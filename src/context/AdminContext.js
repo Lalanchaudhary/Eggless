@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAdminLogin = async () => {
     try {
-      const res = await axios.get('http://localhost:9000/auth/verify', {
+      const res = await axios.get('https://eggless-backend-1.onrender.com/auth/verify', {
         withCredentials: true
       })
       setAdmin(res.data.admin)
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:9000/auth/logout', {}, {
+      await axios.post('https://eggless-backend-1.onrender.com/auth/logout', {}, {
         withCredentials: true
       })
     } catch (error) {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('http://localhost:9000/auth/login', credentials, {
+      const response = await axios.post('https://eggless-backend-1.onrender.com/auth/login', credentials, {
         withCredentials: true
       })
       setAdmin(response.data.admin)

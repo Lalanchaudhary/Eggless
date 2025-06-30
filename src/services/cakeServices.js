@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL ='http://localhost:9000';
+const API_URL ='https://eggless-backend-1.onrender.com';
 
 // Create axios instance with default config
 const api = axios.create({

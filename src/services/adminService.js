@@ -2,7 +2,7 @@ import axios from 'axios';
 // import { API_URL } from '../config';
 
 const api = axios.create({
-  baseURL: `http://localhost:9000/admin`,
+  baseURL: `https://eggless-backend-1.onrender.com/admin`,
   withCredentials: true, // Enable cookies
   headers: {
     'Content-Type': 'application/json'
