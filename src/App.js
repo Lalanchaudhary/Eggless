@@ -40,6 +40,7 @@ import CartoonCake from './pages/ThemeCake/CartoonCake'
 import Cricket from './pages/ThemeCake/Cricket'
 import Nature from './pages/ThemeCake/Nature'
 import FriendshipDay from './pages/Occasion/FriendshipDay'
+import DownloadApk from './pages/DownloadApk'
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token')
@@ -164,7 +165,7 @@ const App = () => {
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/shipping-delivery" element={<ShippingDelivery />} />
-
+            <Route path="/download" element={<DownloadApk />} />
             {/* Auth Routes */}
             <Route
               path="/login"
