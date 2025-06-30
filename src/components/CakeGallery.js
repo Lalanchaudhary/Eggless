@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackDropSection from './BackDropSection';
 import { getAllCakes } from '../services/cakeServices';
+import { ThreeDMarque } from './ThreeDMarque';
 const CakeGallery = () => {
   const navigate = useNavigate();
   const trendingScrollRef = useRef(null);

@@ -40,6 +40,8 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress1] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [locationError, setLocationError] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
@@ -61,11 +63,115 @@ const Checkout = () => {
   const [shippingCost, setShippingCost] = useState(0);
   const [shippingLoading, setShippingLoading] = useState(false);
   const [orderInstruction, setOrderInstruction] = useState("");
+
+  const geocodeAddress = async (address) => {
+    const parts = [address.street, address.city, address.state, address.pincode]
+      .filter(Boolean) // removes undefined or empty parts
+      .join(', ');
+  
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(parts)}`);
+    const data = await res.json();
+    if (data.length > 0) {
+      return {
+        latitude: parseFloat(data[0].lat),
+        longitude: parseFloat(data[0].lon)
+      };
+    }
+    return null;
+  };
+  
+
+  
+  // Function to validate location distance
+  const validateLocationDistance = async (address) => {
+    if (!address || !address.location) {
+      setLocationError('Address is missing');
+      return false;
+    }
+  
+    let userLocation = address.location;
+  
+    // Check and fix missing coordinates
+    if (!userLocation.latitude || !userLocation.longitude) {
+      const geoCoords = await geocodeAddress(address);
+      if (!geoCoords) {
+        setLocationError('Could not determine location from the provided address');
+        return false;
+      }
+      userLocation = geoCoords;
+    }
+  
+    setLocationLoading(true);
+    setLocationError(null);
+  
+    try {
+      const { admins } = await getAllAdmins();
+  
+      if (!admins || admins.length === 0) {
+        setLocationError('No delivery locations available. Please contact support.');
+        return false;
+      }
+  
+      let minDistance = Infinity;
+      let nearestAdmin = null;
+  
+      for (const admin of admins) {
+        const adminLocation = admin.location;
+        if (adminLocation?.latitude && adminLocation?.longitude) {
+          const distance = getDistanceFromLatLonInKm(
+            adminLocation.latitude,
+            adminLocation.longitude,
+            userLocation.latitude,
+            userLocation.longitude
+          );
+          console.log('====================================');
+          console.log( "dis",userLocation.latitude,"minDis",userLocation.longitude);
+          console.log('====================================');
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestAdmin = admin;
+          }
+
+        }
+      }
+
+  
+      if (minDistance === Infinity) {
+        setLocationError('Unable to calculate delivery distance. Please try again.');
+        return false;
+      }
+  
+      if (minDistance > 100) {
+        setLocationError(
+          `Sorry, we cannot deliver to your location. The nearest delivery point is ${minDistance.toFixed(1)}km away, which exceeds our 100km delivery limit.`
+        );
+        return false;
+      }
+  
+      // Valid
+      setLocationError(null);
+      return true;
+    } catch (error) {
+      console.error('Error validating location:', error);
+      setLocationError('Unable to validate delivery location. Please try again.');
+      return false;
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+  
+
   useEffect(() => {
     // Set default address if available
     if (user?.addresses?.length > 0) {
       const defaultAddress = user.addresses.find(addr => addr.isDefault);
-      setSelectedAddress1(defaultAddress || user.addresses[0]);
+      const addressToSet = defaultAddress || user.addresses[0];
+      setSelectedAddress1(addressToSet);
+      
+      // Validate the default address
+      if (addressToSet) {
+        validateLocationDistance(addressToSet);
+      }
     }
 
     // Load Razorpay script
@@ -79,9 +185,17 @@ const Checkout = () => {
     };
   }, [user?.addresses]);
 
+  // Watch for address changes and validate
+  useEffect(() => {
+    if (selectedAddress) {
+      validateLocationDistance(selectedAddress);
+    }
+  }, [selectedAddress]);
+
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const tax = subtotal * 0.1;
   const total = subtotal + shippingCost + tax;
+
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
     if (!selectedAddress) {
@@ -89,14 +203,29 @@ const Checkout = () => {
       return;
     }
 
+    // Validate location before proceeding
+    const isLocationValid = await validateLocationDistance(selectedAddress);
+    if (!isLocationValid) {
+      return;
+    }
+
     // await handlePayment();
   };
 
-  const nextStep = () => {
-    if (currentStep === 1 && !selectedAddress) {
-      setError('Please select a shipping address');
-      return;
+  const nextStep = async () => {
+    if (currentStep === 1) {
+      if (!selectedAddress) {
+        setError('Please select a shipping address');
+        return;
+      }
+
+      // Validate location before proceeding to next step
+      const isLocationValid = await validateLocationDistance(selectedAddress);
+      if (!isLocationValid) {
+        return;
+      }
     }
+
     setError(null);
     setCurrentStep(currentStep + 1);
   };
@@ -110,7 +239,46 @@ const Checkout = () => {
     switch (currentStep) {
       case 1:
         return (
-          <ShipAddr setSelectedAddress1={setSelectedAddress1} setShippingCost={setShippingCost} shippingCost={shippingCost} shippingLoading={shippingLoading} setShippingLoading={setShippingLoading} selectedAddress={selectedAddress} orderInstruction={orderInstruction} setOrderInstruction={setOrderInstruction} />
+          <Box>
+            {locationError && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                  Delivery Location Issue
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {locationError}
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'medium', mb: 1 }}>
+                    What you can do:
+                  </Typography>
+                  <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                    <li>Select a different delivery address</li>
+                    <li>Add a new address within our delivery range</li>
+                    <li>Contact our customer support for assistance</li>
+                  </ul>
+                </Box>
+              </Alert>
+            )}
+            
+            {locationLoading && (
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <CircularProgress size={20} sx={{ mr: 1 }} />
+                <Typography variant="body2">Validating delivery location...</Typography>
+              </Box>
+            )}
+            
+            <ShipAddr 
+              setSelectedAddress1={setSelectedAddress1} 
+              setShippingCost={setShippingCost} 
+              shippingCost={shippingCost} 
+              shippingLoading={shippingLoading} 
+              setShippingLoading={setShippingLoading} 
+              selectedAddress={selectedAddress} 
+              orderInstruction={orderInstruction} 
+              setOrderInstruction={setOrderInstruction} 
+            />
+          </Box>
         );
       case 2:
         return (
@@ -298,7 +466,7 @@ const Checkout = () => {
               <Button
                 variant="contained"
                 onClick={nextStep}
-                disabled={loading || (currentStep === 1 && !selectedAddress)}
+                disabled={loading || (currentStep === 1 && !selectedAddress) || locationLoading || !!locationError}
                 sx={{ 
                   ml: { sm: 'auto' },
                   bgcolor: '#272361',
@@ -306,7 +474,7 @@ const Checkout = () => {
                   width: { xs: '100%', sm: 'auto' }
                 }}
               >
-                Next
+                {locationLoading ? 'Validating...' : 'Next'}
               </Button>
             ) : ''
             }

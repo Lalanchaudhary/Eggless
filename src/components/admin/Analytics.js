@@ -46,10 +46,7 @@ const Analytics = () => {
         getSalesAnalytics(period),
         getProductAnalytics()
       ]);
-      console.log('====================================');
-      console.log(salesResponse);
-      console.log('====================================');
-      setSalesData(productResponse);
+      setSalesData(salesResponse);
       setProductData(productResponse);
       setError(null);
     } catch (err) {

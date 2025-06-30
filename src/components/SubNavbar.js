@@ -89,7 +89,7 @@ const menuItems = [
     label: 'Occasion',
     href: '/all-cakes',
     dropdown: [
-      { name: 'Wedding', href: '/wedding-cakes' },
+      { name: 'FriendShip Day', href: '/friendshipday-cakes' },
       { name: 'Baby Shower', href: '/all-cakes' },
       { name: 'Graduation', href: '/graduation-cakes' },
       { name: 'House Warming', href: '/all-cakes' },

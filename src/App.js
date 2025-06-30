@@ -39,6 +39,7 @@ import SuperManCake from './pages/ThemeCake/SuperManCake'
 import CartoonCake from './pages/ThemeCake/CartoonCake'
 import Cricket from './pages/ThemeCake/Cricket'
 import Nature from './pages/ThemeCake/Nature'
+import FriendshipDay from './pages/Occasion/FriendshipDay'
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token')
@@ -154,6 +155,7 @@ const App = () => {
             <Route path="/cartoon-cakes" element={<CartoonCake />} />
             <Route path="/cricket-cakes" element={<Cricket />} />
             <Route path="/nature-cakes" element={<Nature />} />
+            <Route path="/friendshipday-cakes" element={<FriendshipDay />} />
             <Route path="/corporates-cakes" element={<CorporateCakes />} />
             <Route path="/cake/:id" element={<CakeDetails />} />
             <Route path="/about-us" element={<AboutUs />} />

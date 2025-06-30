@@ -18,12 +18,10 @@ const menuItems = [
     label: 'Theme Cakes',
     href: '/all-cakes',
     dropdown: [
-      { name: 'Cartoon Theme', href: '/all-cakes' },
-      { name: 'Superhero Theme', href: '/all-cakes' },
-      { name: 'Princess Theme', href: '/all-cakes' },
-      { name: 'Sports Theme', href: '/all-cakes' },
-      { name: 'Nature Theme', href: '/all-cakes' },
-      { name: 'Abstract Theme', href: '/all-cakes' },
+      { name: 'Cartoon Theme', href: '/cartoon-cakes' },
+      { name: 'Superhero Theme', href: '/superhero-cakes' },
+      { name: 'Cricket Theme', href: '/cricket-cakes' },
+      { name: 'Nature Theme', href: '/nature-cakes' },
     ],
   },
   {
@@ -77,21 +75,21 @@ const menuItems = [
   },
   {
     label: 'Anniversary',
-    href: '/anniversary-cakes',
+    href: '/anniversary',
     dropdown: [
-      { name: 'Wedding Anniversary', href: '/anniversary-cakes' },
+      { name: '1st-anniversary-cakes', href: '/1st-anniversary-cakes' },
       { name: 'Dating Anniversary', href: '/anniversary-cakes' },
       { name: 'Work Anniversary', href: '/anniversary-cakes' },
       { name: 'Friendship Anniversary', href: '/anniversary-cakes' },
       { name: 'Anniversary Combos', href: '/anniversary-cakes' },
-      { name: 'Anniversary Specials', href: '/anniversary-cakes' },
+      { name: 'Anniversary Specials', href: '/anniversary' },
     ],
   },
   {
     label: 'Occasion',
     href: '/all-cakes',
     dropdown: [
-      { name: 'Wedding', href: '/wedding-cakes' },
+      { name: 'FriendShip Day', href: '/friendshipday-cakes' },
       { name: 'Baby Shower', href: '/all-cakes' },
       { name: 'Graduation', href: '/graduation-cakes' },
       { name: 'House Warming', href: '/all-cakes' },

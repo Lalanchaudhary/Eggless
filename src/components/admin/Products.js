@@ -42,13 +42,16 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
+    category: '',
     price: '',
     rating: 0,
-    reviewCount: 0,
+    reviews: 0,
     image: '',
     description: '',
     label: '',
-    flavour: '',
+    flavor: '',
+    tag: '',
+    original_price: '',
     sizes: [],
     ingredients: [],
     allergens: [],
@@ -57,12 +60,12 @@ const Products = () => {
       protein: '',
       carbs: '',
       fat: ''
-    }
+    },
+    reviewsList: []
   });
 
   const [newSize, setNewSize] = useState({
-    id: '',
-    name: '',
+    size: '',
     price: '',
     serves: ''
   });
@@ -90,13 +93,16 @@ const Products = () => {
     setSelectedProduct(null);
     setFormData({
       name: '',
+      category: '',
       price: '',
       rating: 0,
-      reviewCount: 0,
+      reviews: 0,
       image: '',
       description: '',
       label: '',
-      flavour: '',
+      flavor: '',
+      tag: '',
+      original_price: '',
       sizes: [],
       ingredients: [],
       allergens: [],
@@ -105,7 +111,8 @@ const Products = () => {
         protein: '',
         carbs: '',
         fat: ''
-      }
+      },
+      reviewsList: []
     });
     setDialogOpen(true);
   };
@@ -116,11 +123,14 @@ const Products = () => {
       name: product.name,
       price: product.price,
       rating: product.rating,
-      reviewCount: product.reviewCount,
+      reviews: product.reviews || 0,
       image: product.image,
       description: product.description || '',
       label: product.label || '',
-      flavour: product.flavour || '',
+      category: product.category || '',
+      flavor: product.flavor || '',
+      tag: product.tag || '',
+      original_price: product.original_price || '',
       sizes: product.sizes || [],
       ingredients: product.ingredients || [],
       allergens: product.allergens || [],
@@ -129,7 +139,8 @@ const Products = () => {
         protein: '',
         carbs: '',
         fat: ''
-      }
+      },
+      reviewsList: product.reviewsList || []
     });
     setDialogOpen(true);
   };
@@ -180,12 +191,12 @@ const Products = () => {
   };
 
   const handleAddSize = () => {
-    if (newSize.id && newSize.name && newSize.price && newSize.serves) {
+    if (newSize.size && newSize.price) {
       setFormData(prev => ({
         ...prev,
         sizes: [...prev.sizes, { ...newSize }]
       }));
-      setNewSize({ id: '', name: '', price: '', serves: '' });
+      setNewSize({ size: '', price: '', serves: '' });
     }
   };
 
@@ -268,7 +279,8 @@ const Products = () => {
             <TableRow>
               <TableCell>Image</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Flavour</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Flavor</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Rating</TableCell>
               <TableCell>Actions</TableCell>
@@ -285,7 +297,8 @@ const Products = () => {
                   />
                 </TableCell>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>{product.flavour}</TableCell>
+                <TableCell>{product.category}</TableCell>
+                <TableCell>{product.flavor}</TableCell>
                 <TableCell>₹{product.price.toFixed(2)}</TableCell>
                 <TableCell>{product.rating}</TableCell>
                 <TableCell>
@@ -328,9 +341,19 @@ const Products = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Flavour"
-                  name="flavour"
-                  value={formData.flavour}
+                  label="Category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Flavor"
+                  name="flavor"
+                  value={formData.flavor}
                   onChange={handleInputChange}
                 />
               </Grid>
@@ -348,9 +371,28 @@ const Products = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  label="Original Price"
+                  name="original_price"
+                  type="number"
+                  value={formData.original_price}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
                   label="Label"
                   name="label"
                   value={formData.label}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Tag"
+                  name="tag"
+                  value={formData.tag}
                   onChange={handleInputChange}
                 />
               </Grid>
@@ -380,23 +422,15 @@ const Products = () => {
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom>Sizes</Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={3}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       fullWidth
-                      label="Size ID"
-                      value={newSize.id}
-                      onChange={(e) => setNewSize(prev => ({ ...prev, id: e.target.value }))}
+                      label="Size"
+                      value={newSize.size}
+                      onChange={(e) => setNewSize(prev => ({ ...prev, size: e.target.value }))}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <TextField
-                      fullWidth
-                      label="Size Name"
-                      value={newSize.name}
-                      onChange={(e) => setNewSize(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       fullWidth
                       label="Price"
@@ -405,7 +439,7 @@ const Products = () => {
                       onChange={(e) => setNewSize(prev => ({ ...prev, price: e.target.value }))}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={3}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       fullWidth
                       label="Serves"
@@ -425,7 +459,7 @@ const Products = () => {
                   {formData.sizes.map((size, index) => (
                     <ListItem key={index}>
                       <ListItemText
-                        primary={`${size.name} - ₹${size.price}`}
+                        primary={`${size.size} - ₹${size.price}`}
                         secondary={`Serves: ${size.serves}`}
                       />
                       <ListItemSecondaryAction>

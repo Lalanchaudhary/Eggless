@@ -94,7 +94,7 @@ export function NavbarDemo() {
     }
 
     setIsSearching(true);
-    
+
     // Simulate search delay for better UX
     setTimeout(() => {
       const filteredCakes = allCakes.filter(cake => {
@@ -151,7 +151,7 @@ export function NavbarDemo() {
     <div className='sticky top-0 z-50 py-2 md:py-3 px-3 md:px-6 border-b  border-gray-200  bg-white shadow-sm backdrop-blur-sm bg-white/95' style={{ height: isMobile ? '60px' : '100px' }}>
       <div className="max-w-7xl mx-auto" style={{ height: isMobile ? '50px' : '80px' }}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 md:space-x-6" onClick={()=>{navigate("/")}}>
+          <div className="flex items-center space-x-3 md:space-x-6" onClick={() => { navigate("/") }}>
             <img src={logo} alt='logo' className='h-10 md:h-14 lg:h-20 transition-all duration-300 hover:scale-105' />
           </div>
 
@@ -194,7 +194,7 @@ export function NavbarDemo() {
 
             {/* Search Results Dropdown */}
             {showSearchResults && (
-              <div 
+              <div
                 className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"
                 onClick={(e) => {
                   console.log('Search results container clicked');
@@ -266,28 +266,29 @@ export function NavbarDemo() {
           {/* Right side icons */}
           <div className="flex items-center space-x-2 md:space-x-4">
 
-                    {/* Location Selector - Desktop (moved after Navbar) */}
-                    {
-                      user?.addresses&&
-          <div className="hidden md:flex items-center space-x-2 ml-4 relative" ref={locationRef}>
-            <button
-              className="flex items-center space-x-2 focus:outline-none"
-              onClick={() => setLocationDropdownOpen((open) => !open)}
-            >
-              <FaMapMarkerAlt className="text-rose-400 text-lg" />
-              <span className="text-gray-700 text-base font-medium">{user?.addresses[0].city}</span>
-              <IoIosArrowDown className={`text-gray-500 text-base transition-transform ${locationDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {locationDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
-                <div className="text-gray-800 text-base font-semibold mb-1">Your Location</div>
-                <div className="text-gray-600 text-sm">{user?.addresses[0].city}, {user?.addresses[0].state}</div>
+            {/* Location Selector - Desktop (moved after Navbar) */}
+            {
+              user?.addresses &&
+              <div className="hidden md:flex items-center space-x-2 ml-4 relative" ref={locationRef}>
+                <button
+                  className="flex items-center space-x-2 focus:outline-none"
+                  onClick={() => setLocationDropdownOpen((open) => !open)}
+                >
+                  <FaMapMarkerAlt className="text-rose-400 text-lg" />
+                  <span className="text-gray-700 text-base font-medium">{user?.addresses[0]?.city}</span>
+                  <IoIosArrowDown className={`text-gray-500 text-base transition-transform ${locationDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {locationDropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
+                    <div className="text-gray-800 text-base font-semibold mb-1">Your Location</div>
+                    <div className="text-gray-600 text-sm">{user?.addresses[0]?.city}, {user?.addresses[0]?.state}</div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-}
+            }
+            <Navbar />
             {/* Cart Icon */}
-            <button 
+            <button
               onClick={() => navigate('/cart')}
               className="relative p-1.5 md:p-2 rounded-full hover:bg-gray-100 transition-colors duration-300"
             >
@@ -312,7 +313,7 @@ export function NavbarDemo() {
             </button>
 
             {/* Profile Icon */}
-            <button 
+            <button
               onClick={() => navigate('/user-profile')}
               className="p-1.5 md:p-2 rounded-full hover:bg-gray-100 transition-colors duration-300"
             >
@@ -337,10 +338,10 @@ export function NavbarDemo() {
               className="md:hidden p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-300"
               aria-label="Toggle menu"
             >
-              <svg 
-                className="w-5 h-5 text-gray-600" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="w-5 h-5 text-gray-600"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 {isMobileMenuOpen ? (
@@ -353,7 +354,7 @@ export function NavbarDemo() {
           </div>
         </div>
         {/* Mobile menu with search */}
-        <div 
+        <div
           ref={mobileMenuRef}
           className={cn(
             "relative w-full transition-all duration-300 ease-in-out bg-white",
@@ -398,7 +399,7 @@ export function NavbarDemo() {
 
             {/* Mobile Search Results Dropdown */}
             {showSearchResults && (
-              <div 
+              <div
                 className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"
                 onClick={(e) => {
                   console.log('Mobile search results container clicked');
@@ -466,7 +467,7 @@ export function NavbarDemo() {
               </div>
             )}
           </div>
-                    {/* Location Selector - Mobile */}
+          {/* Location Selector - Mobile */}
           <div className="flex items-center space-x-2 mb-2 mt-2 md:hidden relative" ref={locationRef}>
             <button
               className="flex items-center space-x-2 focus:outline-none"

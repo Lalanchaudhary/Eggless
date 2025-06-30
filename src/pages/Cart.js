@@ -102,7 +102,7 @@ const Cart = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-base sm:text-lg truncate">{item.name}</h3>
-                        <p className="text-sm sm:text-base text-gray-600">Size: {item.selectedSize.name}</p>
+                        <p className="text-sm sm:text-base text-gray-600">Size: {item.selectedSize.size}</p>
                         <p className="text-rose-500 font-semibold text-sm sm:text-base">₹{item.price}</p>
                       </div>
                       <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
