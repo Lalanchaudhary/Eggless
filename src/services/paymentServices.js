@@ -2,7 +2,7 @@ import axios from 'axios';
 import { SiRazorpay } from "react-icons/si";
 import { CiWallet } from "react-icons/ci";
 import { BsCash } from "react-icons/bs";
-const API_URL = 'https://eggless-backend-1.onrender.com';
+const API_URL = 'https://egglesscake-backend.fly.dev';
 const api = axios.create({
     baseURL: API_URL,
     headers: {

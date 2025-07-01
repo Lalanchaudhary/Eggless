@@ -2,7 +2,7 @@ import axios from 'axios';
 // import { API_URL } from '../config';
 
 const api = axios.create({
-  baseURL: `https://eggless-backend-1.onrender.com/admin`,
+  baseURL: `https://egglesscake-backend.fly.dev/admin`,
   withCredentials: true, // Enable cookies
   headers: {
     'Content-Type': 'application/json'

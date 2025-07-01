@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL ='https://eggless-backend-1.onrender.com';
+const API_URL ='https://egglesscake-backend.fly.dev';
 
 // Create axios instance with default config
 const api = axios.create({
