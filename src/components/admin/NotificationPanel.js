@@ -9,7 +9,7 @@ const NotificationPanel = () => {
 
   useEffect(() => {
     // Initialize socket connection
-    const newSocket = io('http://localhost:4000', {
+    const newSocket = io('https://egglesscake-backend.fly.dev', {
       withCredentials: true
     });
 

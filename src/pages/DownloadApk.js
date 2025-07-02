@@ -1,6 +1,6 @@
 import React from 'react';
 import eggless from '../assets/Egglesscake.png'
-const APK_URL = 'https://apk-download-site-j6rotsyja-lalan-chaudharys-projects.vercel.app/EgglessCake.apk';
+const APK_URL = 'https://apk-download-site-lb1py1438-lalan-chaudharys-projects.vercel.app/EgglessCake.apk';
 
 const DownloadApk = () => {
   return (

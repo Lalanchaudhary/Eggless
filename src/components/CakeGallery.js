@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import BackDropSection from './BackDropSection';
 import { getAllCakes } from '../services/cakeServices';
 import { ThreeDMarque } from './ThreeDMarque';
+import Loading from './Loading';
+
 const CakeGallery = () => {
   const navigate = useNavigate();
   const trendingScrollRef = useRef(null);
@@ -235,14 +237,7 @@ const CakeGallery = () => {
   );
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 p-3 lg:p-6 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading cakes...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllCakes } from '../../services/cakeServices';
+import Loading from '../../components/Loading';
 
 const ChocolateCakes = () => {
   const [filters, setFilters] = useState({
@@ -287,14 +288,7 @@ const ChocolateCakes = () => {
   );
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading chocolate cakes...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

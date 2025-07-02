@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import cake from '../assets/cake.jpg'
 import HeroCake from '../assets/HeroCake.jpg'
 import CakeGallery from './CakeGallery';
 import BackDropSection from "./BackDropSection";
 import Carousel from "./Carousel";
 import SubNavbar from './SubNavbar';
+import CelebrationModal from "./CelebrationModel";
 
 const HeroSection = () => {
   let Heroimages = [

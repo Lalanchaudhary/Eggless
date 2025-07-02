@@ -6,6 +6,8 @@ import { checkPhoneNumber, register } from '../services/userService';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import phoneicon from '../assets/phoneicon.png'
+import CelebrationModal from '../components/CelebrationModel';
+import Loading from '../components/Loading';
 const OTP_LENGTH = 6; // 6-digit OTP
 
 const maskPhone = (phone) => {
@@ -23,6 +25,7 @@ const Profile = () => {
   const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [formData, setFormData] = useState({
     phoneNumber: '',
     otp: '',
@@ -90,7 +93,7 @@ const Profile = () => {
       if (!window.recaptchaVerifier) {
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
           size: 'invisible',
-          callback: (response) => {},
+          callback: (response) => { },
         });
       }
       const appVerifier = window.recaptchaVerifier;
@@ -122,6 +125,9 @@ const Profile = () => {
       if (data.isExistingUser) {
         setIsExistingUser(true);
         navigate('/user-profile');
+        setTimeout(() => {
+          window.location.reload(); // Then refresh
+        }, 100); // Small delay to allow navigation to complete
       } else {
         setIsOtpVerified(true);
       }
@@ -144,7 +150,7 @@ const Profile = () => {
         email: formData.email,
         phoneNumber: formData.phoneNumber,
       });
-      navigate('/user-profile');
+      setShowCelebration(true);
     } catch (err) {
       setError(err.message || 'Failed to complete profile. Please try again.');
     }
@@ -155,10 +161,24 @@ const Profile = () => {
     toast.info('Password login not implemented in this demo.');
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <ToastContainer />
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <CelebrationModal
+          isOpen={showCelebration}
+          onClose={() => {
+            setShowCelebration(false);
+            navigate('/user-profile');  // First navigate
+            setTimeout(() => {
+              window.location.reload(); // Then refresh
+            }, 100); // Small delay to allow navigation to complete
+          }}
+        />
         <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden max-w-3xl w-full">
           {/* Left Section */}
           <div className="hidden md:flex flex-col items-center justify-center bg-pink-50 w-1/2 p-8">
@@ -219,7 +239,7 @@ const Profile = () => {
                 <p className="text-center mb-4">Please enter the OTP sent to your</p>
                 <div className="text-center mb-2">
                   <span>Mobile - <b className="text-blue-700">{maskPhone(formData.phoneNumber)}</b></span><br />
-                   
+
                 </div>
                 <div className="text-center mb-4">
                   <button className="text-blue-600 underline" onClick={() => setIsOtpSent(false)}>Change</button>

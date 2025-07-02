@@ -400,93 +400,29 @@ export function NavbarDemo() {
               </div>
             </form>
 
-            {/* Mobile Search Results Dropdown */}
-            {showSearchResults && (
-              <div
-                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"
-                onClick={(e) => {
-                  console.log('Mobile search results container clicked');
-                  e.stopPropagation();
-                }}
-              >
-                {searchResults.length > 0 ? (
-                  <>
-                    <div className="p-3 border-b border-gray-100">
-                      <p className="text-sm text-gray-600">
-                        Found {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} for "{searchQuery}"
-                      </p>
-                    </div>
-                    <div className="py-2">
-                      {searchResults.map((cake) => (
-                        <button
-                          key={cake._id}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log('Mobile cake button clicked:', cake.name);
-                            handleSearchResultClick(cake);
-                          }}
-                          className="w-full px-4 py-3 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors duration-200 flex items-center space-x-3 cursor-pointer focus:outline-none focus:bg-gray-50"
-                        >
-                          <img
-                            src={cake.image}
-                            alt={cake.name}
-                            className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                            onError={(e) => {
-                              e.target.src = 'https://via.placeholder.com/48x48?text=Cake';
-                            }}
-                          />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {cake.name}
-                            </p>
-                            <p className="text-xs text-gray-500 truncate">
-                              ₹{cake.price} • {cake.flavor || cake.category}
-                            </p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                    <div className="p-3 border-t border-gray-100">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          console.log('Mobile view all results clicked');
-                          handleViewAllResults();
-                        }}
-                        className="w-full text-center text-sm text-[#e098b0] hover:text-[#d17a8f] font-medium py-2 hover:bg-gray-50 rounded transition-colors duration-200 cursor-pointer focus:outline-none focus:bg-gray-50"
-                      >
-                        View all results for "{searchQuery}" →
-                      </button>
-                    </div>
-                  </>
-                ) : searchQuery.trim() && !isSearching ? (
-                  <div className="p-4 text-center">
-                    <p className="text-gray-500 text-sm">No cakes found for "{searchQuery}"</p>
-                    <p className="text-gray-400 text-xs mt-1">Try different keywords or browse all cakes</p>
-                  </div>
-                ) : null}
-              </div>
-            )}
+
           </div>
           {/* Location Selector - Mobile */}
-          <div className="flex items-center space-x-2 mb-2 mt-2 md:hidden relative" ref={locationRef}>
-            <button
-              className="flex items-center space-x-2 focus:outline-none"
-              onClick={() => setLocationDropdownOpen((open) => !open)}
-            >
-              <FaMapMarkerAlt className="text-rose-400 text-lg" />
-              <span className="text-gray-700 text-base font-medium">{location}</span>
-              <IoIosArrowDown className={`text-gray-500 text-base transition-transform ${locationDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {locationDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
-                <div className="text-gray-800 text-base font-semibold mb-1">Your Location</div>
-                <div className="text-gray-600 text-sm">{fullLocation}</div>
+          {
+              user?.addresses &&
+              <div className="hidden md:flex items-center space-x-2 ml-4 relative" ref={locationRef}>
+                <button
+                  className="flex items-center space-x-2 focus:outline-none"
+                  onClick={() => setLocationDropdownOpen((open) => !open)}
+                >
+                  <FaMapMarkerAlt className="text-rose-400 text-lg" />
+                  <span className="text-gray-700 text-base font-medium">{user?.addresses[0]?.city}</span>
+                  <IoIosArrowDown className={`text-gray-500 text-base transition-transform ${locationDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {locationDropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
+                    <div className="text-gray-800 text-base font-semibold mb-1">Your Location</div>
+                    <div className="text-gray-600 text-sm">{user?.addresses[0]?.city}, {user?.addresses[0]?.state}</div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            }
+            <Navbar />
           <VerticalSubNavbar vertical />
         </div>
       </div>

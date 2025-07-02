@@ -269,7 +269,7 @@ const UserProfile = () => {
       case 'profile':
       default:
         return (
-          loading?<Loading/>:
+          loading ? <Loading /> :
           <div className="bg-white shadow rounded-lg">
             {/* Profile Header */}
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
