@@ -2,24 +2,10 @@ import axios from 'axios';
 // import { API_URL } from '../config';
 
 const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  baseURL: `https://egglesscake-backend.fly.dev/admin`,
+  withCredentials: true, // Enable cookies
 });
 
-api.interceptors.request.use(
-  async (config) => {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 // Dashboard
 export const getDashboardStats = async () => {
