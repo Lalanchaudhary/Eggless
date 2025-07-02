@@ -287,9 +287,9 @@ export function NavbarDemo() {
               </div>
             }
             {
-              !isMobile?<Navbar />:''
+              !isMobile ? <Navbar /> : ''
             }
-            
+
             {/* Cart Icon */}
             <button
               onClick={() => navigate('/cart')}
@@ -341,19 +341,19 @@ export function NavbarDemo() {
               className="md:hidden p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-300"
               aria-label="Toggle menu"
             >
-              <svg
-                className="w-5 h-5 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                {isMobileMenuOpen ? (
+              {isMobileMenuOpen ? (
+                // Close Icon (X)
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
+                </svg>
+              ) : (
+                // Hamburger Icon
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
+                </svg>
+              )}
             </button>
+
           </div>
         </div>
         {/* Mobile menu with search */}
@@ -363,66 +363,27 @@ export function NavbarDemo() {
             "relative w-full transition-all duration-300 ease-in-out bg-white",
             isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none md:hidden"
           )}>
-          {/* Mobile search input */}
-          <div className="relative w-full mt-2 mb-4" ref={searchRef}>
-            <form onSubmit={handleSearch}>
-              <div className="relative group">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearchInputChange}
-                  onFocus={() => searchQuery.trim() && setShowSearchResults(true)}
-                  placeholder="Search cakes, flavors, occasions..."
-                  className="w-full px-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-[#e098b0] focus:ring-2 focus:ring-[#e098b0]/20 transition-all duration-300 bg-gray-50 hover:bg-white"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#e098b0] transition-colors duration-300"
-                >
-                  {isSearching ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#e098b0]"></div>
-                  ) : (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </form>
-
-
-          </div>
           {/* Location Selector - Mobile */}
           {
-              user?.addresses &&
-              <div className="hidden md:flex items-center space-x-2 ml-4 relative" ref={locationRef}>
-                <button
-                  className="flex items-center space-x-2 focus:outline-none"
-                  onClick={() => setLocationDropdownOpen((open) => !open)}
-                >
-                  <FaMapMarkerAlt className="text-rose-400 text-lg" />
-                  <span className="text-gray-700 text-base font-medium">{user?.addresses[0]?.city}</span>
-                  <IoIosArrowDown className={`text-gray-500 text-base transition-transform ${locationDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {locationDropdownOpen && (
-                  <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
-                    <div className="text-gray-800 text-base font-semibold mb-1">Your Location</div>
-                    <div className="text-gray-600 text-sm">{user?.addresses[0]?.city}, {user?.addresses[0]?.state}</div>
-                  </div>
-                )}
-              </div>
-            }
-            <Navbar />
+            user?.addresses &&
+            <div className="hidden md:flex items-center space-x-2 ml-4 relative" ref={locationRef}>
+              <button
+                className="flex items-center space-x-2 focus:outline-none"
+                onClick={() => setLocationDropdownOpen((open) => !open)}
+              >
+                <FaMapMarkerAlt className="text-rose-400 text-lg" />
+                <span className="text-gray-700 text-base font-medium">{user?.addresses[0]?.city}</span>
+                <IoIosArrowDown className={`text-gray-500 text-base transition-transform ${locationDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {locationDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
+                  <div className="text-gray-800 text-base font-semibold mb-1">Your Location</div>
+                  <div className="text-gray-600 text-sm">{user?.addresses[0]?.city}, {user?.addresses[0]?.state}</div>
+                </div>
+              )}
+            </div>
+          }
+          <Navbar />
           <VerticalSubNavbar vertical />
         </div>
       </div>
