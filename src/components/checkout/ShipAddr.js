@@ -33,7 +33,8 @@ const ShipAddr = ({
   selectedAddress: selectedAddressProp,
   onOrderInstructionChange,
   orderInstruction,
-  setOrderInstruction
+  setOrderInstruction,
+  setShipping
 }) => {
   const { cartItems } = useCart();
   const { user, addAddress, updateAddress, deleteAddress } = useUser();
@@ -107,6 +108,7 @@ const ShipAddr = ({
           }
         }
         setShippingCost(minDistance !== Infinity ? minDistance * 10 : 0);
+        setShipping(minDistance !== Infinity ? minDistance * 10 : 0)
       } catch (error) {
         setShippingCost(0);
       } finally {

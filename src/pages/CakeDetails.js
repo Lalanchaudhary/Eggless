@@ -244,19 +244,6 @@ const CakeDetails = () => {
                 alt={cakeData.name}
                 className="w-full h-full object-cover rounded-lg"
               />
-              {/* Labels and Tags */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {cakeData.label && (
-                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {cakeData.label}
-                  </span>
-                )}
-                {cakeData.tag && (
-                  <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {cakeData.tag}
-                  </span>
-                )}
-              </div>
             </div>
 
             {/* Right Column - Details */}

@@ -63,7 +63,10 @@ const Checkout = () => {
   const [shippingCost, setShippingCost] = useState(0);
   const [shippingLoading, setShippingLoading] = useState(false);
   const [orderInstruction, setOrderInstruction] = useState("");
-
+  const [tax, setTax] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [shipping, setShipping] = useState(0);
   const geocodeAddress = async (address) => {
     const parts = [address.street, address.city, address.state, address.pincode]
       .filter(Boolean) // removes undefined or empty parts
@@ -192,9 +195,14 @@ const Checkout = () => {
     }
   }, [selectedAddress]);
 
-  const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const tax = subtotal * 0.1;
-  const total = subtotal + shippingCost + tax;
+  useEffect(() => {
+    const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    setSubtotal(subtotal);
+    const tax = subtotal * 0.05;
+    const total = subtotal + shippingCost + tax;
+    setTotal(total);
+    setTax(tax);
+  },[])
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
@@ -268,21 +276,12 @@ const Checkout = () => {
               </Box>
             )}
             
-            <ShipAddr 
-              setSelectedAddress1={setSelectedAddress1} 
-              setShippingCost={setShippingCost} 
-              shippingCost={shippingCost} 
-              shippingLoading={shippingLoading} 
-              setShippingLoading={setShippingLoading} 
-              selectedAddress={selectedAddress} 
-              orderInstruction={orderInstruction} 
-              setOrderInstruction={setOrderInstruction} 
-            />
+          <ShipAddr setSelectedAddress1={setSelectedAddress1} setShippingCost={setShippingCost} shippingCost={shippingCost} shippingLoading={shippingLoading} setShippingLoading={setShippingLoading} selectedAddress={selectedAddress} orderInstruction={orderInstruction} setOrderInstruction={setOrderInstruction} setShipping={setShipping} />
           </Box>
         );
       case 2:
         return (
-          <Payment selectedAddress={selectedAddress} orderInstruction={orderInstruction}/>
+          <Payment selectedAddress={selectedAddress} orderInstruction={orderInstruction} tax={tax} shipping={shipping}/>
         );
       case 3:
         return (
