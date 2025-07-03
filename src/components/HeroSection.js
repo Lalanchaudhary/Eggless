@@ -11,15 +11,19 @@ const HeroSection = () => {
   let Heroimages = [
     {
       image: "https://i.pinimg.com/736x/39/8c/b3/398cb39a0415321977ee080472e85c48.jpg",
+      path:'/all-cakes'
     },
     {
       image: "https://i.pinimg.com/736x/56/c4/ff/56c4fff60e85560acedeedb4fee972bb.jpg",
+            path:'/birthday-cakes'
     },
     {
       image: "https://i.pinimg.com/736x/68/65/f3/6865f3f5a1af9c8d425ce509f89e3191.jpg",
+            path:'/anniversary'
     },
     {
-      image: "https://bkmedia.bakingo.com/regular-cake-desktop_12.jpg"
+      image: "https://bkmedia.bakingo.com/regular-cake-desktop_12.jpg",
+            path:'/all-cakes'
     }
   ]
 
