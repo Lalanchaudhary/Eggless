@@ -175,7 +175,7 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
       taxRate: order.taxRate || 0,
       tax: order.tax || 0,
       total: order.totalAmount || 0,
-      shipping:order.shipping|| 0
+      shipping:order.shippingcharge|| 0
     };
 
     return (
@@ -228,11 +228,11 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
               </View>
               <View style={styles.subtotalRow}>
                 <Text style={{ fontSize: 10 }}>Shipping Charge </Text>
-                <Text style={{ fontSize: 10 }}>₹{billData.shipping.toFixed(2)}</Text>
+                <Text style={{ fontSize: 10 }}>₹{order.shippingcharge.toFixed(2)}</Text>
               </View>
               <View style={styles.subtotalRow}>
                 <Text style={{ fontSize: 10 }}>Tax (5%)</Text>
-                <Text style={{ fontSize: 10 }}>₹{billData.tax.toFixed(2)}</Text>
+                <Text style={{ fontSize: 10 }}>₹{order.tax.toFixed(2)}</Text>
               </View>
               <View style={styles.subtotalRow1}>
                 <Text style={{ fontSize: 15, color: '#fff' }}>Grand Total</Text>
@@ -516,7 +516,7 @@ const MyOrders = () => {
               <div className="space-y-2">
                 {order.items.map((item, index) => (
                   <div key={index} className="flex justify-between text-sm">
-                    <span>{item.name} x {item.quantity}</span>
+                    <span>{item.product.name} x {item.quantity}</span>
                     <span>₹{item.price.toFixed(2)}</span>
                   </div>
                 ))}
