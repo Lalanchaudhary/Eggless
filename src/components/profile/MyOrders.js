@@ -196,14 +196,14 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
             </View>
             <View>
               <Text style={[styles.invoiceDetails, { fontSize: 14, fontWeight: 'bold' }]}>Invoice No. INV-{billData.invoiceNumber}</Text>
-              <Text style={[styles.invoiceDetails]}>Date: {billData.invoiceDate.slice(0,10)}</Text>
+              <Text style={[styles.invoiceDetails]}>Date: {new Date(billData.invoiceDate).toLocaleDateString()}</Text>
             </View>
           </View>
           {/* Table */}
           <View style={styles.table}>
             <View style={styles.tableRow}>
               <Text style={[styles.tableColHeader, { width: '5%' }]}>#</Text>
-              <Text style={[styles.tableColHeader, { width: '60%%' }]}>Item</Text>
+              <Text style={[styles.tableColHeader, { width: '60%' }]}>Item</Text>
               <Text style={[styles.tableColHeader, { width: '10%' }]}>Qty</Text>
               <Text style={[styles.tableColHeader, { width: '10%' }]}>rate</Text>
               <Text style={[styles.tableColHeader, { width: '15%' }]}>Amount</Text>
