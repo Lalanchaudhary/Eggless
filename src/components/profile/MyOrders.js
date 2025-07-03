@@ -189,13 +189,13 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 30 }}>
             <View>
               <Text style={styles.billTo}>Bill To:</Text>
-              <Text style={{ fontSize: 16, marginVertical: 5, fontWeight: 'bold' }}>Mr. {billData.customer.displayName}</Text>
-              <Text style={{ fontSize: 10, marginVertical: 2 }}>{billData.customer.mobile}</Text>
-              <Text style={{ fontSize: 10, marginVertical: 2 }}>{billData.customer.email}</Text>
+              <Text style={{ fontSize: 16, marginVertical: 5, fontWeight: 'bold' }}>Mr/Ms. {billData.customer.displayName}</Text>
+              <Text style={{ fontSize: 10, marginVertical: 2 }}>Phone: {billData.customer.mobile}</Text>
+              <Text style={{ fontSize: 10, marginVertical: 2 }}>Email: {billData.customer.email}</Text>
             </View>
             <View>
               <Text style={[styles.invoiceDetails, { fontSize: 14, fontWeight: 'bold' }]}>Invoice No. INV-{billData.invoiceNumber}</Text>
-              <Text style={[styles.invoiceDetails]}>{billData.invoiceDate}</Text>
+              <Text style={[styles.invoiceDetails]}>Date: {billData.invoiceDate.slice(0,10)}</Text>
             </View>
           </View>
           {/* Table */}
@@ -203,7 +203,6 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
             <View style={styles.tableRow}>
               <Text style={[styles.tableColHeader, { width: '5%' }]}>#</Text>
               <Text style={[styles.tableColHeader, { width: '25%' }]}>Item</Text>
-              <Text style={[styles.tableColHeader, { width: '35%' }]}>Description</Text>
               <Text style={[styles.tableColHeader, { width: '10%' }]}>Qty</Text>
               <Text style={[styles.tableColHeader, { width: '10%' }]}>rate</Text>
               <Text style={[styles.tableColHeader, { width: '15%' }]}>Amount</Text>
@@ -211,8 +210,7 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
             {billData.items.map((item, idx) => (
               <View key={idx} style={[styles.tableRow1, { backgroundColor: idx % 2 === 0 ? '#fff' : '#bedef1' }]}>
                 <Text style={[styles.tableColHeader2, { width: '5%' }]}>{idx + 1}</Text>
-                <Text style={[styles.tableColHeader2, { width: '25%' }]}>{item.itemDetails}</Text>
-                <Text style={[styles.tableColHeader2, { width: '35%' }]}>{item.itemDetails}</Text>
+                <Text style={[styles.tableColHeader2, { width: '60%' }]}>{item.itemDetails}</Text>
                 <Text style={[styles.tableColHeader2, { width: '10%' }]}>{item.quantity}</Text>
                 <Text style={[styles.tableColHeader2, { width: '10%' }]}>{item.rate}</Text>
                 <Text style={[styles.tableColHeader2, { width: '15%' }]}>{item.amount}</Text>
@@ -228,12 +226,12 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
                 <Text style={{ fontSize: 10 }}>{billData.subTotal}</Text>
               </View>
               <View style={styles.subtotalRow}>
-                <Text style={{ fontSize: 10 }}>Discount ({billData.discount}%)</Text>
-                <Text style={{ fontSize: 10 }}>{billData.DiscPrice}</Text>
+                <Text style={{ fontSize: 10 }}>Shipping Charge </Text>
+                <Text style={{ fontSize: 10 }}>{billData.shipping}</Text>
               </View>
               <View style={styles.subtotalRow}>
-                <Text style={{ fontSize: 10 }}>Tax ({billData.taxRate}%)</Text>
-                <Text style={{ fontSize: 10 }}>{billData.TaxPrice}</Text>
+                <Text style={{ fontSize: 10 }}>Tax (5%)</Text>
+                <Text style={{ fontSize: 10 }}>{billData.tax}</Text>
               </View>
               <View style={styles.subtotalRow1}>
                 <Text style={{ fontSize: 15, color: '#fff' }}>Grand Total</Text>

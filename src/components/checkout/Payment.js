@@ -32,14 +32,17 @@ import {
   getPaymentMethods
 } from '../../services/paymentServices';
 import { toast } from 'react-toastify';
-const Payment = ({ selectedAddress ,orderInstruction,tax ,shipping}) => {
+import AddMoneyDialog from '../profile/AddMoneyDialog';
+
+const Payment = ({ selectedAddress, orderInstruction, tax, shipping }) => {
   const navigate = useNavigate();
   const { cartItems, removeFromCart } = useCart();
-  const { user } = useUser();
+  const { user, updateUser } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [addMoneyOpen, setAddMoneyOpen] = useState(false);
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const total = subtotal + shipping + tax;
   const handleOrderSubmit = async (e) => {
@@ -64,8 +67,8 @@ const Payment = ({ selectedAddress ,orderInstruction,tax ,shipping}) => {
           price: item.price,
         })),
         totalAmount: total,
-        tax:tax,
-        shippingcharge:shipping,
+        tax: tax,
+        shippingcharge: shipping,
         shippingAddress: selectedAddress,
         orderInstruction,
         userId: user._id,
@@ -136,9 +139,8 @@ const Payment = ({ selectedAddress ,orderInstruction,tax ,shipping}) => {
           {paymentMethods.map((method) => (
             <label
               key={method.id}
-              className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer ${
-                paymentMethod === method.id ? 'border-rose-500 bg-rose-50' : 'border-gray-200'
-              }`}
+              className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer ${paymentMethod === method.id ? 'border-rose-500 bg-rose-50' : 'border-gray-200'
+                }`}
             >
               <div className="flex items-center gap-3">
                 <input
@@ -161,9 +163,18 @@ const Payment = ({ selectedAddress ,orderInstruction,tax ,shipping}) => {
           ))}
 
           {paymentMethod === 'wallet' && (
-            <div className="text-sm text-gray-600">
-              Available Wallet Balance: ₹{user?.wallet.balance || 0}
-            </div>
+            <>
+              <div className="text-sm text-gray-600 mb-2">
+                Available Wallet Balance: ₹{user?.wallet.balance || 0}
+              </div>
+              <button
+                type="button"
+                onClick={() => setAddMoneyOpen(true)}
+                className="w-full text-center bg-gradient-to-r from-[#e098b0] to-[#d88aa2] rounded-lg p-2 text-white mb-2"
+              >
+                Add Money
+              </button>
+            </>
           )}
         </div>
 
@@ -181,6 +192,14 @@ const Payment = ({ selectedAddress ,orderInstruction,tax ,shipping}) => {
           {loading ? 'Processing...' : 'Continue to Payment'}
         </button>
       </div>
+      <AddMoneyDialog
+        open={addMoneyOpen}
+        onClose={() => setAddMoneyOpen(false)}
+        user={user}
+        onMoneyAdded={() => {
+          if (updateUser) updateUser();
+        }}
+      />
     </div>
   );
 };
