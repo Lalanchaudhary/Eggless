@@ -173,8 +173,9 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
       })),
       subTotal: order.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
       taxRate: order.taxRate || 0,
-      TaxPrice: order.taxAmount || 0,
+      tax: order.tax.toFixed(2) || 0,
       total: order.totalAmount || 0,
+      shipping:order.shipping.toFixed(2)|| 0
     };
 
     return (
@@ -202,7 +203,7 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
           <View style={styles.table}>
             <View style={styles.tableRow}>
               <Text style={[styles.tableColHeader, { width: '5%' }]}>#</Text>
-              <Text style={[styles.tableColHeader, { width: '25%' }]}>Item</Text>
+              <Text style={[styles.tableColHeader, { width: '60%%' }]}>Item</Text>
               <Text style={[styles.tableColHeader, { width: '10%' }]}>Qty</Text>
               <Text style={[styles.tableColHeader, { width: '10%' }]}>rate</Text>
               <Text style={[styles.tableColHeader, { width: '15%' }]}>Amount</Text>
@@ -227,11 +228,11 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
               </View>
               <View style={styles.subtotalRow}>
                 <Text style={{ fontSize: 10 }}>Shipping Charge </Text>
-                <Text style={{ fontSize: 10 }}>{billData.shipping}</Text>
+                <Text style={{ fontSize: 10 }}>₹{billData.shipping}</Text>
               </View>
               <View style={styles.subtotalRow}>
                 <Text style={{ fontSize: 10 }}>Tax (5%)</Text>
-                <Text style={{ fontSize: 10 }}>{billData.tax}</Text>
+                <Text style={{ fontSize: 10 }}>₹{billData.tax}</Text>
               </View>
               <View style={styles.subtotalRow1}>
                 <Text style={{ fontSize: 15, color: '#fff' }}>Grand Total</Text>
