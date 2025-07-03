@@ -61,7 +61,7 @@ const AllCakes = () => {
     // Filter by search query first
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filteredCakes = filteredCakes.filter(cake =>
+      filteredCakes = filteredCakes.filter(cake => 
         cake.name?.toLowerCase().includes(query) ||
         cake.description?.toLowerCase().includes(query) ||
         cake.flavor?.toLowerCase().includes(query) ||
@@ -72,14 +72,14 @@ const AllCakes = () => {
 
     // Filter by category (active section)
     if (activeSection !== 'all') {
-      filteredCakes = filteredCakes.filter(cake =>
+      filteredCakes = filteredCakes.filter(cake => 
         cake.category?.toLowerCase() === activeSection ||
         cake.flavor?.toLowerCase() === activeSection
       );
     }
 
     // Filter by price range
-    filteredCakes = filteredCakes.filter(cake =>
+    filteredCakes = filteredCakes.filter(cake => 
       cake.price >= filters.priceRange[0] && cake.price <= filters.priceRange[1]
     );
 
@@ -90,8 +90,8 @@ const AllCakes = () => {
 
     // Filter by dietary preferences
     if (filters.dietary.length > 0) {
-      filteredCakes = filteredCakes.filter(cake =>
-        filters.dietary.some(dietary =>
+      filteredCakes = filteredCakes.filter(cake => 
+        filters.dietary.some(dietary => 
           cake.label?.toLowerCase().includes(dietary.toLowerCase()) ||
           cake.description?.toLowerCase().includes(dietary.toLowerCase())
         )
@@ -100,8 +100,8 @@ const AllCakes = () => {
 
     // Filter by flavor
     if (filters.flavor.length > 0) {
-      filteredCakes = filteredCakes.filter(cake =>
-        filters.flavor.some(flavor =>
+      filteredCakes = filteredCakes.filter(cake => 
+        filters.flavor.some(flavor => 
           cake.flavor?.toLowerCase().includes(flavor.toLowerCase()) ||
           cake.name?.toLowerCase().includes(flavor.toLowerCase())
         )
@@ -110,8 +110,8 @@ const AllCakes = () => {
 
     // Filter by occasion
     if (filters.occasion.length > 0) {
-      filteredCakes = filteredCakes.filter(cake =>
-        filters.occasion.some(occasion =>
+      filteredCakes = filteredCakes.filter(cake => 
+        filters.occasion.some(occasion => 
           cake.tag?.toLowerCase().includes(occasion.toLowerCase()) ||
           cake.description?.toLowerCase().includes(occasion.toLowerCase())
         )
@@ -300,8 +300,9 @@ const AllCakes = () => {
               <button
                 key={star}
                 onClick={() => handleFilterChange('rating', star)}
-                className={`p-1 rounded ${filters.rating >= star ? 'text-yellow-400' : 'text-gray-300'
-                  }`}
+                className={`p-1 rounded ${
+                  filters.rating >= star ? 'text-yellow-400' : 'text-gray-300'
+                }`}
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -311,6 +312,10 @@ const AllCakes = () => {
           </div>
         </div>
 
+        {/* Dietary Preferences */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">Dietary:</span>
+          <div className="flex flex-wrap gap-2">
         {dietaryOptions
           .filter((option) => option !== 'Eggless')
           .map((option) => (
@@ -324,7 +329,8 @@ const AllCakes = () => {
               <span className="text-xs text-gray-600">{option}</span>
             </label>
           ))}
-
+          </div>
+        </div>
 
         {/* Flavors */}
         <div className="flex items-center gap-2">
@@ -374,7 +380,7 @@ const AllCakes = () => {
   );
 
   const CakeCard = ({ cake }) => (
-    <div
+    <div 
       className="group bg-white rounded-lg shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-md hover:-translate-y-1 cursor-pointer"
       onClick={() => navigate(`/cake/${cake._id}`)}
     >
@@ -412,7 +418,7 @@ const AllCakes = () => {
           {cake.description?.slice(0, 100)}...
         </p>
         <div className="flex gap-2">
-          <button
+          <button 
             className="hidden lg:block flex-1 bg-rose-300 hover:bg-rose-400 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors duration-300"
             onClick={(e) => {
               e.stopPropagation();
@@ -421,7 +427,7 @@ const AllCakes = () => {
           >
             Add to Cart
           </button>
-          <button
+          <button 
             className="hidden lg:block flex-1 border border-rose-300 text-rose-500 hover:bg-rose-50 px-2 py-1.5 rounded text-xs font-medium transition-colors duration-300"
             onClick={(e) => {
               e.stopPropagation();
@@ -451,8 +457,8 @@ const AllCakes = () => {
       <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
+          <button 
+            onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors"
           >
             Try Again
@@ -481,10 +487,11 @@ const AllCakes = () => {
             <button
               key={category.id}
               onClick={() => setActiveSection(category.id)}
-              className={`px-4 py-2 rounded-full transition-all duration-300 ${activeSection === category.id
+              className={`px-4 py-2 rounded-full transition-all duration-300 ${
+                activeSection === category.id
                   ? 'bg-rose-300 text-white shadow-md'
                   : 'bg-white text-gray-600 hover:bg-rose-50'
-                }`}
+              }`}
             >
               {category.name}
             </button>
