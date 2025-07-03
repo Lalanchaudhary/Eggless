@@ -64,6 +64,8 @@ const Payment = ({ selectedAddress ,orderInstruction,tax ,shipping}) => {
           price: item.price,
         })),
         totalAmount: total,
+        tax:tax,
+        shippingcharge:shipping,
         shippingAddress: selectedAddress,
         orderInstruction,
         userId: user._id,

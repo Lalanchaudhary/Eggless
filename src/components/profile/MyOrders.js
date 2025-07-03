@@ -61,7 +61,6 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
       borderBottomWidth: 1
     },
     logo: {
-      width: 75,
       height:75
     },
     title: {
@@ -160,21 +159,19 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
     // Prepare billData from order
     const billData = {
       customer: {
-        displayName: order.shippingAddress?.name || order.userName || 'Customer',
-        mobile: order.shippingAddress?.phone || '',
-        email: order.shippingAddress?.email || '',
+        displayName: order.user?.name || order.userName || 'Customer',
+        mobile: order.user?.phoneNumber || '',
+        email: order.user?.email || '',
       },
       invoiceNumber: order.orderId || order.id || '',
-      invoiceDate: new Date(order.createdAt).toLocaleDateString(),
+      invoiceDate: order.createdAt,
       items: order.items.map(item => ({
-        itemDetails: item.name,
+        itemDetails: item.product.name,
         quantity: item.quantity,
         rate: item.price,
         amount: item.price * item.quantity,
       })),
       subTotal: order.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
-      discount: order.discount || 0,
-      DiscPrice: order.discountAmount || 0,
       taxRate: order.taxRate || 0,
       TaxPrice: order.taxAmount || 0,
       total: order.totalAmount || 0,
@@ -324,7 +321,7 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
                 {order.shippingAddress?.street}<br />
                 {order.shippingAddress?.city}, {order.shippingAddress?.state}<br />
                 {order.shippingAddress?.pincode}<br />
-                Phone: {order.shippingAddress?.phone}
+                Phone: {order.user?.phoneNumber}
               </div>
             </div>
           </div>
@@ -336,7 +333,7 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
               {order.items.map((item, index) => (
                 <div key={index} className="flex justify-between items-center">
                   <div>
-                    <span className="font-medium">{item.name}</span>
+                    <span className="font-medium">{item.product.name}</span>
                     <span className="text-gray-600 ml-2">x {item.quantity}</span>
                   </div>
                   <div className="text-right">
