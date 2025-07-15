@@ -5,24 +5,24 @@ import { getAllCakes } from '../services/cakeServices';
 const menuItems = [
   {
     label: 'Cakes',
-    href: '/all-cakes',
+    href: 'Cake',
     dropdown: [
-      { name: 'Chocolate Cakes', href: '/chocolate-cakes' },
-      { name: 'Vanilla Cakes', href: '/vanilla-cakes' },
-      { name: 'Red Velvet Cakes', href: '/all-cakes' },
-      { name: 'Fruit Cakes', href: '/all-cakes' },
-      { name: 'Cheesecakes', href: '/all-cakes' },
-      { name: 'Ice Cream Cakes', href: '/all-cakes' },
+      { name: 'Chocolate Cakes', href: 'Chocolate' },
+      { name: 'Vanilla Cakes', href: 'Vanilla' },
+      { name: 'Red Velvet Cakes', href: 'Red Velvet' },
+      { name: 'Fruit Cakes', href: 'Fruit' },
+      { name: 'Pineapple Cake', href: 'Pineapple' },
+      { name: 'Butterscotch-cake', href: 'Butterscotch' },
     ],
   },
   {
     label: 'Theme Cakes',
-    href: '/all-cakes',
+    href: 'Theme',
     dropdown: [
-      { name: 'Cartoon Theme', href: '/cartoon-cakes' },
-      { name: 'Superhero Theme', href: '/superhero-cakes' },
-      { name: 'Cricket Theme', href: '/cricket-cakes' },
-      { name: 'Nature Theme', href: '/nature-cakes' },
+      { name: 'Cartoon Theme', href: 'Cartoon' },
+      { name: 'Superhero Theme', href: 'Superhero' },
+      { name: 'Cricket Theme', href: 'Cricket' },
+      { name: 'Nature Theme', href: 'Nature' },
     ],
   },
   {
@@ -39,75 +39,56 @@ const menuItems = [
   },
   {
     label: 'Desserts',
-    href: '/all-cakes',
+    href: 'Desserts',
     dropdown: [
-      { name: 'Cupcakes', href: '/all-cakes' },
-      { name: 'Brownies', href: '/all-cakes' },
-      { name: 'Cookies', href: '/all-cakes' },
-      { name: 'Pastries', href: '/all-cakes' },
-      { name: 'Muffins', href: '/all-cakes' },
-      { name: 'Donuts', href: '/all-cakes' },
+      { name: 'Cupcakes', href: 'Cupcakes' },
+      { name: 'Brownies', href: 'Brownies' },
+      { name: 'Cookies', href: 'Cookies' },
+      { name: 'Pastries', href: 'Pastries' },
+      { name: 'Muffins', href: 'Muffins' },
+      { name: 'Donuts', href: 'Donuts' },
     ],
   },
   {
     label: 'Birthday',
-    href: '/birthday-cakes',
+    href: 'Birthday',
     dropdown: [
-      { name: 'Kids Birthday', href: '/birthday-cakes' },
-      { name: 'Adult Birthday', href: '/birthday-cakes' },
-      { name: 'Milestone Birthday', href: '/birthday-cakes' },
-      { name: 'Surprise Birthday', href: '/birthday-cakes' },
-      { name: 'Birthday Combos', href: '/birthday-cakes' },
-      { name: 'Birthday Specials', href: '/birthday-cakes' },
-    ],
-  },
-  {
-    label: 'Hampers',
-    href: '/all-cakes',
-    badge: 'New',
-    dropdown: [
-      { name: 'Chocolate Hampers', href: '/all-cakes' },
-      { name: 'Fruit Hampers', href: '/all-cakes' },
-      { name: 'Gift Hampers', href: '/all-cakes' },
-      { name: 'Premium Hampers', href: '/all-cakes' },
-      { name: 'Corporate Hampers', href: '/all-cakes' },
-      { name: 'Custom Hampers', href: '/all-cakes' },
+      { name: 'Kids Birthday', href: 'Kids Birthday' },
+      { name: 'Adult Birthday', href: 'Adult Birthday' },
+      { name: 'Milestone Birthday', href: 'Milestone Birthday' },
+      { name: 'Surprise Birthday', href: 'Surprise Birthday' },
+      { name: 'Birthday Combos', href: 'Birthday Combos' },
+      { name: 'Birthday Specials', href: 'Birthday Specials' },
     ],
   },
   {
     label: 'Anniversary',
-    href: '/anniversary',
+    href: 'anniversary',
     dropdown: [
-      { name: '1st-anniversary-cakes', href: '/1st-anniversary-cakes' },
-      { name: 'Dating Anniversary', href: '/anniversary-cakes' },
-      { name: 'Work Anniversary', href: '/anniversary-cakes' },
-      { name: 'Friendship Anniversary', href: '/anniversary-cakes' },
-      { name: 'Anniversary Combos', href: '/anniversary-cakes' },
-      { name: 'Anniversary Specials', href: '/anniversary' },
+      { name: 'First Anniversary', href: 'FirstAnniversary' },
+      { name: 'Anniversary Combos', href: 'Anniversary' },
+      { name: 'Anniversary Specials', href: 'Anniversary' },
     ],
   },
   {
     label: 'Occasion',
     href: '/all-cakes',
     dropdown: [
-      { name: 'FriendShip Day', href: '/friendshipday-cakes' },
-      { name: 'Baby Shower', href: '/all-cakes' },
-      { name: 'Graduation', href: '/graduation-cakes' },
-      { name: 'House Warming', href: '/all-cakes' },
-      { name: 'Farewell', href: '/all-cakes' },
-      { name: 'Congratulations', href: '/all-cakes' },
+      { name: 'FriendShip Day', href: 'FriendShip Day' },
+      { name: 'Baby Shower', href: 'Baby Shower' },
+      { name: 'Farewell', href: 'Farewell' },
+      { name: 'Congratulations', href: 'Congratulations' },
     ],
   },
   {
     label: 'Customized Cakes',
-    href: '/all-cakes',
+    href: 'Customized',
     dropdown: [
-      { name: 'Photo Cakes', href: '/all-cakes' },
+      { name: 'Photo Cakes', href: 'Photo' },
       { name: 'Name Cakes', href: '/all-cakes' },
-      { name: 'Designer Cakes', href: '/all-cakes' },
-      { name: '3D Cakes', href: '/all-cakes' },
-      { name: 'Fondant Cakes', href: '/all-cakes' },
-      { name: 'Custom Flavors', href: '/all-cakes' },
+      { name: 'Designer Cakes', href: 'Designer' },
+      { name: 'Fondant Cakes', href: 'Fondant' },
+      { name: 'Custom Flavors', href: 'Custom' },
     ],
   },
 ];
@@ -237,12 +218,15 @@ const SubNavbar = ({ vertical = false }) => {
   };
 
   const handleItemClick = (href) => {
-    navigate(href);
+    console.log('====================================');
+    console.log(href);
+    console.log('====================================');
+    navigate(`/cakes/${href}`);
     setHoveredItem(null);
   };
 
   const handleDropdownItemClick = (href) => {
-    navigate(href);
+    navigate(`/cakes/${href}`);
     setHoveredItem(null);
   };
 
@@ -353,7 +337,7 @@ const SubNavbar = ({ vertical = false }) => {
       )}
       {/* SubNavbar horizontal menu as before */}
       <nav
-        className={`w-full bg-white border-b border-gray-100 shadow-sm ${
+        className={`w-full bg-white border-b border-gray-100 shadow-sm sticky top-[95px] z-30 ${
           vertical ? '' : 'hidden md:block'
         } relative`}
       >
@@ -361,7 +345,7 @@ const SubNavbar = ({ vertical = false }) => {
           className={`flex ${
             vertical
               ? 'flex-col gap-2 items-start px-4 py-2'
-              : 'flex-row justify-center items-center gap-10 py-3 md:py-4 overflow-x-auto whitespace-nowrap'
+              : 'flex-row justify-between items-center px-8  py-3 md:py-4 overflow-x-auto whitespace-nowrap'
           }`}
         >
           {menuItems.map((item) => {

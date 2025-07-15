@@ -278,9 +278,9 @@ const CakeDetails = () => {
 
                 {/* Category and Flavor */}
                 <div className="flex gap-4 mb-3">
-                  {cakeData.category && (
+                  {cakeData.number && (
                     <span className="text-sm text-gray-500 capitalize">
-                      Category: {cakeData.category}
+                      Cake Number: {cakeData.number}
                     </span>
                   )}
                   {cakeData.flavor && (

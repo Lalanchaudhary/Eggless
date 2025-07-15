@@ -41,6 +41,8 @@ import Cricket from './pages/ThemeCake/Cricket'
 import Nature from './pages/ThemeCake/Nature'
 import FriendshipDay from './pages/Occasion/FriendshipDay'
 import DownloadApk from './pages/DownloadApk'
+import SubNavbar from './components/SubNavbar'
+import CommanPage from './pages/CommonPage'
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token')
@@ -143,6 +145,7 @@ const App = () => {
       <ScrollToTop />
       <div className="bg-[#f4eee1] min-h-screen flex flex-col">
         {!isAdminRoute && <NavbarDemo />}
+        {!isAdminRoute && <SubNavbar />}
         <main className="flex-grow">
           <Routes>
             {/* Public Routes */}
@@ -156,6 +159,7 @@ const App = () => {
             <Route path="/cartoon-cakes" element={<CartoonCake />} />
             <Route path="/cricket-cakes" element={<Cricket />} />
             <Route path="/nature-cakes" element={<Nature />} />
+            <Route path="/cakes/:id" element={<CommanPage />} />
             <Route path="/friendshipday-cakes" element={<FriendshipDay />} />
             <Route path="/corporates-cakes" element={<CorporateCakes />} />
             <Route path="/cake/:id" element={<CakeDetails />} />

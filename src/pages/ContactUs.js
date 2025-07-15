@@ -122,7 +122,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Visit Us</h3>
-                    <p className="text-gray-600">123 Bakery Street, Sweet City, SC 12345</p>
+                    <p className="text-gray-600">Sector 128, Noida City, 201304</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -133,7 +133,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Call Us</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
+                    <p className="text-gray-600">+91 7503333332</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -144,7 +144,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Email Us</h3>
-                    <p className="text-gray-600">info@sweetdelights.com</p>
+                    <p className="text-gray-600">info.egglesscakes@gmail.com</p>
                   </div>
                 </div>
               </div>
@@ -155,16 +155,8 @@ const ContactUs = () => {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Business Hours</h2>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span className="text-gray-900">9:00 AM - 8:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span className="text-gray-900">10:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span className="text-gray-900">Closed</span>
+                  <span className="text-gray-600">Monday - Sunday</span>
+                  <span className="text-gray-900">9:00 AM - 11:00 PM</span>
                 </div>
               </div>
             </div>
@@ -172,7 +164,7 @@ const ContactUs = () => {
             {/* Map */}
             <div className="aspect-video rounded-lg overflow-hidden shadow-md">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30591910525!2d-74.25986432970718!3d40.697149422113014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1645564750981!5m2!1sen!2s"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.8075320948947!2d77.36887227528453!3d28.51543787572888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce624117eb64b%3A0xe2f7ea1582c32cfb!2sEggless%20Cake%20Shop!5e0!3m2!1sen!2sin!4v1752556881529!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

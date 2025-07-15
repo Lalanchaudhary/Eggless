@@ -6,8 +6,10 @@ import BackDropSection from "./BackDropSection";
 import Carousel from "./Carousel";
 import SubNavbar from './SubNavbar';
 import CelebrationModal from "./CelebrationModel";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate=useNavigate();
   let Heroimages = [
     {
       image: "https://i.pinimg.com/736x/39/8c/b3/398cb39a0415321977ee080472e85c48.jpg",
@@ -97,7 +99,6 @@ const HeroSection = () => {
 
   return (
     <>
-      <SubNavbar />
       <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-rose-50 to-amber-50 p-8 md:p-16 min-h-screen">
         {/* Left Content */}
         <div className="max-w-xl mb-10 md:mb-0">
@@ -111,7 +112,7 @@ const HeroSection = () => {
 
           {/* Buttons */}
           <div className="flex gap-4">
-            <button className="bg-rose-300 hover:bg-rose-400 text-white font-semibold px-6 py-3 rounded shadow transition">
+            <button className="bg-rose-300 hover:bg-rose-400 text-white font-semibold px-6 py-3 rounded shadow transition" onClick={()=>{navigate("/all-cakes")}}>
               Explore Our Cakes
             </button>
             <button className="bg-amber-100 hover:bg-amber-200 text-gray-800 font-medium px-6 py-3 rounded shadow transition">

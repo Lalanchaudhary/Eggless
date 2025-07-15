@@ -330,19 +330,17 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
             <h4 className="text-lg font-medium text-gray-900 mb-3">Order Items</h4>
             <div className="space-y-4">
               {order.items.map((item, index) => (
-                <div key={index} className="flex justify-between text-sm">
-                  <span>{item.product.name} x {item.quantity}</span>
-                  <span>₹{item.price.toFixed(2)}</span>
+                <div key={index} className="flex justify-between items-center">
+                  <div>
+                    <span className="font-medium">{item.product.name}</span>
+                    <span className="text-gray-600 ml-2">x {item.quantity}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-gray-600">₹{item.price.toFixed(2)} each</div>
+                    <div className="font-medium">₹{(item.price * item.quantity).toFixed(2)}</div>
+                  </div>
                 </div>
               ))}
-              <div className="flex justify-between text-sm mt-2">
-                <span>Shipping Charge</span>
-                <span>₹{order.shippingcharge ? order.shippingcharge.toFixed(2) : '0.00'}</span>
-              </div>
-              <div className="flex justify-between text-sm mt-1">
-                <span>Tax</span>
-                <span>₹{order.tax ? order.tax.toFixed(2) : '0.00'}</span>
-              </div>
               <div className="border-t pt-4 flex justify-between font-semibold">
                 <span>Total Amount</span>
                 <span>₹{order.totalAmount.toFixed(2)}</span>
@@ -523,15 +521,7 @@ const MyOrders = () => {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between text-sm mt-2">
-                <span>Shipping Charge</span>
-                <span>₹{order.shippingcharge ? order.shippingcharge.toFixed(2) : '0.00'}</span>
-              </div>
-              <div className="flex justify-between text-sm mt-1">
-                <span>Tax</span>
-                <span>₹{order.tax ? order.tax.toFixed(2) : '0.00'}</span>
-              </div>
-              <div className="border-t pt-4 flex justify-between font-semibold">
+              <div className="mt-4 pt-4 border-t flex justify-between font-semibold">
                 <span>Total</span>
                 <span>₹{order.totalAmount.toFixed(2)}</span>
               </div>

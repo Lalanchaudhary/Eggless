@@ -61,7 +61,8 @@ const Products = () => {
       carbs: '',
       fat: ''
     },
-    reviewsList: []
+    reviewsList: [],
+    number: 0
   });
 
   const [newSize, setNewSize] = useState({
@@ -72,6 +73,9 @@ const Products = () => {
 
   const [newIngredient, setNewIngredient] = useState('');
   const [newAllergen, setNewAllergen] = useState('');
+  const [editingSizeIndex, setEditingSizeIndex] = useState(null);
+  const [editingSize, setEditingSize] = useState({ size: '', price: '', serves: '' });
+  const [searchNumber, setSearchNumber] = useState('');
 
   useEffect(() => {
     loadProducts();
@@ -112,7 +116,8 @@ const Products = () => {
         carbs: '',
         fat: ''
       },
-      reviewsList: []
+      reviewsList: [],
+      number: products.length + 1
     });
     setDialogOpen(true);
   };
@@ -140,7 +145,8 @@ const Products = () => {
         carbs: '',
         fat: ''
       },
-      reviewsList: product.reviewsList || []
+      reviewsList: product.reviewsList || [],
+      number: product.number?.$numberInt || product.number || ''
     });
     setDialogOpen(true);
   };
@@ -257,6 +263,14 @@ const Products = () => {
     );
   }
 
+  // Group products by category
+  const groupedProducts = products.reduce((acc, product) => {
+    const category = product.category || 'Uncategorized';
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(product);
+    return acc;
+  }, {});
+
   return (
     <Box p={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -273,53 +287,91 @@ const Products = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Flavor</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Rating</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow key={product._id}>
-                <TableCell>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    style={{ width: 50, height: 50, objectFit: 'cover' }}
-                  />
-                </TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.category}</TableCell>
-                <TableCell>{product.flavor}</TableCell>
-                <TableCell>₹{product.price.toFixed(2)}</TableCell>
-                <TableCell>{product.rating}</TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleEditProduct(product)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDeleteProduct(product._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {/* Search box for number */}
+      <Box mb={3} maxWidth={300}>
+        <TextField
+          label="Search by Number"
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={searchNumber}
+          onChange={e => setSearchNumber(e.target.value)}
+        />
+      </Box>
+
+      {/* Render products grouped by category */}
+      {(() => {
+        const filteredProducts = searchNumber.trim()
+          ? products.filter(product => {
+              const num = product.number?.$numberInt || product.number || '';
+              return num.toString() === searchNumber.trim();
+            })
+          : products;
+        const groupedProductsFiltered = filteredProducts.reduce((acc, product) => {
+          const label = product.label || 'Unlabeled';
+          if (!acc[label]) acc[label] = [];
+          acc[label].push(product);
+          return acc;
+        }, {});
+        return Object.keys(groupedProductsFiltered).map((label) => (
+          <Box key={label} mb={5}>
+            <Typography variant="h5" sx={{ mb: 2, mt: 3 }} color="secondary">
+              {label} ({groupedProductsFiltered[label].length})
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Image</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Category</TableCell>
+                    <TableCell>Flavor</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Rating</TableCell>
+                    <TableCell>Label</TableCell>
+                    <TableCell>Number</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {groupedProductsFiltered[label].map((product) => (
+                    <TableRow key={product._id}>
+                      <TableCell>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          style={{ width: 50, height: 50, objectFit: 'cover' }}
+                        />
+                      </TableCell>
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>{product.category}</TableCell>
+                      <TableCell>{product.flavor}</TableCell>
+                      <TableCell>₹{product.price.toFixed(2)}</TableCell>
+                      <TableCell>{product.rating}</TableCell>
+                      <TableCell>{product.label}</TableCell>
+                      <TableCell>{product.number?.$numberInt || product.number || ''}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleEditProduct(product)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDeleteProduct(product._id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        ));
+      })()}
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>
@@ -417,6 +469,17 @@ const Products = () => {
                   required
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Number"
+                  name="number"
+                  type="number"
+                  value={formData.number}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Grid>
 
               {/* Sizes Section */}
               <Grid item xs={12}>
@@ -458,15 +521,78 @@ const Products = () => {
                 <List>
                   {formData.sizes.map((size, index) => (
                     <ListItem key={index}>
-                      <ListItemText
-                        primary={`${size.size} - ₹${size.price}`}
-                        secondary={`Serves: ${size.serves}`}
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton edge="end" onClick={() => handleRemoveSize(index)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
+                      {editingSizeIndex === index ? (
+                        <>
+                          <TextField
+                            label="Size"
+                            value={editingSize.size}
+                            onChange={e => setEditingSize(prev => ({ ...prev, size: e.target.value }))}
+                            size="small"
+                            sx={{ mr: 1, width: 80 }}
+                          />
+                          <TextField
+                            label="Price"
+                            type="number"
+                            value={editingSize.price}
+                            onChange={e => setEditingSize(prev => ({ ...prev, price: e.target.value }))}
+                            size="small"
+                            sx={{ mr: 1, width: 80 }}
+                          />
+                          <TextField
+                            label="Serves"
+                            value={editingSize.serves}
+                            onChange={e => setEditingSize(prev => ({ ...prev, serves: e.target.value }))}
+                            size="small"
+                            sx={{ mr: 1, width: 120 }}
+                          />
+                          <IconButton
+                            edge="end"
+                            aria-label="save"
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                sizes: prev.sizes.map((s, i) => i === index ? { ...editingSize } : s)
+                              }));
+                              setEditingSizeIndex(null);
+                            }}
+                          >
+                            <span role="img" aria-label="save">💾</span>
+                          </IconButton>
+                          <IconButton
+                            edge="end"
+                            aria-label="cancel"
+                            onClick={() => setEditingSizeIndex(null)}
+                          >
+                            <span role="img" aria-label="cancel">❌</span>
+                          </IconButton>
+                        </>
+                      ) : (
+                        <>
+                          <ListItemText
+                            primary={`${size.size} - ₹${size.price}`}
+                            secondary={`Serves: ${size.serves}`}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              edge="end"
+                              aria-label="edit"
+                              onClick={() => {
+                                setEditingSizeIndex(index);
+                                setEditingSize(size);
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              edge="end"
+                              aria-label="delete"
+                              onClick={() => handleRemoveSize(index)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </>
+                      )}
                     </ListItem>
                   ))}
                 </List>
@@ -475,76 +601,72 @@ const Products = () => {
               {/* Ingredients Section */}
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom>Ingredients</Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={9}>
-                    <TextField
-                      fullWidth
-                      label="Ingredient"
-                      value={newIngredient}
-                      onChange={(e) => setNewIngredient(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={handleAddIngredient}
-                      sx={{ height: '100%' }}
-                    >
-                      Add Ingredient
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Add Ingredient"
+                  value={newIngredient}
+                  onChange={(e) => setNewIngredient(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddIngredient();
+                    }
+                  }}
+                />
+                <List>
                   {formData.ingredients.map((ingredient, index) => (
-                    <Chip
-                      key={index}
-                      label={ingredient}
-                      onDelete={() => handleRemoveIngredient(index)}
-                    />
+                    <ListItem key={index}>
+                      <ListItemText primary={ingredient} />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleRemoveIngredient(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
                   ))}
-                </Box>
+                </List>
               </Grid>
 
               {/* Allergens Section */}
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom>Allergens</Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={9}>
-                    <TextField
-                      fullWidth
-                      label="Allergen"
-                      value={newAllergen}
-                      onChange={(e) => setNewAllergen(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={handleAddAllergen}
-                      sx={{ height: '100%' }}
-                    >
-                      Add Allergen
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Add Allergen"
+                  value={newAllergen}
+                  onChange={(e) => setNewAllergen(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleAddAllergen();
+                    }
+                  }}
+                />
+                <List>
                   {formData.allergens.map((allergen, index) => (
-                    <Chip
-                      key={index}
-                      label={allergen}
-                      onDelete={() => handleRemoveAllergen(index)}
-                    />
+                    <ListItem key={index}>
+                      <ListItemText primary={allergen} />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleRemoveAllergen(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
                   ))}
-                </Box>
+                </List>
               </Grid>
 
               {/* Nutrition Info Section */}
               <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom>Nutrition Information</Typography>
+                <Typography variant="h6" gutterBottom>Nutrition Info</Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="Calories"
@@ -553,7 +675,7 @@ const Products = () => {
                       onChange={handleInputChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="Protein"
@@ -562,7 +684,7 @@ const Products = () => {
                       onChange={handleInputChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="Carbs"
@@ -571,7 +693,7 @@ const Products = () => {
                       onChange={handleInputChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       label="Fat"
@@ -582,18 +704,35 @@ const Products = () => {
                   </Grid>
                 </Grid>
               </Grid>
+
+              {/* Reviews List Section */}
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>Reviews</Typography>
+                <List>
+                  {formData.reviewsList.map((review, index) => (
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary={`Review ${index + 1}: ${review.comment}`}
+                        secondary={`Rating: ${review.rating}/5`}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Grid>
             </Grid>
+            <DialogActions>
+              <Button onClick={() => setDialogOpen(false)} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" variant="contained" color="primary">
+                {selectedProduct ? 'Save Changes' : 'Add Product'}
+              </Button>
+            </DialogActions>
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
-            {selectedProduct ? 'Update' : 'Add'}
-          </Button>
-        </DialogActions>
       </Dialog>
     </Box>
   );
 };
 
-export default Products; 
+export default Products;

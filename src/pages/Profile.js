@@ -85,11 +85,13 @@ const Profile = () => {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
+    // Only clear previous confirmation, not recaptchaVerifier
+    if (window.confirmationResult) window.confirmationResult = null;
     try {
       if (!formData.phoneNumber || formData.phoneNumber.length < 10) {
         throw new Error('Please enter a valid phone number');
       }
-      // Setup reCAPTCHA
+      // Setup reCAPTCHA only if not already rendered
       if (!window.recaptchaVerifier) {
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
           size: 'invisible',
@@ -241,9 +243,6 @@ const Profile = () => {
                   <span>Mobile - <b className="text-blue-700">{maskPhone(formData.phoneNumber)}</b></span><br />
 
                 </div>
-                <div className="text-center mb-4">
-                  <button className="text-blue-600 underline" onClick={() => setIsOtpSent(false)}>Change</button>
-                </div>
                 <form onSubmit={handleVerifyOtp}>
                   <div className="flex justify-center space-x-2 mb-2">
                     {otpArray.map((digit, idx) => (
@@ -271,13 +270,19 @@ const Profile = () => {
                   </button>
                 </form>
                 <div className="text-center text-xs text-gray-500 mb-2">
-                  By continuing, you agree to Winni <a href="#" className="text-blue-600 underline">Terms of Use</a> and <a href="#" className="text-blue-600 underline">Privacy Policy</a>.
+                  By continuing, you agree to Egglesscake <a href="#" className="text-blue-600 underline">Terms of Use</a> and <a href="#" className="text-blue-600 underline">Privacy Policy</a>.
                 </div>
                 <button
                   className="w-full py-2 border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-50"
-                  onClick={handleLoginWithPassword}
+                  onClick={() => {
+                    setIsOtpSent(false);
+                    setError('');
+                    setOtpArray(Array(OTP_LENGTH).fill(''));
+                    if (window.confirmationResult) window.confirmationResult = null;
+                    // Do NOT clear or re-initialize window.recaptchaVerifier here
+                  }}
                 >
-                  Login using Password
+                  Change Phone Number
                 </button>
               </>
             )}
