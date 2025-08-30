@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllCakes } from '../services/cakeServices';
+import { FaPhone, FaSearch } from 'react-icons/fa';
 
 const menuItems = [
   {
@@ -103,6 +104,7 @@ const SubNavbar = ({ vertical = false }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [showSearchInput, setShowSearchInput] = useState(false);
   const [allCakes, setAllCakes] = useState([]);
   const searchRef = useRef(null);
 
@@ -128,15 +130,19 @@ const SubNavbar = ({ vertical = false }) => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setShowSearchResults(false);
+        // Don't close search input when clicking on the search icon
+        if (!event.target.closest('button[aria-label="toggle-search"]')) {
+          setShowSearchInput(false);
+        }
       }
     };
-    if (showSearchResults) {
+    if (showSearchResults || showSearchInput) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showSearchResults]);
+  }, [showSearchResults, showSearchInput]);
 
   const performSearch = (query) => {
     if (!query.trim()) {
@@ -232,41 +238,59 @@ const SubNavbar = ({ vertical = false }) => {
 
   return (
     <>
-      {/* Mobile search box above subnavbar */}
+      {/* Phone numbers with search icon for mobile */}
       {isMobile && (
-        <div className="w-full px-2 py-1 bg-white border-b border-gray-100 sticky top-[60px] z-40" ref={searchRef}>
-          <form onSubmit={handleSearch} className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-              onFocus={() => searchQuery.trim() && setShowSearchResults(true)}
-              placeholder="Search cakes, flavors, occasions..."
-              className="w-full px-4 py-1 rounded-lg  border border-gray-200 focus:outline-none focus:border-[#e098b0] focus:ring-2 focus:ring-[#e098b0]/20 transition-all duration-300 bg-gray-50 hover:bg-white"
-            />
-            <button
-              type="submit"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#e098b0] transition-colors duration-300"
+        <div className="w-full px-2 py-2 bg-white border-b border-gray-100 sticky top-[60px] z-40">
+          {/* Phone numbers in rows */}
+          <div className="flex flex-row items-center justify-between">
+            <a href="tel:7503333332" className="flex items-center space-x-2 text-gray-700 hover:text-[#e098b0] transition-colors duration-300 mb-1">
+              <FaPhone className="text-[#e098b0]" />
+              <span className="text-sm font-medium">750-333-3332</span>
+            </a>
+            <a href="tel:8285500500" className="flex items-center space-x-2 text-gray-700 hover:text-[#e098b0] transition-colors duration-300">
+              <FaPhone className="text-[#e098b0]" />
+              <span className="text-sm font-medium">828-550-0500</span>
+            </a>
+                      {/* Search icon and toggle */}
+          <div className="flex justify-center">
+            <button 
+              onClick={() => setShowSearchInput(!showSearchInput)}
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+              aria-label="toggle-search"
             >
-              {isSearching ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#e098b0]"></div>
-              ) : (
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              )}
+              <FaSearch className="text-[#e098b0] w-4 h-4" />
             </button>
-          </form>
+          </div>
+          </div>
+          
+
+          
+          {/* Search input that appears when search icon is clicked */}
+          {showSearchInput && (
+            <div className="mt-2" ref={searchRef}>
+              <form onSubmit={handleSearch} className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  onFocus={() => searchQuery.trim() && setShowSearchResults(true)}
+                  placeholder="Search cakes, flavors, occasions..."
+                  className="w-full px-4 py-1 rounded-lg border border-gray-200 focus:outline-none focus:border-[#e098b0] focus:ring-2 focus:ring-[#e098b0]/20 transition-all duration-300 bg-gray-50 hover:bg-white"
+                  autoFocus
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#e098b0] transition-colors duration-300"
+                >
+                  {isSearching ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#e098b0]"></div>
+                  ) : (
+                    <FaSearch className="w-4 h-4" />
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
           {/* Mobile Search Results Dropdown */}
           {showSearchResults && (
             <div

@@ -7,7 +7,7 @@ import logo from '../assets/Egglesscake.png'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SubNavbar from './SubNavbar';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useUser } from '../context/UserContext';
 import VerticalSubNavbar from './VerticalSubNavbar';
@@ -263,6 +263,18 @@ export function NavbarDemo() {
             )}
           </div>
 
+          {/* Phone numbers - visible on desktop */}
+          <div className="hidden md:flex items-center space-x-4 mr-4">
+            <a href="tel:7503333332" className="hidden md:flex items-center space-x-2 text-gray-700 hover:text-[#e098b0] transition-colors duration-300">
+              <FaPhone className="text-[#e098b0]" />
+              <span className="text-sm font-medium">750-333-3332</span>
+            </a>
+            <a href="tel:8285500500" className="hidden md:flex items-center space-x-2 text-gray-700 hover:text-[#e098b0] transition-colors duration-300">
+              <FaPhone className="text-[#e098b0]" />
+              <span className="hidden md:flex text-sm font-medium">828-550-0500</span>
+            </a>
+          </div>
+
           {/* Right side icons */}
           <div className="flex items-center space-x-2 md:space-x-4">
 
@@ -356,6 +368,9 @@ export function NavbarDemo() {
 
           </div>
         </div>
+        {/* Phone numbers - visible on mobile when menu is open */}
+
+
         {/* Mobile menu with search */}
         <div
           ref={mobileMenuRef}
