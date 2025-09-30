@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import * as adminService from '../../services/adminService';
+import OrderChart from './charts/OrderChart';
+import MonthlyChart from './charts/MonthlyChart';
+import DailyOrderChart from './charts/DailyOrderChart';
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -40,7 +43,6 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Admin Dashboard</h1>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -104,12 +106,16 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div className='flex justify-between items-center mb-8'>
+        <DailyOrderChart/>
+        <OrderChart />
+      </div>
 
       {/* Recent Orders */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
-          <button 
+          <button
             onClick={loadDashboardStats}
             className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
           >
@@ -120,8 +126,8 @@ const Dashboard = () => {
         {stats?.recentOrders?.length > 0 ? (
           <div className="space-y-4">
             {stats.recentOrders.map((order) => (
-              <div 
-                key={order._id} 
+              <div
+                key={order._id}
                 className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
