@@ -96,9 +96,6 @@ export const deleteCake = async (id) => {
 
 // Add review to cake
 export const addReview = async (cakeId, reviewData) => {
-    console.log('====================================');
-    console.log(cakeId);
-    console.log('====================================');
   try {
     const response = await api.post(`/cake/${cakeId}/reviews`, reviewData);
     return response.data;

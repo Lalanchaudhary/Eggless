@@ -127,9 +127,6 @@ const Checkout = () => {
             userLocation.latitude,
             userLocation.longitude
           );
-          console.log('====================================');
-          console.log( "dis",userLocation.latitude,"minDis",userLocation.longitude);
-          console.log('====================================');
           if (distance < minDistance) {
             minDistance = distance;
             nearestAdmin = admin;

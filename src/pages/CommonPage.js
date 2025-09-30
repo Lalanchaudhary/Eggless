@@ -32,7 +32,6 @@ const CommanPage = () => {
           e.category?.toLowerCase().includes(id.toLowerCase()) ||
           e.name?.toLowerCase().includes(id.toLowerCase())
         );
-        console.log('Fetched cakes:', filterData);
         setCakes(filterData);
         setError(null);
       } catch (err) {

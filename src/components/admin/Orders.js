@@ -46,7 +46,6 @@ const Orders = () => {
   const loadOrders = async () => {
     try {
       const data = await adminService.getAllOrders();
-      console.log(data.orders);
       
       setOrders(data.orders);
       setError(null);

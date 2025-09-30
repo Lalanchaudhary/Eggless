@@ -433,9 +433,6 @@ const MyOrders = () => {
   };
 
   const handleCancelClick = (orderId) => {
-    console.log('====================================');
-    console.log(orderId);
-    console.log('====================================');
     setCancellingOrderId(orderId);
     setCancelDialog(true);
   };

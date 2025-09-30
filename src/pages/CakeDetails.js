@@ -167,9 +167,6 @@ const CakeDetails = () => {
         comment: newReview.comment
       };
 
-      console.log('====================================');
-      console.log("cake id",id);
-      console.log('====================================');
       const updatedCake = await addReview(id, reviewData);
       setCakeData(updatedCake);
       

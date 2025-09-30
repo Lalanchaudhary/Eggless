@@ -54,9 +54,6 @@ const initializeRazorpay = () => {
 
 // Create Razorpay Order
 const createRazorpayOrder = async (orderData) => {
-  console.log('====================================');
-  console.log(orderData);
-  console.log('====================================');
   try {
     // Check if token exists
     const token = localStorage.getItem('token');
@@ -156,7 +153,7 @@ const handleRazorpayPayment = async (orderData) => {
 
 // Handle COD Payment
 const handleCODPayment = async (orderData) => {
-  console.log("cod pe");
+
   
   try {
     const response = await api.post('/payment/cod',orderData);

@@ -28,7 +28,6 @@ const SuperManCake = () => {
         const fiterData=data.filter((e)=>{
             return e.label=='superhero-cakes'
         })
-        console.log('Fetched cakes:', fiterData);
         setCakes(fiterData);
         setError(null);
       } catch (err) {

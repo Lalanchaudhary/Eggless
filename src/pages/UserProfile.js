@@ -214,7 +214,6 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         const profile = await getProfile(); // Wait for resolved data
-        console.log(profile.name);
         setUserData(profile);
       } catch (error) {
         console.error('Error fetching profile:', error);

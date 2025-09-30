@@ -25,7 +25,6 @@ const BirthdayCakes = () => {
       try {
         setLoading(true);
         const data = await getAllCakes();
-        console.log('Fetched cakes:', data);
         setCakes(data);
         setError(null);
       } catch (err) {

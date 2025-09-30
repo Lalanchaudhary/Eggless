@@ -25,9 +25,7 @@ export const CartProvider = ({ children }) => {
       navigate('/login');
       return;
     }
-    console.log('====================================');
-    console.log(item);
-    console.log('====================================');
+
 
     setCartItems(prevItems => {
       const existingItem = prevItems.find(i => i.id === item.id);

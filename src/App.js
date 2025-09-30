@@ -43,6 +43,7 @@ import FriendshipDay from './pages/Occasion/FriendshipDay'
 import DownloadApk from './pages/DownloadApk'
 import SubNavbar from './components/SubNavbar'
 import CommanPage from './pages/CommonPage'
+import Templates from './components/admin/Templates'
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token')
@@ -135,7 +136,8 @@ const App = () => {
     '/admin/users',
     '/admin/analytics',
     '/admin/delivery-boys',
-    '/admin/create-user'
+    '/admin/create-user',
+    'admin/create-template'
   ]
 
   const isAdminRoute = adminPaths.some(path => location.pathname.startsWith(path))
@@ -282,6 +284,16 @@ const App = () => {
                 <AdminRoute>
                   <AdminLayout>
                     <CreateUser />
+                  </AdminLayout>
+                </AdminRoute>
+              }
+            />
+                        <Route
+              path="/admin/create-template"
+              element={
+                <AdminRoute>
+                  <AdminLayout>
+                    <Templates />
                   </AdminLayout>
                 </AdminRoute>
               }

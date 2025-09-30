@@ -28,7 +28,7 @@ const FriendshipDay = () => {
         const fiterData=data.filter((e)=>{
             return e.label=='friendship-day-cakes'
         })
-        console.log('Fetched cakes:', fiterData);
+
         setCakes(fiterData);
         setError(null);
       } catch (err) {

@@ -60,7 +60,6 @@ export const getProfile = async () => {
 };
 
 export const updateProfile = async (profileData) => {
-  console.log(profileData);
   
   const response = await api.patch('/users/profile', profileData);
   // Update local storage if user data is returned
@@ -161,9 +160,7 @@ export const cancelOrder = async (orderId) => {
 
     // Step 1: Cancel the order
     const cancelResponse = await api.get(`/users/orders/${orderId}/cancel`);
-    console.log('====================================');
-    console.log(cancelResponse);
-    console.log('====================================');
+   
     // Step 2: If order was paid, trigger refund
     let refundResponse = null;
     if (cancelResponse.data.order.paymentStatus === 'Completed') {

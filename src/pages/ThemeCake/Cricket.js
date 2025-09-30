@@ -28,7 +28,6 @@ const Cricket = () => {
         const fiterData=data.filter((e)=>{
             return e.label=='cricket-cakes'
         })
-        console.log('Fetched cakes:', fiterData);
         setCakes(fiterData);
         setError(null);
       } catch (err) {
