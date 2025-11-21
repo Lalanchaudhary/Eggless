@@ -19,11 +19,6 @@ import {
   CircularProgress,
   Alert,
   Grid,
-  Chip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   List,
   ListItem,
   ListItemText,
@@ -34,12 +29,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import * as adminService from '../../services/adminService';
 
+import { storage } from '../../Firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { styled } from '@mui/material/styles';
+
+const SectionContainer = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+  padding: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
+  border: `1px solid ${theme.palette.divider}`,
+  backgroundColor: theme.palette.background.paper,
+}));
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -90,6 +99,23 @@ const Products = () => {
       setError(err.message || 'Failed to load products');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setIsUploading(true);
+      try {
+        const storageRef = ref(storage, `products/${file.name}`);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        setFormData(prev => ({ ...prev, image: downloadURL }));
+      } catch (error) {
+        setError('Image upload failed. Please try again.');
+      }
+      setIsUploading(false);
     }
   };
 
@@ -263,13 +289,7 @@ const Products = () => {
     );
   }
 
-  // Group products by category
-  const groupedProducts = products.reduce((acc, product) => {
-    const category = product.category || 'Uncategorized';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(product);
-    return acc;
-  }, {});
+
 
   return (
     <Box p={3}>
@@ -378,348 +398,378 @@ const Products = () => {
           {selectedProduct ? 'Edit Product' : 'Add New Product'}
         </DialogTitle>
         <DialogContent>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Flavor"
-                  name="flavor"
-                  value={formData.flavor}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Price"
-                  name="price"
-                  type="number"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Original Price"
-                  name="original_price"
-                  type="number"
-                  value={formData.original_price}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Label"
-                  name="label"
-                  value={formData.label}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Tag"
-                  name="tag"
-                  value={formData.tag}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  multiline
-                  rows={3}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Image URL"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Number"
-                  name="number"
-                  type="number"
-                  value={formData.number}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-
-              {/* Sizes Section */}
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom>Sizes</Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={4}>
-                    <TextField
-                      fullWidth
-                      label="Size"
-                      value={newSize.size}
-                      onChange={(e) => setNewSize(prev => ({ ...prev, size: e.target.value }))}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <TextField
-                      fullWidth
-                      label="Price"
-                      type="number"
-                      value={newSize.price}
-                      onChange={(e) => setNewSize(prev => ({ ...prev, price: e.target.value }))}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <TextField
-                      fullWidth
-                      label="Serves"
-                      value={newSize.serves}
-                      onChange={(e) => setNewSize(prev => ({ ...prev, serves: e.target.value }))}
-                    />
-                  </Grid>
+          <Box component="form" onSubmit={handleSubmit}>
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Basic Information</Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </Grid>
-                <Button
-                  variant="outlined"
-                  onClick={handleAddSize}
-                  sx={{ mt: 1 }}
-                >
-                  Add Size
-                </Button>
-                <List>
-                  {formData.sizes.map((size, index) => (
-                    <ListItem key={index}>
-                      {editingSizeIndex === index ? (
-                        <>
-                          <TextField
-                            label="Size"
-                            value={editingSize.size}
-                            onChange={e => setEditingSize(prev => ({ ...prev, size: e.target.value }))}
-                            size="small"
-                            sx={{ mr: 1, width: 80 }}
-                          />
-                          <TextField
-                            label="Price"
-                            type="number"
-                            value={editingSize.price}
-                            onChange={e => setEditingSize(prev => ({ ...prev, price: e.target.value }))}
-                            size="small"
-                            sx={{ mr: 1, width: 80 }}
-                          />
-                          <TextField
-                            label="Serves"
-                            value={editingSize.serves}
-                            onChange={e => setEditingSize(prev => ({ ...prev, serves: e.target.value }))}
-                            size="small"
-                            sx={{ mr: 1, width: 120 }}
-                          />
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Flavor"
+                    name="flavor"
+                    value={formData.flavor}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Price"
+                    name="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Original Price"
+                    name="original_price"
+                    type="number"
+                    value={formData.original_price}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Label"
+                    name="label"
+                    value={formData.label}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Tag"
+                    name="tag"
+                    value={formData.tag}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Number"
+                    name="number"
+                    type="number"
+                    value={formData.number}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    multiline
+                    rows={3}
+                  />
+                </Grid>
+              </Grid>
+            </SectionContainer>
+
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Product Image</Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Image URL"
+                    name="image"
+                    value={formData.image}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                  >
+                    Upload File
+                    <input
+                      type="file"
+                      hidden
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  {isUploading && <CircularProgress size={24} sx={{ ml: 2 }} />}
+                </Grid>
+                {(imageFile || formData.image) && (
+                  <Grid item xs={12}>
+                    <Box mt={2}>
+                      <Typography variant="subtitle1">Image Preview:</Typography>
+                      <img
+                        src={imageFile ? URL.createObjectURL(imageFile) : formData.image}
+                        alt="Preview"
+                        style={{ width: '100%', maxHeight: 300, objectFit: 'contain' }}
+                      />
+                    </Box>
+                  </Grid>
+                )}
+              </Grid>
+            </SectionContainer>
+
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Sizes</Typography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label="Size"
+                    value={newSize.size}
+                    onChange={(e) => setNewSize(prev => ({ ...prev, size: e.target.value }))}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label="Price"
+                    type="number"
+                    value={newSize.price}
+                    onChange={(e) => setNewSize(prev => ({ ...prev, price: e.target.value }))}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label="Serves"
+                    value={newSize.serves}
+                    onChange={(e) => setNewSize(prev => ({ ...prev, serves: e.target.value }))}
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                variant="outlined"
+                onClick={handleAddSize}
+                sx={{ mt: 1 }}
+              >
+                Add Size
+              </Button>
+              <List>
+                {formData.sizes.map((size, index) => (
+                  <ListItem key={index}>
+                    {editingSizeIndex === index ? (
+                      <>
+                        <TextField
+                          label="Size"
+                          value={editingSize.size}
+                          onChange={e => setEditingSize(prev => ({ ...prev, size: e.target.value }))}
+                          size="small"
+                          sx={{ mr: 1, width: 80 }}
+                        />
+                        <TextField
+                          label="Price"
+                          type="number"
+                          value={editingSize.price}
+                          onChange={e => setEditingSize(prev => ({ ...prev, price: e.target.value }))}
+                          size="small"
+                          sx={{ mr: 1, width: 80 }}
+                        />
+                        <TextField
+                          label="Serves"
+                          value={editingSize.serves}
+                          onChange={e => setEditingSize(prev => ({ ...prev, serves: e.target.value }))}
+                          size="small"
+                          sx={{ mr: 1, width: 120 }}
+                        />
+                        <IconButton
+                          edge="end"
+                          aria-label="save"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              sizes: prev.sizes.map((s, i) => i === index ? { ...editingSize } : s)
+                            }));
+                            setEditingSizeIndex(null);
+                          }}
+                        >
+                          <span role="img" aria-label="save">💾</span>
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          aria-label="cancel"
+                          onClick={() => setEditingSizeIndex(null)}
+                        >
+                          <span role="img" aria-label="cancel">❌</span>
+                        </IconButton>
+                      </>
+                    ) : (
+                      <>
+                        <ListItemText
+                          primary={`${size.size} - ₹${size.price}`}
+                          secondary={`Serves: ${size.serves}`}
+                        />
+                        <ListItemSecondaryAction>
                           <IconButton
                             edge="end"
-                            aria-label="save"
+                            aria-label="edit"
                             onClick={() => {
-                              setFormData(prev => ({
-                                ...prev,
-                                sizes: prev.sizes.map((s, i) => i === index ? { ...editingSize } : s)
-                              }));
-                              setEditingSizeIndex(null);
+                              setEditingSizeIndex(index);
+                              setEditingSize(size);
                             }}
                           >
-                            <span role="img" aria-label="save">💾</span>
+                            <EditIcon />
                           </IconButton>
                           <IconButton
                             edge="end"
-                            aria-label="cancel"
-                            onClick={() => setEditingSizeIndex(null)}
+                            aria-label="delete"
+                            onClick={() => handleRemoveSize(index)}
                           >
-                            <span role="img" aria-label="cancel">❌</span>
+                            <DeleteIcon />
                           </IconButton>
-                        </>
-                      ) : (
-                        <>
-                          <ListItemText
-                            primary={`${size.size} - ₹${size.price}`}
-                            secondary={`Serves: ${size.serves}`}
-                          />
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              edge="end"
-                              aria-label="edit"
-                              onClick={() => {
-                                setEditingSizeIndex(index);
-                                setEditingSize(size);
-                              }}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={() => handleRemoveSize(index)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </>
-                      )}
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
+                        </ListItemSecondaryAction>
+                      </>
+                    )}
+                  </ListItem>
+                ))}
+              </List>
+            </SectionContainer>
 
-              {/* Ingredients Section */}
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom>Ingredients</Typography>
-                <TextField
-                  fullWidth
-                  label="Add Ingredient"
-                  value={newIngredient}
-                  onChange={(e) => setNewIngredient(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddIngredient();
-                    }
-                  }}
-                />
-                <List>
-                  {formData.ingredients.map((ingredient, index) => (
-                    <ListItem key={index}>
-                      <ListItemText primary={ingredient} />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleRemoveIngredient(index)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Ingredients</Typography>
+              <TextField
+                fullWidth
+                label="Add Ingredient"
+                value={newIngredient}
+                onChange={(e) => setNewIngredient(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleAddIngredient();
+                  }
+                }}
+              />
+              <List>
+                {formData.ingredients.map((ingredient, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={ingredient} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleRemoveIngredient(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </SectionContainer>
 
-              {/* Allergens Section */}
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom>Allergens</Typography>
-                <TextField
-                  fullWidth
-                  label="Add Allergen"
-                  value={newAllergen}
-                  onChange={(e) => setNewAllergen(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleAddAllergen();
-                    }
-                  }}
-                />
-                <List>
-                  {formData.allergens.map((allergen, index) => (
-                    <ListItem key={index}>
-                      <ListItemText primary={allergen} />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleRemoveAllergen(index)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Allergens</Typography>
+              <TextField
+                fullWidth
+                label="Add Allergen"
+                value={newAllergen}
+                onChange={(e) => setNewAllergen(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleAddAllergen();
+                  }
+                }}
+              />
+              <List>
+                {formData.allergens.map((allergen, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={allergen} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleRemoveAllergen(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </SectionContainer>
 
-              {/* Nutrition Info Section */}
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom>Nutrition Info</Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Calories"
-                      name="nutritionInfo.calories"
-                      value={formData.nutritionInfo.calories}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Protein"
-                      name="nutritionInfo.protein"
-                      value={formData.nutritionInfo.protein}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Carbs"
-                      name="nutritionInfo.carbs"
-                      value={formData.nutritionInfo.carbs}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Fat"
-                      name="nutritionInfo.fat"
-                      value={formData.nutritionInfo.fat}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Nutrition Info</Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Calories"
+                    name="nutritionInfo.calories"
+                    value={formData.nutritionInfo.calories}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Protein"
+                    name="nutritionInfo.protein"
+                    value={formData.nutritionInfo.protein}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Carbs"
+                    name="nutritionInfo.carbs"
+                    value={formData.nutritionInfo.carbs}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Fat"
+                    name="nutritionInfo.fat"
+                    value={formData.nutritionInfo.fat}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
               </Grid>
+            </SectionContainer>
 
-              {/* Reviews List Section */}
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom>Reviews</Typography>
-                <List>
-                  {formData.reviewsList.map((review, index) => (
-                    <ListItem key={index}>
-                      <ListItemText
-                        primary={`Review ${index + 1}: ${review.comment}`}
-                        secondary={`Rating: ${review.rating}/5`}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
-            </Grid>
+            <SectionContainer>
+              <Typography variant="h6" gutterBottom>Reviews</Typography>
+              <List>
+                {formData.reviewsList.map((review, index) => (
+                  <ListItem key={index}>
+                    <ListItemText
+                      primary={`Review ${index + 1}: ${review.comment}`}
+                      secondary={`Rating: ${review.rating}/5`}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </SectionContainer>
+
             <DialogActions>
               <Button onClick={() => setDialogOpen(false)} color="primary">
                 Cancel

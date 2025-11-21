@@ -7,15 +7,42 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-
+import * as adminService from '../../../services/adminService';
+import { useEffect, useState } from 'react';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const OrderChart = () => {
+  const [orders, setOrders] = useState([]);
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [cancelled, setCancelled] = useState(0);
+  const [delivered, setDelivered] = useState(0);
+  const [pending, setPending] = useState(0);
+  const loadOrders = async () => {
+    try {
+      const data = await adminService.getAllOrders();
+      console.log(data)
+      setCancelled(data.orders.filter(order => order.status === 'Cancelled').length);
+      setDelivered(data.orders.filter(order => order.status === 'Delivered').length);
+      setPending(data.orders.filter(order => order.status === 'Pending').length);
+      setError(null);
+    } catch (err) {
+      setError(err.message || 'Failed to load orders');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
   const data = {
     labels: ['Delivered', 'Pending', 'Cancelled'],
     datasets: [
       {
-        data: [25, 26, 24], // Example percentages
+        data: [delivered, pending, cancelled], // Example percentages
         backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
         borderWidth: 0,
       },

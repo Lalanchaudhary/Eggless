@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import cake from '../assets/cake.jpg';
-
+import CakeCard from './CakeCard';
 const Home = () => {
   const navigate = useNavigate();
 
@@ -26,44 +26,6 @@ const Home = () => {
     { id: 12, name: 'Black Forest', price: 42, image: cake },
   ];
 
-  const CakeCard = ({ cake }) => (
-    <div 
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-      onClick={() => navigate(`/cake/${cake.id}`)}
-    >
-      <div className="relative aspect-square">
-        <img
-          src={cake.image}
-          alt={cake.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-lg mb-2">{cake.name}</h3>
-        <p className="text-gray-600 mb-3">${cake.price}</p>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <button 
-            className="flex-1 bg-rose-300 hover:bg-rose-400 text-white px-4 py-2 rounded transition"
-            onClick={(e) => {
-              e.stopPropagation();
-              // Add to cart logic here
-            }}
-          >
-            Add to Cart
-          </button>
-          <button 
-            className="flex-1 border border-rose-300 text-rose-400 hover:bg-rose-50 px-4 py-2 rounded transition"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/cake/${cake.id}`);
-            }}
-          >
-            More Details
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 
   const CakeSection = ({ title, cakes, description }) => (
     <div className="mb-16">
