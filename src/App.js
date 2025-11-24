@@ -1,49 +1,56 @@
-import React, { useEffect, useState } from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { NavbarDemo } from './components/Navbar'
-import './App.css'
-import HeroSection from './components/HeroSection'
-import AllCakes from './pages/AllCakes'
-import CakeDetails from './pages/CakeDetails'
-import Cart from './pages/Cart'
-import Footer from './components/Footer'
-import Products from './components/Products'
-import Profile from './pages/Profile'
-import UserProfile from './pages/UserProfile'
-import AboutUs from './pages/AboutUs'
-import ContactUs from './pages/ContactUs'
-import Checkout from './pages/Checkout'
-import OrderSuccess from './pages/OrderSuccess'
-import ScrollToTop from './ScrollToTop'
-import PrivacyPolicy from './pages/plicy/PrivacyPolicy'
-import Terms from './pages/plicy/Terms'
-import RefundPolicy from './pages/plicy/RefundPolicy'
-import ShippingDelivery from './pages/plicy/ShippingDelivery'
-import AdminLayout from './components/admin/AdminLayout'
-import Dashboard from './components/admin/Dashboard'
-import Orders from './components/admin/Orders'
-import AdminProducts from './components/admin/Products'
-import Users from './components/admin/Users'
-import Analytics from './components/admin/Analytics'
-import AdminLogin from './pages/AdminLogin'
-import DeliveryBoys from './components/admin/DeliveryBoys'
-import CreateUser from './components/admin/CreateUser'
-import { useAuth } from './context/AdminContext'
-import { getCurrentLocation } from './lib/getCurrentLocation';
-import { reverseGeocode } from './lib/reverseGeocode';
-import { useUser } from './context/UserContext'
-import AnniversaryCakes from './pages/Anniversary/AnniversaryCakes'
-import BirthdayCakes from './pages/BirthDay/BirthdayCakes'
-import CorporateCakes from './pages/CorporateCakes'
-import SuperManCake from './pages/ThemeCake/SuperManCake'
-import CartoonCake from './pages/ThemeCake/CartoonCake'
-import Cricket from './pages/ThemeCake/Cricket'
-import Nature from './pages/ThemeCake/Nature'
-import FriendshipDay from './pages/Occasion/FriendshipDay'
-import DownloadApk from './pages/DownloadApk'
-import SubNavbar from './components/SubNavbar'
-import CommanPage from './pages/CommonPage'
-import Templates from './components/admin/Templates'
+import React, { useEffect, useState, Suspense } from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import "./App.css";
+
+// Normal imports (should NOT be lazy)
+import { NavbarDemo } from "./components/Navbar";
+import ScrollToTop from "./ScrollToTop";
+import { useAuth } from "./context/AdminContext";
+import { getCurrentLocation } from "./lib/getCurrentLocation";
+import { reverseGeocode } from "./lib/reverseGeocode";
+import { useUser } from "./context/UserContext";
+import SubNavbar from "./components/SubNavbar";
+
+// Lazy imports (components/pages)
+const HeroSection = React.lazy(() => import("./components/HeroSection"));
+const AllCakes = React.lazy(() => import("./pages/AllCakes"));
+const CakeDetails = React.lazy(() => import("./pages/CakeDetails"));
+const Cart = React.lazy(() => import("./pages/Cart"));
+const Footer = React.lazy(() => import("./components/Footer"));
+const Products = React.lazy(() => import("./components/Products"));
+const Profile = React.lazy(() => import("./pages/Profile"));
+const UserProfile = React.lazy(() => import("./pages/UserProfile"));
+const AboutUs = React.lazy(() => import("./pages/AboutUs"));
+const ContactUs = React.lazy(() => import("./pages/ContactUs"));
+const Checkout = React.lazy(() => import("./pages/Checkout"));
+const OrderSuccess = React.lazy(() => import("./pages/OrderSuccess"));
+const PrivacyPolicy = React.lazy(() => import("./pages/plicy/PrivacyPolicy"));
+const Terms = React.lazy(() => import("./pages/plicy/Terms"));
+const RefundPolicy = React.lazy(() => import("./pages/plicy/RefundPolicy"));
+const ShippingDelivery = React.lazy(() => import("./pages/plicy/ShippingDelivery"));
+const AdminLayout = React.lazy(() => import("./components/admin/AdminLayout"));
+const Dashboard = React.lazy(() => import("./components/admin/Dashboard"));
+const Orders = React.lazy(() => import("./components/admin/Orders"));
+const AdminProducts = React.lazy(() => import("./components/admin/Products"));
+const Users = React.lazy(() => import("./components/admin/Users"));
+const Analytics = React.lazy(() => import("./components/admin/Analytics"));
+const AdminLogin = React.lazy(() => import("./pages/AdminLogin"));
+const DeliveryBoys = React.lazy(() => import("./components/admin/DeliveryBoys"));
+const CreateUser = React.lazy(() => import("./components/admin/CreateUser"));
+const Templates = React.lazy(() => import("./components/admin/Templates"));
+
+const AnniversaryCakes = React.lazy(() => import("./pages/Anniversary/AnniversaryCakes"));
+const BirthdayCakes = React.lazy(() => import("./pages/BirthDay/BirthdayCakes"));
+const CorporateCakes = React.lazy(() => import("./pages/CorporateCakes"));
+const SuperManCake = React.lazy(() => import("./pages/ThemeCake/SuperManCake"));
+const CartoonCake = React.lazy(() => import("./pages/ThemeCake/CartoonCake"));
+const Cricket = React.lazy(() => import("./pages/ThemeCake/Cricket"));
+const Nature = React.lazy(() => import("./pages/ThemeCake/Nature"));
+const FriendshipDay = React.lazy(() => import("./pages/Occasion/FriendshipDay"));
+const DownloadApk = React.lazy(() => import("./pages/DownloadApk"));
+const CommanPage = React.lazy(() => import("./pages/CommonPage"));
+
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token')

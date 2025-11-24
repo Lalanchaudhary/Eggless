@@ -11,14 +11,17 @@ import { AuthProvider } from './context/AdminContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-  <AuthProvider>
-      <UserProvider>
-      <CartProvider>
-    <App />
-    <ToastContainer/>
-    </CartProvider>
-    </UserProvider>
-    </AuthProvider>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <AuthProvider>
+        <UserProvider>
+          <CartProvider>
+            <App />
+            <ToastContainer />
+          </CartProvider>
+        </UserProvider>
+      </AuthProvider>
+      
+    </React.Suspense>
   </BrowserRouter>
 );
 

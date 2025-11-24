@@ -4,7 +4,7 @@ export const reverseGeocode = async (lat, lon) => {
       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
       {
         headers: {
-          'User-Agent': 'MERN-Ecommerce-App/1.0 (your@email.com)',
+          'User-Agent': 'MERN-Ecommerce-App/1.0 (egglesscakes@email.com)',
         }
       }
     );
