@@ -8,20 +8,17 @@ import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from './context/UserContext'
 import { CartProvider } from './context/CartContext'
-import { AuthProvider } from './context/AdminContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <React.Suspense fallback={<div>Loading...</div>}>
     <HelmetProvider>
-      <AuthProvider>
         <UserProvider>
           <CartProvider>
             <App />
             <ToastContainer />
           </CartProvider>
         </UserProvider>
-      </AuthProvider>
       </HelmetProvider>
     </React.Suspense>
   </BrowserRouter>

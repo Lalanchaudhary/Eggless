@@ -14,16 +14,10 @@ const maskPhone = (phone) => {
   if (!phone) return '';
   return phone.replace(/^([+]?\d{2})\d{4}(\d{4})$/, '$1******$2');
 };
-const maskEmail = (email) => {
-  if (!email) return '';
-  const [name, domain] = email.split('@');
-  return name.slice(0, 3) + '*'.repeat(Math.max(0, name.length - 3)) + '@' + domain;
-};
 
 const Profile = () => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
-  const [isExistingUser, setIsExistingUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [formData, setFormData] = useState({
@@ -121,11 +115,9 @@ const Profile = () => {
       if (!formData.otp || formData.otp.length !== OTP_LENGTH) {
         throw new Error(`Please enter a valid ${OTP_LENGTH}-digit OTP`);
       }
-      const result = await window.confirmationResult.confirm(formData.otp);
       // Check if user exists
       const data = await checkPhoneNumber(formData.phoneNumber);
       if (data.isExistingUser) {
-        setIsExistingUser(true);
         navigate('/user-profile');
         setTimeout(() => {
           window.location.reload(); // Then refresh
@@ -159,9 +151,6 @@ const Profile = () => {
   };
 
   // "Login using Password" handler (implement as needed)
-  const handleLoginWithPassword = () => {
-    toast.info('Password login not implemented in this demo.');
-  };
 
   if (loading) {
     return <Loading />;
@@ -273,7 +262,7 @@ const Profile = () => {
                   </button>
                 </form>
                 <div className="text-center text-xs text-gray-500 mb-2">
-                  By continuing, you agree to Egglesscake <a href="#" className="text-blue-600 underline">Terms of Use</a> and <a href="#" className="text-blue-600 underline">Privacy Policy</a>.
+                  By continuing, you agree to Egglesscake <a href="https://www.egglesscakes.in/terms-of-use" className="text-blue-600 underline">Terms of Use</a> and <a href="https://www.egglesscakes.in/privacy-policy" className="text-blue-600 underline">Privacy Policy</a>.
                 </div>
                 <button
                   className="w-full py-2 border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-50"
