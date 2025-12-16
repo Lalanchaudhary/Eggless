@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAllCakes } from '../../services/cakeServices';
 import Loading from '../../components/Loading';
 import CakeCard from '../../components/CakeCard'; 
@@ -13,7 +12,6 @@ const Cricket = () => {
   const [cakes, setCakes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   // Filter options
   const dietaryOptions = ['Eggless', 'Vegan', 'Gluten Free', 'Sugar Free'];
@@ -26,7 +24,7 @@ const Cricket = () => {
         setLoading(true);
         const data = await getAllCakes();
         const fiterData=data.filter((e)=>{
-            return e.label=='cricket-cakes'
+            return e.label==='cricket-cakes'
         })
         setCakes(fiterData);
         setError(null);
@@ -82,9 +80,9 @@ const Cricket = () => {
     return filteredCakes;
   };
 
-  const filteredCakes = cakes;
+  const filteredCakes = getFilteredCakes();
 
-  // Helper function to render star ratings
+  /* Helper function to render star ratings (unused)
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -144,6 +142,7 @@ const Cricket = () => {
 
     return stars;
   };
+  */
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
@@ -334,4 +333,4 @@ const Cricket = () => {
   );
 };
 
-export default Cricket; 
+export default Cricket;

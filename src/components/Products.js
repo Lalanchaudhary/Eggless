@@ -191,6 +191,10 @@ const Products = () => {
                 <img
                   src={cake.image}
                   alt={cake.name}
+                    onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
                   className="w-full h-full object-cover"
                 />
               </div>

@@ -184,7 +184,10 @@ const Profile = () => {
         <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden max-w-3xl w-full">
           {/* Left Section */}
           <div className="hidden md:flex flex-col items-center justify-center bg-pink-50 w-1/2 p-8">
-            <img src={phoneicon} alt="Gift" className="w-40 mb-8" />
+            <img src={phoneicon} alt="Gift"   onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }} className="w-40 mb-8" />
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <span className="text-xl">🛒</span>

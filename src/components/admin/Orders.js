@@ -34,7 +34,6 @@ const Orders = () => {
   const [error, setError] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedAdminId, setSelectedAdminId] = useState('');
 
@@ -258,4 +257,4 @@ const Orders = () => {
   );
 };
 
-export default Orders; 
+export default Orders;

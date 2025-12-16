@@ -1,27 +1,4 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  IconButton,
-  Alert,
-  CircularProgress,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-} from '@mui/material';
 import { useUser } from '../../context/UserContext';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -41,7 +18,7 @@ const Payment = ({ selectedAddress, orderInstruction, tax, shipping }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
-  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  
   const [addMoneyOpen, setAddMoneyOpen] = useState(false);
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const total = subtotal + shipping + tax;

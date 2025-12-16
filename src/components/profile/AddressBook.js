@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { useUser } from '../../context/UserContext';
 import {
   Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
   Button,
   Dialog,
   DialogTitle,
@@ -16,11 +12,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  IconButton,
-  Alert,
   CircularProgress
 } from '@mui/material';
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { getCurrentLocation } from '../../lib/getCurrentLocation';
 import { reverseGeocode } from '../../lib/reverseGeocode';
 const AddressBook = () => {
@@ -28,7 +21,7 @@ const AddressBook = () => {
   const [open, setOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  
   const [formData, setFormData] = useState({
     type: 'Home',
     street: '',
@@ -75,7 +68,7 @@ const AddressBook = () => {
       },
       isDefault: false
     });
-    setError(null);
+    
   };
 
   const handleChange = (e) => {
@@ -88,7 +81,6 @@ const AddressBook = () => {
 
   const handleSubmit = async () => {
     if (!formData.street || !formData.city || !formData.state || !formData.pincode) {
-      setError('Please fill in all required fields');
       return;
     }
 
@@ -101,7 +93,7 @@ const AddressBook = () => {
       }
       handleClose();
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to save address');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -112,7 +104,7 @@ const AddressBook = () => {
       try {
         await deleteAddress(addressId);
       } catch (err) {
-        setError(err.response?.data?.error || 'Failed to delete address');
+        console.error(err);
       }
     }
   };
@@ -191,8 +183,7 @@ const AddressBook = () => {
                   ...addr,
                 }));
               } catch (err) {
-                setError("Unable to fetch current location");
-                console.error(err);
+                console.error("Unable to fetch current location", err);
               } finally {
                 setLoading(false);
               }
@@ -286,4 +277,4 @@ const AddressBook = () => {
   );
 };
 
-export default AddressBook; 
+export default AddressBook;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as adminService from '../../services/adminService';
 import OrderChart from './charts/OrderChart';
-import MonthlyChart from './charts/MonthlyChart';
 import DailyOrderChart from './charts/DailyOrderChart';
 
 const Dashboard = () => {
@@ -161,4 +160,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

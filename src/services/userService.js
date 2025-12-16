@@ -133,31 +133,6 @@ export const cancelOrder = async (orderId) => {
       throw new Error('Order ID is required');
     }
 
-    // // Get order details
-    // const orderResponse = await api.get('/users/orders');
-    // console.log('====================================');
-    // console.log(orderResponse);
-    // console.log('====================================');
-    // const order = orderResponse;
-
-    // if (!order) {
-    //   throw new Error('Order not found');
-    // }
-
-    // // Check if order is in cancellable state
-    // if (order.status !== 'Pending') {
-    //   throw new Error(`Cannot cancel order in ${order.status} state. Only Pending orders can be cancelled.`);
-    // }
-
-    // // Check cancellation time limit (24 hours)
-    // const orderDate = new Date(order.createdAt);
-    // const now = new Date();
-    // const hoursSinceOrder = (now - orderDate) / (1000 * 60 * 60);
-
-    // if (hoursSinceOrder > 24) {
-    //   throw new Error('Order can only be cancelled within 24 hours of placement');
-    // }
-
     // Step 1: Cancel the order
     const cancelResponse = await api.get(`/users/orders/${orderId}/cancel`);
    

@@ -10,8 +10,7 @@ import * as adminService from '../../../services/adminService';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PaymentMethodChart = () => {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    
     const [COD, setCOD] = useState(0);
     const [UPI, setUPI] = useState(0);
     const [Card, setCard] = useState(0);
@@ -24,11 +23,9 @@ const PaymentMethodChart = () => {
         setUPI(data.orders.filter(order => order.paymentMethod === 'UPI').length);
         setCard(data.orders.filter(order => order.paymentMethod === 'Card').length);
         setWallet(data.orders.filter(order => order.paymentMethod === 'Wallet').length);
-        setError(null);
+        
       } catch (err) {
-        setError(err.message || 'Failed to load orders');
-      } finally {
-        setLoading(false);
+        console.error(err.message || 'Failed to load orders');
       }
     };
   
@@ -52,7 +49,7 @@ const PaymentMethodChart = () => {
       Wallet: Wallet,
     };
     setPaymentData(fetchedData);
-  }, []);
+  }, [COD,UPI,Card,Wallet]);
 
   const data = {
     labels: ["UPI", "Card", "COD", "Wallet"],

@@ -79,6 +79,10 @@ export const ProductItem = ({
         width={80}
         height={50}
         alt={title}
+          onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
         className="shrink-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 w-16 h-12 sm:w-[140px] sm:h-[70px] object-cover" />
       <div>
         <h4 className="text-base sm:text-lg font-semibold mb-1 text-black">

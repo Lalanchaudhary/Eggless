@@ -9,7 +9,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <img src={logo} alt="Logo" className="h-12 md:h-16" />
+            <img src={logo} alt="Logo"   onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }} className="h-12 md:h-16" />
             <p className="text-gray-600 text-sm">
               Delivering happiness through delicious eggless cakes since 2010. We specialize in custom-made cakes for all occasions.
             </p>

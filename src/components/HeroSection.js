@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import cake from '../assets/cake.jpg'
-import HeroCake from '../assets/HeroCake.jpg'
 import CakeGallery from './CakeGallery';
-import BackDropSection from "./BackDropSection";
 import Carousel from "./Carousel";
-import SubNavbar from './SubNavbar';
-import CelebrationModal from "./CelebrationModel";
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
@@ -124,7 +120,10 @@ const HeroSection = () => {
         {/* Right Image Placeholder */}
         <div className="w-full md:w-[800px] max-w-[800px]">
           <div className="aspect-[4/3] bg-gray-300 rounded-xl flex items-center justify-center text-4xl text-gray-500 shadow-lg">
-            <img src={cake} alt="cake" className="w-full h-full object-cover rounded-xl" />
+            <img src={cake} alt="cake"   onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }} className="w-full h-full object-cover rounded-xl" />
           </div>
         </div>
       </div>
@@ -155,6 +154,10 @@ const HeroSection = () => {
                   <img
                     src={review.image}
                     alt={review.name}
+                      onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAllCakes } from '../../services/cakeServices';
 import Loading from '../../components/Loading';
 import CakeCard from '../../components/CakeCard';
@@ -13,7 +12,6 @@ const SuperManCake = () => {
   const [cakes, setCakes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   // Filter options
   const dietaryOptions = ['Eggless', 'Vegan', 'Gluten Free', 'Sugar Free'];
@@ -26,7 +24,7 @@ const SuperManCake = () => {
         setLoading(true);
         const data = await getAllCakes();
         const fiterData=data.filter((e)=>{
-            return e.label=='superhero-cakes'
+            return e.label==='superhero-cakes'
         })
         setCakes(fiterData);
         setError(null);
@@ -82,9 +80,9 @@ const SuperManCake = () => {
     return filteredCakes;
   };
 
-  const filteredCakes = cakes;
+  const filteredCakes = getFilteredCakes();
 
-  // Helper function to render star ratings
+  /* // Helper function to render star ratings
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -143,7 +141,7 @@ const SuperManCake = () => {
     }
 
     return stars;
-  };
+  }; */
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
@@ -334,4 +332,4 @@ const SuperManCake = () => {
   );
 };
 
-export default SuperManCake; 
+export default SuperManCake;

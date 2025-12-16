@@ -1,12 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import { HoveredLink, Menu, MenuItem, ProductItem } from "../ui/navbar-menu";
+import { Menu, MenuItem } from "../ui/navbar-menu";
 import { cn } from "../lib/utils";
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import logo from '../assets/Egglesscake.png'
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import SubNavbar from './SubNavbar';
+ 
 import { FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useUser } from '../context/UserContext';
@@ -25,8 +24,7 @@ export function NavbarDemo() {
   const [allCakes, setAllCakes] = useState([]);
   const mobileMenuRef = useRef(null);
   const searchRef = useRef(null);
-  const [location, setLocation] = useState('Patiala');
-  const [fullLocation] = useState('Patiala, Punjab, India');
+  
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const locationRef = useRef(null);
   const { user } = useUser();
@@ -152,7 +150,10 @@ export function NavbarDemo() {
       <div className="max-w-7xl mx-auto" style={{ height: isMobile ? '60px' : '80px' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3 md:space-x-6" onClick={() => { navigate("/") }}>
-            <img src={logo} alt='logo' className='h-10 md:h-14 lg:h-20 transition-all duration-300 hover:scale-105' />
+            <img src={logo} alt='logo'   onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }} className='h-10 md:h-14 lg:h-20 transition-all duration-300 hover:scale-105' />
           </div>
 
           {/* Search input - visible on all screen sizes */}
@@ -223,6 +224,7 @@ export function NavbarDemo() {
                           <img
                             src={cake.image}
                             alt={cake.name}
+                            
                             className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                             onError={(e) => {
                               e.target.src = 'https://via.placeholder.com/48x48?text=Cake';

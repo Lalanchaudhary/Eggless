@@ -5,8 +5,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from 'react-router-dom';
 
 function Carousel(props) {
-  const navigate=useNavigate();
-  const [settings] = useState({ 
+  const navigate = useNavigate();
+  const [settings] = useState({
     dots: true,
     infinite: true,
     arrows: false, // ← Disable the arrows
@@ -32,32 +32,36 @@ function Carousel(props) {
       }
     ]
   });
-  
+
 
   return (
     <>
-    
-    <div className="w-screen px-4 py-6">
-      <div className="slider-container">
-        <Slider {...settings}>
-          {props.data.map((item, index) => (
-            <div key={index} className="px-2">
-              <div className="relative group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300" onClick={()=>{navigate(item.path)}}>
-                <img 
-                  src={item.image} 
-                  alt={item.alt || 'carousel image'} 
-                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                  style={{ 
-                    height: props.height || '300px',
-                    width: props.width || '100%'
-                  }}
-                />
+
+      <div className="w-screen px-4 py-6">
+        <div className="slider-container">
+          <Slider {...settings}>
+            {props.data.map((item, index) => (
+              <div key={index} className="px-2">
+                <div className="relative group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300" onClick={() => { navigate(item.path) }}>
+                  <img
+                    src={item.image}
+                    alt={item.alt || 'carousel image'}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/placeholder-cake.jpg";
+                    }}
+                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{
+                      height: props.height || '300px',
+                      width: props.width || '100%'
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </div>
-    </div>
     </>
   );
 }

@@ -6,12 +6,12 @@ import { toast } from 'react-toastify';
 const CakeCard = ({ cake }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity] = useState(1);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     console.log("Hello");
-    
+
     if (!cake) return;
 
     const selectedSizeData = cake.sizes?.[0]; // assuming first size as default
@@ -84,12 +84,16 @@ const CakeCard = ({ cake }) => {
   return (
     <div
       className="group bg-white rounded-lg shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-md hover:-translate-y-1 cursor-pointer"
-      onClick={() => navigate(`/cake/${cake._id}`)}
+      onClick={() => navigate(`/cake/${cake.slug}`)}
     >
       <div className="w-full aspect-square relative overflow-hidden p-4 pb-0">
         <img
           src={cake.image}
           alt={cake.name}
+            onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
           className="w-full h-full rounded-lg object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>
@@ -120,10 +124,8 @@ const CakeCard = ({ cake }) => {
           </button>
           <button
             className="hidden lg:block flex-1 border border-rose-300 text-rose-500 hover:bg-rose-50 px-2 py-1.5 rounded text-xs font-medium transition-colors duration-300"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/cake/${cake._id}`);
-            }}
+            onClick={() => navigate(`/cake/${cake.slug}`)}
+
           >
             Details
           </button>

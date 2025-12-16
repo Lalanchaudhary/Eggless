@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import CakeGallery from '../components/CakeGallery';
-import cake from '../assets/cake.jpg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllCakes } from '../services/cakeServices';
 import CakeCard from '../components/CakeCard';
@@ -40,7 +38,6 @@ const AllCakes = () => {
       try {
         setLoading(true);
         const data = await getAllCakes();
-
         setCakes(data);
         setError(null);
       } catch (err) {
@@ -156,7 +153,7 @@ const AllCakes = () => {
   const categories = getCategories();
   const filteredCakes = getFilteredCakes();
 
-  // Helper function to render star ratings
+  /* Helper function to render star ratings (unused)
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -216,6 +213,7 @@ const AllCakes = () => {
 
     return stars;
   };
+  */
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
@@ -480,4 +478,4 @@ const AllCakes = () => {
   );
 };
 
-export default AllCakes; 
+export default AllCakes;

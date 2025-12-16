@@ -12,10 +12,8 @@ import { useEffect, useState } from 'react';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const OrderChart = () => {
-  const [orders, setOrders] = useState([]);
-  const [admins, setAdmins] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
+  
   const [cancelled, setCancelled] = useState(0);
   const [delivered, setDelivered] = useState(0);
   const [pending, setPending] = useState(0);
@@ -26,11 +24,9 @@ const OrderChart = () => {
       setCancelled(data.orders.filter(order => order.status === 'Cancelled').length);
       setDelivered(data.orders.filter(order => order.status === 'Delivered').length);
       setPending(data.orders.filter(order => order.status === 'Pending').length);
-      setError(null);
+      
     } catch (err) {
-      setError(err.message || 'Failed to load orders');
-    } finally {
-      setLoading(false);
+      console.error(err.message || 'Failed to load orders');
     }
   };
 

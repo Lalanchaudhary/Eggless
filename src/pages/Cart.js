@@ -91,6 +91,10 @@ const Cart = () => {
                         <img
                           src={item.image}
                           alt={item.name}
+                            onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
                           className="w-full h-full object-cover rounded-lg"
                         />
                       </div>

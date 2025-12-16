@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Chip,
   Menu,
   MenuItem,
   CircularProgress,
@@ -66,18 +65,7 @@ const Users = () => {
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active':
-        return 'success';
-      case 'inactive':
-        return 'error';
-      case 'suspended':
-        return 'warning';
-      default:
-        return 'default';
-    }
-  };
+  
 
   if (loading) {
     return (
@@ -163,4 +151,4 @@ const Users = () => {
   );
 };
 
-export default Users; 
+export default Users;

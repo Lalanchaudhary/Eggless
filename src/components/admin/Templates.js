@@ -298,6 +298,10 @@ const Templates = () => {
                         <img 
                           src={finalData.image} 
                           alt="Product" 
+                            onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
                           className="w-48 h-48 object-contain rounded-lg border border-gray-200" 
                         />
                       </div>

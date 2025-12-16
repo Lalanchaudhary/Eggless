@@ -3,7 +3,6 @@ import { io } from 'socket.io-client';
 
 const NotificationPanel = () => {
   const [notifications, setNotifications] = useState([]);
-  const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
 
@@ -45,7 +44,7 @@ const NotificationPanel = () => {
       setIsConnected(false);
     });
 
-    setSocket(newSocket);
+    
 
     // Request notification permission
     if ('Notification' in window && Notification.permission === 'default') {
@@ -193,4 +192,4 @@ const NotificationPanel = () => {
   );
 };
 
-export default NotificationPanel; 
+export default NotificationPanel;

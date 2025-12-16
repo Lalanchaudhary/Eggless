@@ -360,6 +360,10 @@ const Products = () => {
                         <img
                           src={product.image}
                           alt={product.name}
+                            onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
                           style={{ width: 50, height: 50, objectFit: 'cover' }}
                         />
                       </TableCell>
@@ -528,6 +532,10 @@ const Products = () => {
                       <img
                         src={imageFile ? URL.createObjectURL(imageFile) : formData.image}
                         alt="Preview"
+                          onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
                         style={{ width: '100%', maxHeight: 300, objectFit: 'contain' }}
                       />
                     </Box>

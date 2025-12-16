@@ -20,7 +20,6 @@ import {
 import { getCurrentLocation } from '../../lib/getCurrentLocation';
 import { reverseGeocode } from '../../lib/reverseGeocode';
 import { useUser } from "../../context/UserContext";
-import { useCart } from "../../context/CartContext";
 import { getAllAdmins } from '../../services/adminService';
 import { getDistanceFromLatLonInKm } from '../../lib/utils';
 
@@ -36,8 +35,7 @@ const ShipAddr = ({
   setOrderInstruction,
   setShipping
 }) => {
-  const { cartItems } = useCart();
-  const { user, addAddress, updateAddress, deleteAddress } = useUser();
+  const { user, addAddress, updateAddress } = useUser();
   const [selectedAddress, setSelectedAddress] = useState(selectedAddressProp || null);
   const [open, setOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
@@ -116,7 +114,7 @@ const ShipAddr = ({
       }
     };
     calculateShipping();
-  }, [selectedAddress, setShippingCost, setShippingLoading]);
+  }, [selectedAddress, setShippingCost, setShippingLoading ,setShipping]);
 
   const handleAddressOpen = (address = null) => {
     if (address) {

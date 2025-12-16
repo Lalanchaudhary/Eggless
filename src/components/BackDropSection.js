@@ -34,7 +34,10 @@ const BackDropSection = () => {
 
         {/* Image */}
         <div className="flex justify-center">
-          <img src={backdrop} alt="Bakery illustration" className="w-full max-w-xs md:max-w-sm" />
+          <img src={backdrop} alt="Bakery illustration" className="w-full max-w-xs md:max-w-sm"   onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }} />
         </div>
 
         {/* Right Side Texts */}

@@ -49,6 +49,16 @@ export const getCakeById = async (id) => {
     throw error;
   }
 };
+export const getCakeBySlug = async (slug) => {
+  try {
+    const response = await api.get(`/cake/slug/${slug}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching cake ${slug}:`, error);
+    throw error;
+  }
+};
+
 
 // Create new cake (admin only)
 export const createCake = async (cakeData) => {

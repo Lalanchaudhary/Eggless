@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAllCakes } from '../../services/cakeServices';
 import CakeCard from '../../components/CakeCard';
 const WeddingCakes = () => {
@@ -12,7 +11,6 @@ const WeddingCakes = () => {
   const [cakes, setCakes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   // Filter options
   const dietaryOptions = ['Eggless', 'Vegan', 'Gluten Free', 'Sugar Free'];
@@ -80,7 +78,7 @@ const WeddingCakes = () => {
 
   const filteredCakes = getFilteredCakes();
 
-  // Helper function to render star ratings
+  /* Helper function to render star ratings (unused)
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -140,6 +138,7 @@ const WeddingCakes = () => {
 
     return stars;
   };
+  */
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
@@ -337,4 +336,4 @@ const WeddingCakes = () => {
   );
 };
 
-export default WeddingCakes; 
+export default WeddingCakes;

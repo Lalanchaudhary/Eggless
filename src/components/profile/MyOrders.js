@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useUser } from '../../context/UserContext';
 import * as userService from '../../services/userService';
 import { 
   FiEye, 
-  FiX, 
-  FiTruck, 
-  FiCheckCircle, 
-  FiClock,
-  FiPackage
+  FiX
 } from 'react-icons/fi';
 import logo from '../../assets/Egglesscake.png'
 import { Document, Page, Text, View, StyleSheet, PDFDownloadLink, Image } from '@react-pdf/renderer';
@@ -408,7 +403,6 @@ const OrderDetail = ({ order, onClose, onCancel }) => {
 };
 
 const MyOrders = () => {
-  const { user } = useUser();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -565,4 +559,4 @@ const MyOrders = () => {
   );
 };
 
-export default MyOrders; 
+export default MyOrders;

@@ -6,7 +6,10 @@ const DownloadApk = () => {
   return (
     <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb' }}>
       <div  style={{ background: 'white', padding: '2.5rem 2rem', borderRadius: '1.5rem', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', maxWidth: 400, width: '100%', textAlign: 'center' }}>
-        <img src={eggless} className='m-auto' alt="EgglessCake App" style={{ width: 180, marginBottom: 24 }} />
+        <img src={eggless} className='m-auto' alt="EgglessCake App"   onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }} style={{ width: 180, marginBottom: 24 }} />
         <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: 12 }}>Download EgglessCake App</h1>
         <p style={{ color: '#555', marginBottom: 28 }}>
           Get the best eggless cakes delivered to your doorstep! Download our Android app now.

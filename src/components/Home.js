@@ -49,6 +49,10 @@ const Home = () => {
           <img
             src={cake}
             alt="Hero Background"
+              onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/placeholder-cake.jpg";
+  }}
             className="w-full h-full object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-rose-100/80 to-amber-100/80" />
