@@ -22,6 +22,8 @@ const CakeDetails = () => {
   const [selectedSize, setSelectedSize] = useState('0.5Kg');
   const { addToCart } = useCart();
   const scrollContainerRef = useRef(null);
+  const [selectedFlavor, setSelectedFlavor] = useState("");
+
   // New state for review form and modal
   const [newReview, setNewReview] = useState({
     rating: 0,
@@ -54,6 +56,9 @@ const CakeDetails = () => {
 
         const cake = await getCakeBySlug(id);
         setCakeData(cake);
+        if (cake.flavors && cake.flavors.length > 0) {
+          setSelectedFlavor(cake.flavors[0]);
+        }
 
         setError(null);
       } catch (err) {
@@ -224,9 +229,9 @@ const CakeDetails = () => {
         <title>{cakeData.name} | Eggless Cakes</title>
 
         {/* Meta Description */}
-        <meta name="description" content={cakeData.description ? cakeData.description.slice(0, 155) : `Order ${cakeData.name} online from Eggless Cakes with same-day delivery.`}/>
+        <meta name="description" content={cakeData.description ? cakeData.description.slice(0, 155) : `Order ${cakeData.name} online from Eggless Cakes with same-day delivery.`} />
         {/* Canonical URL */}
-        <link rel="canonical" href={`https://www.egglesscakes.in/cake/${cakeData.slug}`}/>
+        <link rel="canonical" href={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
 
         {/* Open Graph (Social Sharing) */}
         <meta property="og:title" content={cakeData.name} />
@@ -290,10 +295,10 @@ const CakeDetails = () => {
                 <img
                   src={cakeData.image}
                   alt={cakeData.name}
-                    onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/images/placeholder-cake.jpg";
+                  }}
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
@@ -301,9 +306,27 @@ const CakeDetails = () => {
               {/* Right Column - Details */}
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                    {cakeData.name}
-                  </h1>
+                  <div className='flex justify-between'>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      {cakeData.name}
+                    </h1>
+                    {cakeData.flavors && cakeData.flavors.length > 0 && (
+                      <div className="mb-4">
+                        <select
+                          value={selectedFlavor}
+                          onChange={(e) => setSelectedFlavor(e.target.value)}
+                          className="w-full text-[#000] border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                        >
+                          {cakeData.flavors.map((flavor, index) => (
+                            <option key={index} value={flavor}>
+                              {flavor}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+
 
                   {/* Rating and Reviews */}
                   <div className="flex items-center gap-4 mb-3">
@@ -334,11 +357,7 @@ const CakeDetails = () => {
                         Cake Number: {cakeData.number}
                       </span>
                     )}
-                    {cakeData.flavor && (
-                      <span className="text-sm text-gray-500 capitalize">
-                        Flavor: {cakeData.flavor}
-                      </span>
-                    )}
+
                   </div>
 
                   <p className="text-gray-600">{cakeData.description}</p>
@@ -523,10 +542,10 @@ const CakeDetails = () => {
                       <img
                         src={cake.image}
                         alt={cake.name}
-                          onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/images/placeholder-cake.jpg";
+                        }}
                         className="w-full h-full object-cover"
                       />
                     </div>

@@ -6,9 +6,9 @@ import { FaPhone, FaSearch } from 'react-icons/fa';
 const menuItems = [
   {
     label: 'Cakes',
-    href: 'Cake',
+    href: '/all-cakes',
     dropdown: [
-      { name: 'Chocolate Cakes', href: 'Chocolate' },
+      { name: 'Chocolate Cakes', href: '/Chocolate' },
       { name: 'Vanilla Cakes', href: 'Vanilla' },
       { name: 'Red Velvet Cakes', href: 'Red Velvet' },
       { name: 'Fruit Cakes', href: 'Fruit' },
@@ -18,7 +18,7 @@ const menuItems = [
   },
   {
     label: 'Theme Cakes',
-    href: 'Theme',
+    href: '/Theme',
     dropdown: [
       { name: 'Cartoon Theme', href: 'Cartoon' },
       { name: 'Superhero Theme', href: 'Superhero' },
@@ -223,6 +223,20 @@ const SubNavbar = ({ vertical = false }) => {
     }, 150); // slight delay
   };
 
+  const navigateTo = (href) => {
+  if (!href) return;
+
+  // If already a full path
+  if (href.startsWith('/')) {
+    navigate(href);
+  } else {
+    navigate(`/cakes/${encodeURIComponent(href)}`);
+  }
+
+  setHoveredItem(null);
+};
+
+
   const handleItemClick = (href) => {
     console.log('====================================');
     console.log(href);
@@ -387,7 +401,7 @@ const SubNavbar = ({ vertical = false }) => {
                   className="relative flex flex-col items-start group"
                 >
                   <button
-                    onClick={() => handleItemClick(item.href)}
+                    onClick={() => navigateTo(item.href)}
                     className={`text-lg md:text-xl font-medium text-black hover:text-rose-500 transition-colors px-2 ${
                       vertical ? 'py-1' : ''
                     }`}
@@ -418,7 +432,7 @@ const SubNavbar = ({ vertical = false }) => {
                       {item.dropdown.map((dropdownItem, index) => (
                         <li key={index}>
                           <button
-                            onClick={() => handleDropdownItemClick(dropdownItem.href)}
+                            onClick={() => navigateTo(dropdownItem.href)}
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
                           >
                             {dropdownItem.name}
@@ -428,7 +442,7 @@ const SubNavbar = ({ vertical = false }) => {
                     </ul>
                     <div className="px-4 py-2 border-t border-gray-100">
                       <button
-                        onClick={() => handleItemClick(item.href)}
+                        onClick={() => navigateTo(item.href)}
                         className="text-sm text-rose-500 hover:text-rose-600 font-medium"
                       >
                         View All {item.label} →
