@@ -1,14 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import cake from '../assets/cake.jpg';
 import { useCart } from '../context/CartContext';
 import { getCakeById, addReview, getAllCakes, getCakeBySlug } from '../services/cakeServices';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Loading from '../components/Loading';
 import { Helmet } from "react-helmet-async";
 function isMongoId(value) {
   return /^[0-9a-fA-F]{24}$/.test(value);
 }
+
+const Cakeflavors = [
+  "Chocolate",
+  "Vanilla",
+  "Strawberry",
+  "Butterscotch",
+  "Red Velvet",
+  "Black Forest",
+  "Pineapple",
+  "Mango",
+  "Coffee",
+  "Blueberry",
+  "Fruit Cake",
+  "Chocolate Truffle",
+  "Ferrero Rocher",
+  "Oreo",
+  "KitKat"
+];
+
 
 const CakeDetails = () => {
   const { id } = useParams();
@@ -55,6 +73,9 @@ const CakeDetails = () => {
         }
 
         const cake = await getCakeBySlug(id);
+        console.log('====================================');
+        console.log(cake);
+        console.log('====================================');
         setCakeData(cake);
         if (cake.flavors && cake.flavors.length > 0) {
           setSelectedFlavor(cake.flavors[0]);
@@ -265,6 +286,7 @@ const CakeDetails = () => {
           })}
         </script>
       </Helmet>
+            <ToastContainer />
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button */}
@@ -310,14 +332,14 @@ const CakeDetails = () => {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
                       {cakeData.name}
                     </h1>
-                    {cakeData.flavors && cakeData.flavors.length > 0 && (
+                    {Cakeflavors && Cakeflavors.length > 0 && (
                       <div className="mb-4">
                         <select
                           value={selectedFlavor}
                           onChange={(e) => setSelectedFlavor(e.target.value)}
                           className="w-full text-[#000] border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-rose-300"
                         >
-                          {cakeData.flavors.map((flavor, index) => (
+                          {Cakeflavors.map((flavor, index) => (
                             <option key={index} value={flavor}>
                               {flavor}
                             </option>

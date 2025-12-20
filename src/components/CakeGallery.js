@@ -30,6 +30,7 @@ const CakeGallery = () => {
   }, []);
 
   // Filter cakes for different sections
+  const Chrismas = cakes.filter(cake => cake.label === 'Chrismas');
   const trendingCakes = cakes.filter(cake => cake.label === 'EGGLESS');
   const surpriseCakes = cakes.filter(cake => cake.tag === 'Annivarsary');
   const bestSellers = cakes.filter(cake => cake.label === 'Best Seller');
@@ -113,8 +114,8 @@ const CakeGallery = () => {
       <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 p-3 lg:p-6 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors"
           >
             Try Again
@@ -126,22 +127,27 @@ const CakeGallery = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 p-3 lg:p-6">
-      <CakeSection 
-        title="Our Trending Cakes" 
-        cakes={trendingCakes} 
-        scrollRef={trendingScrollRef} 
+      <CakeSection
+        title="Chrismas Specail Cakes"
+        cakes={Chrismas}
+        scrollRef={trendingScrollRef}
       />
-      <CakeSection 
-        title="Surprise Your Love" 
-        cakes={surpriseCakes} 
-        backdrop 
-        scrollRef={surpriseScrollRef} 
+      <CakeSection
+        title="Our Trending Cakes"
+        cakes={trendingCakes}
+        scrollRef={trendingScrollRef}
+      />
+      <CakeSection
+        title="Surprise Your Love"
+        cakes={surpriseCakes}
+        backdrop
+        scrollRef={surpriseScrollRef}
       />
       <BackDropSection />
-      <CakeSection 
-        title="Our Best Sellers" 
-        cakes={bestSellers} 
-        scrollRef={bestSellersScrollRef} 
+      <CakeSection
+        title="Our Best Sellers"
+        cakes={bestSellers}
+        scrollRef={bestSellersScrollRef}
       />
     </div>
   );

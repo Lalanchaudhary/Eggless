@@ -22,7 +22,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  MenuItem
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -172,7 +173,7 @@ const Products = () => {
         fat: ''
       },
       reviewsList: product.reviewsList || [],
-      number: product.number?.$numberInt || product.number || ''
+      number: products.length + 1
     });
     setDialogOpen(true);
   };
@@ -289,6 +290,25 @@ const Products = () => {
     );
   }
 
+  const cakeFlavors = [
+    "Chocolate",
+    "Vanilla",
+    "Strawberry",
+    "Butterscotch",
+    "Red Velvet",
+    "Black Forest",
+    "Pineapple",
+    "Mango",
+    "Coffee",
+    "Blueberry",
+    "Fruit Cake",
+    "Chocolate Truffle",
+    "Ferrero Rocher",
+    "Oreo",
+    "KitKat"
+  ];
+
+
 
 
   return (
@@ -323,9 +343,9 @@ const Products = () => {
       {(() => {
         const filteredProducts = searchNumber.trim()
           ? products.filter(product => {
-              const num = product.number?.$numberInt || product.number || '';
-              return num.toString() === searchNumber.trim();
-            })
+            const num = product.number?.$numberInt || product.number || '';
+            return num.toString() === searchNumber.trim();
+          })
           : products;
         const groupedProductsFiltered = filteredProducts.reduce((acc, product) => {
           const label = product.label || 'Unlabeled';
@@ -360,10 +380,10 @@ const Products = () => {
                         <img
                           src={product.image}
                           alt={product.name}
-                            onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/images/placeholder-cake.jpg";
+                          }}
                           style={{ width: 50, height: 50, objectFit: 'cover' }}
                         />
                       </TableCell>
@@ -428,13 +448,22 @@ const Products = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
+                    select
                     fullWidth
                     label="Flavor"
                     name="flavor"
                     value={formData.flavor}
                     onChange={handleInputChange}
-                  />
+                    required
+                  >
+                    {cakeFlavors.map((flavor) => (
+                      <MenuItem key={flavor} value={flavor}>
+                        {flavor}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
@@ -532,10 +561,10 @@ const Products = () => {
                       <img
                         src={imageFile ? URL.createObjectURL(imageFile) : formData.image}
                         alt="Preview"
-                          onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/images/placeholder-cake.jpg";
+                        }}
                         style={{ width: '100%', maxHeight: 300, objectFit: 'contain' }}
                       />
                     </Box>

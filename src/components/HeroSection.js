@@ -1,27 +1,28 @@
 import React from "react";
-import cake from '../assets/cake.jpg'
+import cake from '../assets/chrismas_banner.png'
 import CakeGallery from './CakeGallery';
 import Carousel from "./Carousel";
 import { useNavigate } from "react-router-dom";
+import FallingSnow from "./FallingSnow";
 
 const HeroSection = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   let Heroimages = [
     {
       image: "https://i.pinimg.com/736x/39/8c/b3/398cb39a0415321977ee080472e85c48.jpg",
-      path:'/all-cakes'
+      path: '/all-cakes'
     },
     {
       image: "https://i.pinimg.com/736x/56/c4/ff/56c4fff60e85560acedeedb4fee972bb.jpg",
-            path:'/birthday-cakes'
+      path: '/birthday-cakes'
     },
     {
       image: "https://i.pinimg.com/736x/68/65/f3/6865f3f5a1af9c8d425ce509f89e3191.jpg",
-            path:'/anniversary'
+      path: '/anniversary'
     },
     {
       image: "https://bkmedia.bakingo.com/regular-cake-desktop_12.jpg",
-            path:'/all-cakes'
+      path: '/all-cakes'
     }
   ]
 
@@ -95,38 +96,55 @@ const HeroSection = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-rose-50 to-amber-50 p-8 md:p-16 min-h-screen">
+      <div className="relative flex flex-col md:flex-row items-center justify-between 
+                bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 
+                p-8 md:p-16 min-h-screen overflow-hidden">
+
+        {/* Falling Snow */}
+        <FallingSnow count={50} />
+
         {/* Left Content */}
-        <div className="max-w-xl mb-10 md:mb-0">
+        <div className="relative max-w-xl mb-10 md:mb-0 z-10">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Delightfully <span className="text-rose-400">Eggless</span>,<br />
-            Perfectly Crafted Cakes
+            Magical <span className="text-rose-400">Eggless</span><br />
+            Christmas Cakes
           </h1>
+
           <p className="text-gray-600 text-lg mb-6">
-            Experience the joy of exquisite eggless cakes, baked with the finest ingredients and a dash of love. Find your perfect slice for any occasion.
+            Celebrate the season with festive flavors and beautifully crafted
+            eggless Christmas cakes.
           </p>
 
-          {/* Buttons */}
           <div className="flex gap-4">
-            <button className="bg-rose-300 hover:bg-rose-400 text-white font-semibold px-6 py-3 rounded shadow transition" onClick={()=>{navigate("/all-cakes")}}>
-              Explore Our Cakes
+            <button
+              className="bg-rose-400 hover:bg-rose-500 text-white font-semibold 
+                   px-6 py-3 rounded-lg shadow transition"
+              onClick={() => navigate("/all-cakes")}
+            >
+              Explore Christmas Cakes
             </button>
-            <button className="bg-amber-100 hover:bg-amber-200 text-gray-800 font-medium px-6 py-3 rounded shadow transition">
-              Get Inspired
+
+            <button
+              className="bg-emerald-100 hover:bg-emerald-200 text-gray-800 
+                   font-medium px-6 py-3 rounded-lg shadow transition"
+            >
+              Order Holiday Treats
             </button>
           </div>
         </div>
 
-        {/* Right Image Placeholder */}
-        <div className="w-full md:w-[800px] max-w-[800px]">
-          <div className="aspect-[4/3] bg-gray-300 rounded-xl flex items-center justify-center text-4xl text-gray-500 shadow-lg">
-            <img src={cake} alt="cake"   onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }} className="w-full h-full object-cover rounded-xl" />
+        {/* Right Image */}
+        <div className="relative w-full md:w-[800px] max-w-[800px] z-10">
+          <div className="aspect-[4/3] rounded-2xl shadow-xl overflow-hidden">
+            <img
+              src={cake}
+              alt="Christmas Cake"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
+
       <Carousel data={Heroimages} height="534" width="534" show={3} />
       <CakeGallery />
 
@@ -154,10 +172,10 @@ const HeroSection = () => {
                   <img
                     src={review.image}
                     alt={review.name}
-                      onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/placeholder-cake.jpg";
+                    }}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
