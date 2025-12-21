@@ -16,7 +16,7 @@ const CakeCard = ({ cake }) => {
 
     const selectedSizeData = cake.sizes?.[0]; // assuming first size as default
     if (!selectedSizeData) {
-      toast.error('Please select a size');
+      toast('Please select a size');
       return;
     }
 
@@ -33,9 +33,9 @@ const CakeCard = ({ cake }) => {
     addToCart(cartItem);
     const token = localStorage.getItem('token');
     if (token) {
-      toast.success('Added to cart successfully!');
+      toast('Added to cart successfully!');
     } else {
-      toast.error('Please login to add items to cart');
+      toast('Please login to add items to cart');
     }
   };
 

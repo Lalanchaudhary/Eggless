@@ -15,8 +15,8 @@ root.render(
     <HelmetProvider>
         <UserProvider>
           <CartProvider>
-            <App />
             <ToastContainer />
+            <App />
           </CartProvider>
         </UserProvider>
       </HelmetProvider>

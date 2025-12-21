@@ -28,7 +28,7 @@ const DeliveryBoys = () => {
       const response = await adminService.getAllDeliveryBoys();
       setDeliveryBoys(response.deliveryBoys || []);
     } catch (error) {
-      toast.error('Failed to load delivery boys');
+      toast('Failed to load delivery boys');
       console.error('Error loading delivery boys:', error);
     } finally {
       setLoading(false);
@@ -74,15 +74,15 @@ const DeliveryBoys = () => {
     try {
       if (editingId) {
         await adminService.updateDeliveryBoy(editingId, formData);
-        toast.success('Delivery boy updated successfully!');
+        toast('Delivery boy updated successfully!');
       } else {
         await adminService.createDeliveryBoy(formData);
-        toast.success('Delivery boy added successfully!');
+        toast('Delivery boy added successfully!');
       }
       resetForm();
       loadDeliveryBoys();
     } catch (error) {
-      toast.error(error.message || 'Failed to save delivery boy');
+      toast(error.message || 'Failed to save delivery boy');
     }
   };
 
@@ -105,10 +105,10 @@ const DeliveryBoys = () => {
     if (window.confirm('Are you sure you want to delete this delivery boy?')) {
       try {
         await adminService.deleteDeliveryBoy(id);
-        toast.success('Delivery boy deleted successfully!');
+        toast('Delivery boy deleted successfully!');
         loadDeliveryBoys();
       } catch (error) {
-        toast.error('Failed to delete delivery boy');
+        toast('Failed to delete delivery boy');
       }
     }
   };

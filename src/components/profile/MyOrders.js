@@ -471,7 +471,7 @@ const MyOrders = () => {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">My Orders</h2>
       <div className="space-y-6">
         {orders.map((order) => (
-          <div key={order.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+          <div key={order._id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Order #{order.orderId}</h3>

@@ -45,7 +45,7 @@ const Checkout = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
+
   // Address form data
   const [addressFormData, setAddressFormData] = useState({
     type: 'Home',
@@ -67,11 +67,13 @@ const Checkout = () => {
   const [total, setTotal] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [shipping, setShipping] = useState(0);
+  const [deliveryDate, setDeliveryDate] = useState('');
+  const [deliveryTime, setDeliveryTime] = useState('');
   const geocodeAddress = async (address) => {
     const parts = [address.street, address.city, address.state, address.pincode]
       .filter(Boolean) // removes undefined or empty parts
       .join(', ');
-  
+
     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(parts)}`);
     const data = await res.json();
     if (data.length > 0) {
@@ -82,18 +84,18 @@ const Checkout = () => {
     }
     return null;
   };
-  
 
-  
+
+
   // Function to validate location distance
   const validateLocationDistance = async (address) => {
     if (!address || !address.location) {
       setLocationError('Address is missing');
       return false;
     }
-  
+
     let userLocation = address.location;
-  
+
     // Check and fix missing coordinates
     if (!userLocation.latitude || !userLocation.longitude) {
       const geoCoords = await geocodeAddress(address);
@@ -103,21 +105,21 @@ const Checkout = () => {
       }
       userLocation = geoCoords;
     }
-  
+
     setLocationLoading(true);
     setLocationError(null);
-  
+
     try {
       const { admins } = await getAllAdmins();
-  
+
       if (!admins || admins.length === 0) {
         setLocationError('No delivery locations available. Please contact support.');
         return false;
       }
-  
+
       let minDistance = Infinity;
       let nearestAdmin = null;
-  
+
       for (const admin of admins) {
         const adminLocation = admin.location;
         if (adminLocation?.latitude && adminLocation?.longitude) {
@@ -135,19 +137,19 @@ const Checkout = () => {
         }
       }
 
-  
+
       if (minDistance === Infinity) {
         setLocationError('Unable to calculate delivery distance. Please try again.');
         return false;
       }
-  
+
       if (minDistance > 100) {
         setLocationError(
           `Sorry, we cannot deliver to your location. The nearest delivery point is ${minDistance.toFixed(1)}km away, which exceeds our 100km delivery limit.`
         );
         return false;
       }
-  
+
       // Valid
       setLocationError(null);
       return true;
@@ -159,7 +161,7 @@ const Checkout = () => {
       setLocationLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     // Set default address if available
@@ -167,7 +169,7 @@ const Checkout = () => {
       const defaultAddress = user.addresses.find(addr => addr.isDefault);
       const addressToSet = defaultAddress || user.addresses[0];
       setSelectedAddress1(addressToSet);
-      
+
       // Validate the default address
       if (addressToSet) {
         validateLocationDistance(addressToSet);
@@ -199,7 +201,7 @@ const Checkout = () => {
     const total = subtotal + shippingCost + tax;
     setTotal(total);
     setTax(tax);
-  },[])
+  }, [])
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
@@ -265,20 +267,21 @@ const Checkout = () => {
                 </Box>
               </Alert>
             )}
-            
+
             {locationLoading && (
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <CircularProgress size={20} sx={{ mr: 1 }} />
                 <Typography variant="body2">Validating delivery location...</Typography>
               </Box>
             )}
+
+            <ShipAddr setSelectedAddress1={setSelectedAddress1} setShippingCost={setShippingCost} shippingCost={shippingCost} shippingLoading={shippingLoading} setShippingLoading={setShippingLoading} selectedAddress={selectedAddress} orderInstruction={orderInstruction} setOrderInstruction={setOrderInstruction} setShipping={setShipping} deliveryDate={deliveryDate} setDeliveryDate={setDeliveryDate} deliveryTime={deliveryTime} setDeliveryTime={setDeliveryTime} />
             
-          <ShipAddr setSelectedAddress1={setSelectedAddress1} setShippingCost={setShippingCost} shippingCost={shippingCost} shippingLoading={shippingLoading} setShippingLoading={setShippingLoading} selectedAddress={selectedAddress} orderInstruction={orderInstruction} setOrderInstruction={setOrderInstruction} setShipping={setShipping} />
           </Box>
         );
       case 2:
         return (
-          <Payment selectedAddress={selectedAddress} orderInstruction={orderInstruction} tax={tax} shipping={shipping}/>
+          <Payment selectedAddress={selectedAddress} orderInstruction={orderInstruction} tax={tax} shipping={shipping} deliveryDate={deliveryDate} deliveryTime={deliveryTime} />
         );
       case 3:
         return (
@@ -311,9 +314,9 @@ const Checkout = () => {
                   Order Summary
                 </Typography>
                 {cartItems.map(item => (
-                  <Box key={item.id} sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
+                  <Box key={item.id} sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
                     py: 1,
                     fontSize: { xs: '0.9rem', sm: '1rem' }
                   }}>
@@ -334,10 +337,10 @@ const Checkout = () => {
                     <Typography>Tax</Typography>
                     <Typography>${tax.toFixed(2)}</Typography>
                   </Box>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    mt: 2, 
+                  <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    mt: 2,
                     fontWeight: 'bold',
                     fontSize: { xs: '1rem', sm: '1.1rem' }
                   }}>
@@ -355,20 +358,20 @@ const Checkout = () => {
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
+    <Box sx={{
+      minHeight: '100vh',
       bgcolor: 'background.default',
       py: { xs: 2, sm: 4, md: 6 },
       px: { xs: 1, sm: 2, md: 3 }
     }}>
-      <Box sx={{ 
-        maxWidth: '1200px', 
+      <Box sx={{
+        maxWidth: '1200px',
         mx: 'auto',
         px: { xs: 1, sm: 2, md: 3 }
       }}>
-        <Typography 
-          variant="h4" 
-          sx={{ 
+        <Typography
+          variant="h4"
+          sx={{
             mb: { xs: 3, sm: 4, md: 6 },
             fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
             textAlign: { xs: 'center', sm: 'left' }
@@ -376,41 +379,41 @@ const Checkout = () => {
         >
           Checkout
         </Typography>
-        
+
         {/* Progress Steps */}
         <Box sx={{ mb: { xs: 4, sm: 6, md: 8 } }}>
-          <Box sx={{ 
-            display: 'flex', 
+          <Box sx={{
+            display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
             alignItems: { xs: 'flex-start', sm: 'center' },
             justifyContent: 'space-between',
             gap: { xs: 2, sm: 0 }
           }}>
             {['Shipping', 'Payment', 'Review'].map((step, index) => (
-              <Box key={step} sx={{ 
-                display: 'flex', 
+              <Box key={step} sx={{
+                display: 'flex',
                 alignItems: 'center',
                 width: { xs: '100%', sm: 'auto' }
               }}>
-                <Box sx={{ 
+                <Box sx={{
                   width: { xs: 32, sm: 36 },
                   height: { xs: 32, sm: 36 },
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  bgcolor: currentStep > index + 1 ? 'primary.main' : 
-                          currentStep === index + 1 ? 'primary.light' : 'grey.300'
+                  bgcolor: currentStep > index + 1 ? 'primary.main' :
+                    currentStep === index + 1 ? 'primary.light' : 'grey.300'
                 }}>
-                  <Typography sx={{ 
-                    color: 'white', 
+                  <Typography sx={{
+                    color: 'white',
                     fontWeight: 'medium',
                     fontSize: { xs: '0.875rem', sm: '1rem' }
                   }}>
                     {index + 1}
                   </Typography>
                 </Box>
-                <Typography sx={{ 
+                <Typography sx={{
                   ml: 1,
                   fontSize: { xs: '0.875rem', sm: '1rem' },
                   color: currentStep === index + 1 ? 'primary.main' : 'text.secondary',
@@ -419,7 +422,7 @@ const Checkout = () => {
                   {step}
                 </Typography>
                 {index < 2 && !isMobile && (
-                  <Box sx={{ 
+                  <Box sx={{
                     width: { xs: 32, sm: 64, md: 96 },
                     height: 2,
                     mx: 2,
@@ -432,16 +435,16 @@ const Checkout = () => {
         </Box>
 
         {/* Form */}
-        <Box component="form" onSubmit={handleOrderSubmit} sx={{ 
+        <Box component="form" onSubmit={handleOrderSubmit} sx={{
           bgcolor: 'background.paper',
           borderRadius: 2,
           boxShadow: 1,
           p: { xs: 2, sm: 3, md: 4 }
         }}>
           {renderStep()}
-          
+
           {/* Navigation Buttons */}
-          <Box sx={{ 
+          <Box sx={{
             mt: { xs: 4, sm: 6 },
             display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
@@ -463,7 +466,7 @@ const Checkout = () => {
                 variant="contained"
                 onClick={nextStep}
                 disabled={loading || (currentStep === 1 && !selectedAddress) || locationLoading || !!locationError}
-                sx={{ 
+                sx={{
                   ml: { sm: 'auto' },
                   bgcolor: '#272361',
                   '&:hover': { bgcolor: '#272361' },

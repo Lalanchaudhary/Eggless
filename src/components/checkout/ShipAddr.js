@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react"
 import {
-    Box,
-    Typography,
-    Card,
-    CardContent,
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Alert,
-    CircularProgress,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 import { getCurrentLocation } from '../../lib/getCurrentLocation';
 import { reverseGeocode } from '../../lib/reverseGeocode';
@@ -33,7 +33,11 @@ const ShipAddr = ({
   onOrderInstructionChange,
   orderInstruction,
   setOrderInstruction,
-  setShipping
+  setShipping,
+  deliveryDate,
+  setDeliveryDate,
+  deliveryTime,
+  setDeliveryTime
 }) => {
   const { user, addAddress, updateAddress } = useUser();
   const [selectedAddress, setSelectedAddress] = useState(selectedAddressProp || null);
@@ -53,6 +57,8 @@ const ShipAddr = ({
     },
     isDefault: false
   });
+  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(deliveryDate || '');
+  const [selectedDeliveryTime, setSelectedDeliveryTime] = useState(deliveryTime || '');
 
   const setSelectAdr = (address) => {
     setSelectedAddress(address);
@@ -114,7 +120,7 @@ const ShipAddr = ({
       }
     };
     calculateShipping();
-  }, [selectedAddress, setShippingCost, setShippingLoading ,setShipping]);
+  }, [selectedAddress, setShippingCost, setShippingLoading, setShipping]);
 
   const handleAddressOpen = (address = null) => {
     if (address) {
@@ -155,6 +161,11 @@ const ShipAddr = ({
     setAddressFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+    if (setDeliveryDate) setDeliveryDate(selectedDeliveryDate);
+    if (setDeliveryTime) setDeliveryTime(selectedDeliveryTime);
+  }, [selectedDeliveryDate, selectedDeliveryTime, setDeliveryDate, setDeliveryTime]);
+
   const handleAddressSubmit = async () => {
     if (!addressFormData.city || !addressFormData.state || !addressFormData.pincode) {
       setError('Please fill in all required fields');
@@ -177,110 +188,148 @@ const ShipAddr = ({
   };
 
   return (
-    <Box>
-      <Typography variant="h6">Shipping Information</Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+    <>
+      <Box>
+        <Typography variant="h6">Shipping Information</Typography>
+        {error && <Alert severity="error">{error}</Alert>}
 
-      <Box display="flex" justifyContent="space-between" my={2}>
-        <Typography variant="subtitle1">Select a Shipping Address</Typography>
-        <Button onClick={() => handleAddressOpen()} variant="contained">Add Address</Button>
+        <Box display="flex" justifyContent="space-between" my={2}>
+          <Typography variant="subtitle1">Select a Shipping Address</Typography>
+          <Button onClick={() => handleAddressOpen()} variant="contained">Add Address</Button>
+        </Box>
+        {/* Delivery Date and Time Fields */}
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
+          <TextField
+            label="Delivery Date"
+            type="date"
+            value={selectedDeliveryDate}
+            onChange={e => setSelectedDeliveryDate(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            className="w-full md:w-1/2"
+          />
+          <TextField
+            label="Delivery Time"
+            type="time"
+            value={selectedDeliveryTime}
+            onChange={e => setSelectedDeliveryTime(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            className="w-full md:w-1/2"
+          />
+        </div>
+
+        {user?.addresses?.length === 0 ? (
+          <Typography>No addresses found.</Typography>
+        ) : (
+          user.addresses.map(address => (
+            <Card
+              key={address._id}
+              onClick={() => setSelectAdr(address)}
+              sx={{
+                border: selectedAddress?._id === address._id ? '2px solid #e098b0' : '1px solid #e0e0e0',
+                mb: 2
+              }}
+            >
+              <CardContent>
+                <Typography>{address.type}</Typography>
+                <Typography>{address?.street && ','} {address.city}, {address.state} {address.pincode}</Typography>
+              </CardContent>
+            </Card>
+          ))
+        )}
+
+        {shippingLoading ? (
+          <Typography>Calculating shipping...</Typography>
+        ) : (
+          selectedAddress && <Typography>Shipping Charge: ₹{shippingCost.toFixed(2)}</Typography>
+        )}
+
+        <TextField
+          label="Write message on Cake"
+          fullWidth
+          multiline
+          rows={2}
+          value={orderInstruction}
+          onChange={e => {
+            setOrderInstruction(e.target.value);
+            onOrderInstructionChange?.(e.target.value);
+          }}
+          sx={{ mt: 2 }}
+        />
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
+          • Please ensure the delivery address is complete and accurate.
+        </Typography>
+        <br />
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
+         • We are not responsible for delays caused by incorrect or incomplete address details.
+        </Typography>
+        <br />
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
+          • Delivery time is an estimate and may vary due to traffic, weather, or unforeseen conditions.
+        </Typography>
+        <br />
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 3 }}>
+          • Our delivery partner may contact you at the provided phone number for smooth delivery.
+        </Typography>
+
+
+        <Dialog open={open} onClose={handleAddressClose} fullWidth>
+          <DialogTitle>{editingAddress ? 'Edit Address' : 'Add Address'}</DialogTitle>
+          <DialogContent>
+            <Button
+              fullWidth
+              sx={{ my: 2 }}
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  const loc = await getCurrentLocation();
+                  const addr = await reverseGeocode(loc.latitude, loc.longitude);
+                  setAddressFormData(prev => ({
+                    ...prev,
+                    location: { latitude: loc.latitude, longitude: loc.longitude },
+                    ...addr
+                  }));
+                } catch {
+                  setError('Failed to get current location');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              Use Current Location
+            </Button>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Type</InputLabel>
+              <Select name="type" value={addressFormData.type} onChange={handleAddressChange}>
+                <MenuItem value="Home">Home</MenuItem>
+                <MenuItem value="Work">Work</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField fullWidth name="street" label="Street" value={addressFormData.street} onChange={handleAddressChange} margin="normal" />
+            <TextField fullWidth name="city" label="City" value={addressFormData.city} onChange={handleAddressChange} margin="normal" required />
+            <TextField fullWidth name="state" label="State" value={addressFormData.state} onChange={handleAddressChange} margin="normal" required />
+            <TextField fullWidth name="pincode" label="Pincode" value={addressFormData.pincode} onChange={handleAddressChange} margin="normal" required />
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Default</InputLabel>
+              <Select name="isDefault" value={addressFormData.isDefault} onChange={handleAddressChange}>
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleAddressClose}>Cancel</Button>
+            <Button onClick={handleAddressSubmit} disabled={loading} variant="contained">
+              {loading ? <CircularProgress size={24} /> : 'Save'}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
 
-      {user?.addresses?.length === 0 ? (
-        <Typography>No addresses found.</Typography>
-      ) : (
-        user.addresses.map(address => (
-          <Card
-            key={address._id}
-            onClick={() => setSelectAdr(address)}
-            sx={{
-              border: selectedAddress?._id === address._id ? '2px solid #e098b0' : '1px solid #e0e0e0',
-              mb: 2
-            }}
-          >
-            <CardContent>
-              <Typography>{address.type}</Typography>
-              <Typography>{address.street}, {address.city}, {address.state} {address.pincode}</Typography>
-            </CardContent>
-          </Card>
-        ))
-      )}
-
-      {shippingLoading ? (
-        <Typography>Calculating shipping...</Typography>
-      ) : (
-        selectedAddress && <Typography>Shipping Charge: ₹{shippingCost.toFixed(2)}</Typography>
-      )}
-
-      <TextField
-        label="Order Instructions"
-        fullWidth
-        multiline
-        rows={2}
-        value={orderInstruction}
-        onChange={e => {
-          setOrderInstruction(e.target.value);
-          onOrderInstructionChange?.(e.target.value);
-        }}
-        sx={{ mt: 2 }}
-      />
-
-      <Dialog open={open} onClose={handleAddressClose} fullWidth>
-        <DialogTitle>{editingAddress ? 'Edit Address' : 'Add Address'}</DialogTitle>
-        <DialogContent>
-          <Button
-            fullWidth
-            sx={{ my: 2 }}
-            onClick={async () => {
-              try {
-                setLoading(true);
-                const loc = await getCurrentLocation();
-                const addr = await reverseGeocode(loc.latitude, loc.longitude);
-                setAddressFormData(prev => ({
-                  ...prev,
-                  location: { latitude: loc.latitude, longitude: loc.longitude },
-                  ...addr
-                }));
-              } catch {
-                setError('Failed to get current location');
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
-            Use Current Location
-          </Button>
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Type</InputLabel>
-            <Select name="type" value={addressFormData.type} onChange={handleAddressChange}>
-              <MenuItem value="Home">Home</MenuItem>
-              <MenuItem value="Work">Work</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField fullWidth name="street" label="Street" value={addressFormData.street} onChange={handleAddressChange} margin="normal" />
-          <TextField fullWidth name="city" label="City" value={addressFormData.city} onChange={handleAddressChange} margin="normal" required />
-          <TextField fullWidth name="state" label="State" value={addressFormData.state} onChange={handleAddressChange} margin="normal" required />
-          <TextField fullWidth name="pincode" label="Pincode" value={addressFormData.pincode} onChange={handleAddressChange} margin="normal" required />
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Default</InputLabel>
-            <Select name="isDefault" value={addressFormData.isDefault} onChange={handleAddressChange}>
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleAddressClose}>Cancel</Button>
-          <Button onClick={handleAddressSubmit} disabled={loading} variant="contained">
-            {loading ? <CircularProgress size={24} /> : 'Save'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+    </>
   );
 };
 

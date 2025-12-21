@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { app } from '../Firebase';
 import { checkPhoneNumber, register } from '../services/userService';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import phoneicon from '../assets/phoneicon.png'
 import CelebrationModal from '../components/CelebrationModel';
@@ -78,6 +78,7 @@ const Profile = () => {
   // Send OTP
   const handleSendOtp = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
     // Only clear previous confirmation, not recaptchaVerifier
     if (window.confirmationResult) window.confirmationResult = null;
@@ -100,9 +101,11 @@ const Profile = () => {
       window.confirmationResult = confirmation;
       setIsOtpSent(true);
       setTimer(30);
-      toast.success(`Otp sent to ${fullPhone}`, { position: "top-right", autoClose: 3000 });
+      toast(`Otp sent to ${fullPhone}`, { position: "top-right", autoClose: 3000 });
     } catch (err) {
       setError(err.message || 'Failed to send OTP. Try again.');
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -152,13 +155,12 @@ const Profile = () => {
 
   // "Login using Password" handler (implement as needed)
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <>
-      <ToastContainer />
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <CelebrationModal
           isOpen={showCelebration}
@@ -173,10 +175,10 @@ const Profile = () => {
         <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden max-w-3xl w-full">
           {/* Left Section */}
           <div className="hidden md:flex flex-col items-center justify-center bg-pink-50 w-1/2 p-8">
-            <img src={phoneicon} alt="Gift"   onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }} className="w-40 mb-8" />
+            <img src={phoneicon} alt="Gift" onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/placeholder-cake.jpg";
+            }} className="w-40 mb-8" />
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <span className="text-xl">🛒</span>
@@ -216,12 +218,15 @@ const Profile = () => {
                       />
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-400 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-300"
-                  >
-                    Send OTP
-                  </button>
+                  {
+                    <button
+                      type="submit"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-400 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-300"
+                      disabled={loading}
+                    >
+                      {loading ? 'Sending OTP...' : 'Send OTP'}
+                    </button>
+                  }
                 </form>
               </>
             )}

@@ -4,7 +4,9 @@ import CakeGallery from './CakeGallery';
 import Carousel from "./Carousel";
 import { useNavigate } from "react-router-dom";
 import FallingSnow from "./FallingSnow";
-
+import garland from '../assets/garland2.png'
+import bell from '../assets/bell2.png'
+import santa from '../assets/santa2.png'
 const HeroSection = () => {
   const navigate = useNavigate();
   let Heroimages = [
@@ -96,16 +98,37 @@ const HeroSection = () => {
 
   return (
     <>
-      <div className="relative flex flex-col md:flex-row items-center justify-between 
-                bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 
-                p-8 md:p-16 min-h-screen overflow-hidden">
-
+      <div
+        className="relative flex flex-col  md:flex-row items-center justify-between
+  bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50
+  p-8 md:p-16 min-h-screen overflow-hidden"
+      >
         {/* Falling Snow */}
         <FallingSnow count={50} />
 
+        {/* Garland */}
+        <img
+          src={garland}
+          alt="Christmas Garland"
+          className="absolute top-[55px] left-[-50px] w-72  opacity-80 pointer-events-none transform scale-y-110 rotate-[-25deg] hidden md:block"
+        />
+
+
+        {/* Bell */}
+        <img
+          src={bell}
+          alt="Bell"
+          className="absolute top-0 left-48 w-10 animate-bell opacity-80 hidden md:block"
+        />
+            <img
+              src={santa}
+              alt="Santa"
+              className="absolute left-[500px] top-[230px] w-24 animate-santa hidden md:block"
+            />
         {/* Left Content */}
-        <div className="relative max-w-xl mb-10 md:mb-0 z-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+        <div className="relative max-w-xl mb-10 md:mb-0 z-10 ">
+                      {/* Santa */}
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
             Magical <span className="text-rose-400">Eggless</span><br />
             Christmas Cakes
           </h1>
@@ -115,21 +138,22 @@ const HeroSection = () => {
             eggless Christmas cakes.
           </p>
 
-          <div className="flex gap-4">
+          <div className="relative flex gap-4 items-center">
             <button
-              className="bg-rose-400 hover:bg-rose-500 text-white font-semibold 
-                   px-6 py-3 rounded-lg shadow transition"
+              className="bg-rose-400 hover:bg-rose-500 text-white font-semibold
+        px-6 py-3 rounded-lg shadow transition"
               onClick={() => navigate("/all-cakes")}
             >
               Explore Christmas Cakes
             </button>
 
             <button
-              className="bg-emerald-100 hover:bg-emerald-200 text-gray-800 
-                   font-medium px-6 py-3 rounded-lg shadow transition"
+              className="bg-emerald-100 hover:bg-emerald-200 text-gray-800
+        font-medium px-6 py-3 rounded-lg shadow transition"
             >
               Order Holiday Treats
             </button>
+
           </div>
         </div>
 
@@ -144,6 +168,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
 
       <Carousel data={Heroimages} height="534" width="534" show={3} />
       <CakeGallery />

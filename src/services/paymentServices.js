@@ -4,24 +4,24 @@ import { CiWallet } from "react-icons/ci";
 import { BsCash } from "react-icons/bs";
 const API_URL = 'https://egglesscake-backend.fly.dev';
 const api = axios.create({
-    baseURL: API_URL,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  
-  // Add token to requests if it exists
-  api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    } else {
-      console.warn('No authentication token found');
-    }
-    return config;
-  }, (error) => {
-    return Promise.reject(error);
-  });
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Add token to requests if it exists
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    console.warn('No authentication token found');
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
 // Add response interceptor to handle auth errors
 api.interceptors.response.use(
@@ -29,9 +29,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Clear token and redirect to login if unauthorized
-    //   localStorage.removeItem('token');
-    //   window.location.href = '/login';
-    console.warn('401 error: token might be invalid or expired');
+      //   localStorage.removeItem('token');
+      //   window.location.href = '/login';
+      console.warn('401 error: token might be invalid or expired');
     }
     return Promise.reject(error);
   }
@@ -85,78 +85,78 @@ const verifyRazorpayPayment = async (paymentData) => {
 
 // Handle Razorpay Payment
 const handleRazorpayPayment = async (orderData) => {
-    try {
-      const res = await initializeRazorpay();
-      if (!res) throw new Error('Razorpay SDK failed to load');
-  
-      const order = await createRazorpayOrder(orderData);
-  
-      return new Promise((resolve, reject) => {
-        const options = {
-          key: 'rzp_test_1FGhUyAJx6vnYE',
-          amount: order.amount,
-          currency: order.currency,
-          name: 'EggLessCake',
-          description: 'Payment for your order',
-          order_id: order.id,
-  
-          handler: async function (response) {
-            try {
-              const verifyData = await verifyRazorpayPayment({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                orderId: order.orderId || orderData.orderId || order._id, // fix this if needed
-              });
-  
-              resolve({ success: true, data: verifyData });
-            } catch (err) {
-              console.error('Payment verification error:', err);
-              reject(new Error('Payment verification failed'));
-            }
-          },
-  
-          prefill: {
-            name: orderData.userData?.name || 'Test User',
-            email: orderData.userData?.email || 'test@example.com',
-            contact: orderData.userData?.phoneNumber || '9999999999',
-          },
-  
-          theme: { color: '#272361' },
-  
-          modal: {
-            escape: false,
-            backdropclose: false,
-          },
-        };
-  
-        const paymentObject = new window.Razorpay(options);
-  
-        paymentObject.on('payment.failed', function (response) {
-          console.error('Razorpay payment failed:', response.error);
-          reject(new Error(response.error.description || 'Payment failed'));
-        });
-  
-        paymentObject.on('modal.closed', function () {
-          console.warn('Payment popup was closed by user');
-          reject(new Error('Payment cancelled by user'));
-        });
-  
-        paymentObject.open();
+  try {
+    const res = await initializeRazorpay();
+    if (!res) throw new Error('Razorpay SDK failed to load');
+
+    const order = await createRazorpayOrder(orderData);
+
+    return new Promise((resolve, reject) => {
+      const options = {
+        key: 'rzp_test_1FGhUyAJx6vnYE',
+        amount: order.amount,
+        currency: order.currency,
+        name: 'EggLessCake',
+        description: 'Payment for your order',
+        order_id: order.id,
+
+        handler: async function (response) {
+          try {
+            const verifyData = await verifyRazorpayPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              orderId: order.orderId || orderData.orderId || order._id, // fix this if needed
+            });
+
+            resolve({ success: true, data: verifyData });
+          } catch (err) {
+            console.error('Payment verification error:', err);
+            reject(new Error('Payment verification failed'));
+          }
+        },
+
+        prefill: {
+          name: orderData.userData?.name || 'Test User',
+          email: orderData.userData?.email || 'test@example.com',
+          contact: orderData.userData?.phoneNumber || '9999999999',
+        },
+
+        theme: { color: '#272361' },
+
+        modal: {
+          escape: false,
+          backdropclose: false,
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+
+      paymentObject.on('payment.failed', function (response) {
+        console.error('Razorpay payment failed:', response.error);
+        reject(new Error(response.error.description || 'Payment failed'));
       });
-    } catch (error) {
-      console.error('Razorpay payment error:', error);
-      throw error;
-    }
-  };
-  
+
+      paymentObject.on('modal.closed', function () {
+        console.warn('Payment popup was closed by user');
+        reject(new Error('Payment cancelled by user'));
+      });
+
+      paymentObject.open();
+    });
+  } catch (error) {
+    console.error('Razorpay payment error:', error);
+    throw error;
+  }
+};
+
 
 // Handle COD Payment
 const handleCODPayment = async (orderData) => {
 
-  
+
   try {
-    const response = await api.post('/payment/cod',orderData);
+    const response = await api.post('/payment/cod', orderData);
     return response.data;
   } catch (error) {
     console.error('COD payment error:', error);
@@ -167,7 +167,7 @@ const handleCODPayment = async (orderData) => {
 // Handle Wallet Payment
 const handleWalletPayment = async (orderData) => {
   try {
-    const response = await api.post('/payment/payment/wallet',orderData);
+    const response = await api.post('/payment/payment/wallet', orderData);
     return response.data;
   } catch (error) {
     console.error('Wallet payment error:', error);

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getCakeById, addReview, getAllCakes, getCakeBySlug } from '../services/cakeServices';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import { Helmet } from "react-helmet-async";
 function isMongoId(value) {
@@ -157,7 +157,7 @@ const CakeDetails = () => {
 
     const selectedSizeData = cakeData.sizes.find(size => size.size === selectedSize);
     if (!selectedSizeData) {
-      toast.error('Please select a size');
+      toast('Please select a size');
       return;
     }
 
@@ -174,9 +174,9 @@ const CakeDetails = () => {
     addToCart(cartItem);
     const token = localStorage.getItem("token");
     if (token) {
-      toast.success('Added to cart successfully!');
+      toast('Added to cart successfully!');
     } else {
-      toast.error('Please login to add items to cart');
+      toast('Please login to add items to cart');
     }
   };
 
@@ -190,7 +190,7 @@ const CakeDetails = () => {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     if (newReview.rating === 0 || !newReview.comment || !newReview.name) {
-      toast.error('Please fill in all fields and select a rating');
+      toast('Please fill in all fields and select a rating');
       return;
     }
 
@@ -215,7 +215,7 @@ const CakeDetails = () => {
       toast.success('Review submitted successfully!');
     } catch (error) {
       console.error('Error submitting review:', error);
-      toast.error('Failed to submit review. Please try again later.');
+      toast('Failed to submit review. Please try again later.');
     } finally {
       setSubmittingReview(false);
     }
@@ -286,7 +286,6 @@ const CakeDetails = () => {
           })}
         </script>
       </Helmet>
-            <ToastContainer />
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button */}

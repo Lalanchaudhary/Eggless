@@ -121,9 +121,9 @@ const AddressBook = () => {
         </div>
 
         <div className="space-y-4">
-          {user?.addresses?.map((address) => (
-            <div key={address.id} className="border rounded-lg p-4">
-              <div className="flex justify-between items-start mb-4">
+          {user?.addresses?.map((address , index) => (
+            <div key={index} className="border rounded-lg p-4">
+              <div className="flex justify-between items-start mb-1">
                 <div>
                   <div className="flex items-center space-x-2">
                     <h3 className="text-lg font-semibold text-gray-900">{address.type}</h3>
@@ -146,8 +146,7 @@ const AddressBook = () => {
                 </div>
               </div>
               <div className="text-gray-600">
-                <p>{address.address}</p>
-                <p>{address.city}, {address.state} {address.pincode}</p>
+                <p>{address.street && address.street + ','} {address.city}, {address.state}, {address.pincode}</p>
                 <p>{user.phoneNumber}</p>
               </div>
             </div>
