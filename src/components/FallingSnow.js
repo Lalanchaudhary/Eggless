@@ -1,3 +1,4 @@
+import snowball from "../assets/snowball.png";
 const FallingSnow = ({ count = 40 }) => {
   return (
     <div className="snow">
@@ -13,7 +14,7 @@ const FallingSnow = ({ count = 40 }) => {
             opacity: 0.4 + Math.random() * 0.6,
           }}
         >
-          ❄
+          <img src={snowball} alt="Snowball" height={20} width={20} /> 
         </span>
       ))}
     </div>

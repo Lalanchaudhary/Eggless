@@ -120,6 +120,11 @@ const HeroSection = () => {
           alt="Bell"
           className="absolute top-0 left-48 w-10 animate-bell opacity-80 hidden md:block"
         />
+                    <img
+              src={santa}
+              alt="Santa"
+              className="absolute right-[30px] top-[20px] w-24 animate-santa sm:block md:hidden"
+            />
             <img
               src={santa}
               alt="Santa"
