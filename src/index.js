@@ -8,10 +8,11 @@ import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from './context/UserContext'
 import { CartProvider } from './context/CartContext'
+import Loading from './components/Loading';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <React.Suspense fallback={<Loading/>}>
     <HelmetProvider>
         <UserProvider>
           <CartProvider>

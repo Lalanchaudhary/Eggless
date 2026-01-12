@@ -13,7 +13,6 @@ import SubNavbar from "./components/SubNavbar";
 import { AuthProvider } from './context/AdminContext';
 // Lazy imports (components/pages)
 const HeroSection = React.lazy(() => import("./components/HeroSection"));
-const AllCakes = React.lazy(() => import("./pages/AllCakes"));
 const CakeDetails = React.lazy(() => import("./pages/CakeDetails"));
 const Cart = React.lazy(() => import("./pages/Cart"));
 const Footer = React.lazy(() => import("./components/Footer"));
@@ -38,15 +37,6 @@ const AdminLogin = React.lazy(() => import("./pages/AdminLogin"));
 const DeliveryBoys = React.lazy(() => import("./components/admin/DeliveryBoys"));
 const CreateUser = React.lazy(() => import("./components/admin/CreateUser"));
 const Templates = React.lazy(() => import("./components/admin/Templates"));
-
-const AnniversaryCakes = React.lazy(() => import("./pages/Anniversary/AnniversaryCakes"));
-const BirthdayCakes = React.lazy(() => import("./pages/BirthDay/BirthdayCakes"));
-const CorporateCakes = React.lazy(() => import("./pages/CorporateCakes"));
-const SuperManCake = React.lazy(() => import("./pages/ThemeCake/SuperManCake"));
-const CartoonCake = React.lazy(() => import("./pages/ThemeCake/CartoonCake"));
-const Cricket = React.lazy(() => import("./pages/ThemeCake/Cricket"));
-const Nature = React.lazy(() => import("./pages/ThemeCake/Nature"));
-const FriendshipDay = React.lazy(() => import("./pages/Occasion/FriendshipDay"));
 const DownloadApk = React.lazy(() => import("./pages/DownloadApk"));
 const CommanPage = React.lazy(() => import("./pages/CommonPage"));
 
@@ -155,16 +145,7 @@ const App = () => {
             <Route path="/" element={<HeroSection />} />
             <Route path="/products" element={<Products />} />
             <Route path="/delievery" element={<DeliveryBoys />} />
-            <Route path="/all-cakes" element={<AllCakes />} />
-            <Route path="/anniversary" element={<AnniversaryCakes />} />
-            <Route path="/birthday-cakes" element={<BirthdayCakes />} />
-            <Route path="/superhero-cakes" element={<SuperManCake />} />
-            <Route path="/cartoon-cakes" element={<CartoonCake />} />
-            <Route path="/cricket-cakes" element={<Cricket />} />
-            <Route path="/nature-cakes" element={<Nature />} />
             <Route path="/cakes/:id" element={<CommanPage />} />
-            <Route path="/friendshipday-cakes" element={<FriendshipDay />} />
-            <Route path="/corporates-cakes" element={<CorporateCakes />} />
             <Route path="/cake/:id" element={<CakeDetails />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/contact-us" element={<ContactUs />} />

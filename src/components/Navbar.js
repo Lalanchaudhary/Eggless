@@ -48,24 +48,24 @@ export function NavbarDemo() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
-        setIsMobileMenuOpen(false);
-      }
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowSearchResults(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+  //       setIsMobileMenuOpen(false);
+  //     }
+  //     if (searchRef.current && !searchRef.current.contains(event.target)) {
+  //       setShowSearchResults(false);
+  //     }
+  //   };
 
-    if (isMobileMenuOpen || showSearchResults) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+  //   if (isMobileMenuOpen || showSearchResults) {
+  //     document.addEventListener('mousedown', handleClickOutside);
+  //   }
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isMobileMenuOpen, showSearchResults]);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [isMobileMenuOpen, showSearchResults]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -351,7 +351,7 @@ export function NavbarDemo() {
 
             {/* Mobile menu button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setIsMobileMenuOpen(prev => !prev)}
               className="md:hidden p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-300"
               aria-label="Toggle menu"
             >

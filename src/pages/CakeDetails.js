@@ -73,9 +73,6 @@ const CakeDetails = () => {
         }
 
         const cake = await getCakeBySlug(id);
-        console.log('====================================');
-        console.log(cake);
-        console.log('====================================');
         setCakeData(cake);
         if (cake.flavors && cake.flavors.length > 0) {
           setSelectedFlavor(cake.flavors[0]);

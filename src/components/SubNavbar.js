@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAllCakes } from '../services/cakeServices';
 import { FaPhone, FaSearch } from 'react-icons/fa';
 
@@ -8,34 +8,22 @@ const menuItems = [
     label: 'Cakes',
     href: '/all-cakes',
     dropdown: [
-      { name: 'Chocolate Cakes', href: '/Chocolate' },
-      { name: 'Vanilla Cakes', href: 'Vanilla' },
-      { name: 'Red Velvet Cakes', href: 'Red Velvet' },
-      { name: 'Fruit Cakes', href: 'Fruit' },
-      { name: 'Pineapple Cake', href: 'Pineapple' },
-      { name: 'Butterscotch-cake', href: 'Butterscotch' },
+      { name: 'Chocolate Cakes', href: 'chocolate-cakes' },
+      { name: 'Vanilla Cakes', href: 'vanilla-flavor' },
+      { name: 'Red Velvet Cakes', href: 'redVelvet-flavor-cakes' },
+      { name: 'Fruit Cakes', href: 'fruit-cakes' },
+      { name: 'Pineapple Cake', href: 'pineapple-flavor-cakes' },
+      { name: 'Butterscotch-cake', href: 'butterscotch-flavor-cakes' },
     ],
   },
   {
     label: 'Theme Cakes',
     href: '/Theme',
     dropdown: [
-      { name: 'Cartoon Theme', href: 'Cartoon' },
-      { name: 'Superhero Theme', href: 'Superhero' },
-      { name: 'Cricket Theme', href: 'Cricket' },
-      { name: 'Nature Theme', href: 'Nature' },
-    ],
-  },
-  {
-    label: 'By Relationship',
-    href: '/all-cakes',
-    dropdown: [
-      { name: 'For Parents', href: '/all-cakes' },
-      { name: 'For Siblings', href: '/all-cakes' },
-      { name: 'For Friends', href: '/all-cakes' },
-      { name: 'For Colleagues', href: '/all-cakes' },
-      { name: 'For Children', href: '/all-cakes' },
-      { name: 'For Grandparents', href: '/all-cakes' },
+      { name: 'Cartoon Theme', href: 'cartoon-theme-cakes' },
+      { name: 'Superhero Theme', href: 'superhero-theme-cakes' },
+      { name: 'Cricket Theme', href: 'cricket-theme-cakes' },
+      { name: 'Nature Theme', href: 'nature-theme-cakes' },
     ],
   },
   {
@@ -43,53 +31,53 @@ const menuItems = [
     href: 'Desserts',
     dropdown: [
       { name: 'Cupcakes', href: 'Cupcakes' },
-      { name: 'Brownies', href: 'Brownies' },
-      { name: 'Cookies', href: 'Cookies' },
-      { name: 'Pastries', href: 'Pastries' },
-      { name: 'Muffins', href: 'Muffins' },
-      { name: 'Donuts', href: 'Donuts' },
+      { name: 'Brownies', href: 'brownies' },
+      { name: 'Cookies', href: 'cookies' },
+      { name: 'Pastries', href: 'pastries' },
+      { name: 'Muffins', href: 'muffins' },
+      { name: 'Donuts', href: 'donuts' },
     ],
   },
   {
     label: 'Birthday',
     href: 'Birthday',
     dropdown: [
-      { name: 'Kids Birthday', href: 'Kids Birthday' },
-      { name: 'Adult Birthday', href: 'Adult Birthday' },
-      { name: 'Milestone Birthday', href: 'Milestone Birthday' },
-      { name: 'Surprise Birthday', href: 'Surprise Birthday' },
-      { name: 'Birthday Combos', href: 'Birthday Combos' },
-      { name: 'Birthday Specials', href: 'Birthday Specials' },
+      { name: 'Kids Birthday', href: 'kids-birthday' },
+      { name: 'Adult Birthday', href: 'adult-birthday' },
+      { name: 'Milestone Birthday', href: 'milestone-birthday' },
+      { name: 'Surprise Birthday', href: 'surprise-birthday' },
+      { name: 'Birthday Combos', href: 'birthday-combos' },
+      { name: 'Birthday Specials', href: 'birthday-Specials' },
     ],
   },
   {
     label: 'Anniversary',
     href: 'anniversary',
     dropdown: [
-      { name: 'First Anniversary', href: 'FirstAnniversary' },
-      { name: 'Anniversary Combos', href: 'Anniversary' },
-      { name: 'Anniversary Specials', href: 'Anniversary' },
+      { name: 'First Anniversary', href: 'FirstAnniversary-cakes' },
+      { name: 'Anniversary Combos', href: 'anniversary-cakes' },
+      { name: 'Anniversary Specials', href: 'anniversary-cakes' },
     ],
   },
   {
     label: 'Occasion',
     href: '/all-cakes',
     dropdown: [
-      { name: 'FriendShip Day', href: 'FriendShip Day' },
-      { name: 'Baby Shower', href: 'Baby Shower' },
-      { name: 'Farewell', href: 'Farewell' },
-      { name: 'Congratulations', href: 'Congratulations' },
+      { name: 'FriendShip Day', href: 'friendship-day-cakes' },
+      { name: 'Baby Shower', href: 'baby-shower-cakes' },
+      { name: 'Farewell', href: 'farewell-cakes' },
+      { name: 'Congratulations', href: 'congratulations-cakes' },
     ],
   },
   {
     label: 'Customized Cakes',
     href: 'Customized',
     dropdown: [
-      { name: 'Photo Cakes', href: 'Photo' },
-      { name: 'Name Cakes', href: '/all-cakes' },
-      { name: 'Designer Cakes', href: 'Designer' },
-      { name: 'Fondant Cakes', href: 'Fondant' },
-      { name: 'Custom Flavors', href: 'Custom' },
+      { name: 'Photo Cakes', href: 'photo-cakes' },
+      { name: 'Name Cakes', href: 'name-cakes' },
+      { name: 'Designer Cakes', href: 'designer-cakes' },
+      { name: 'Fondant Cakes', href: 'fondant-cakes' },
+      { name: 'Custom Flavors', href: 'custom-flavor-cakes' },
     ],
   },
 ];
@@ -107,6 +95,19 @@ const SubNavbar = ({ vertical = false }) => {
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [allCakes, setAllCakes] = useState([]);
   const searchRef = useRef(null);
+  const dropdownRef = useRef(null);
+    useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setHoveredItem(false);
+      }
+    };
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [hoveredItem]);
+
 
   useEffect(() => {
     const fetchCakes = async () => {
@@ -198,6 +199,10 @@ const SubNavbar = ({ vertical = false }) => {
   };
 
   const handleMouseEnter = (label) => {
+    if(hoveredItem){
+      setHoveredItem(null);
+      return;
+    }
     if (!vertical && itemRefs.current[label]) {
       const rect = itemRefs.current[label].getBoundingClientRect();
       const dropdownWidth = 260;
@@ -217,38 +222,6 @@ const SubNavbar = ({ vertical = false }) => {
   };
   
 
-  const handleMouseLeave = () => {
-    setTimeout(() => {
-      setHoveredItem(null);
-    }, 150); // slight delay
-  };
-
-  const navigateTo = (href) => {
-  if (!href) return;
-
-  // If already a full path
-  if (href.startsWith('/')) {
-    navigate(href);
-  } else {
-    navigate(`/cakes/${encodeURIComponent(href)}`);
-  }
-
-  setHoveredItem(null);
-};
-
-
-  const handleItemClick = (href) => {
-    console.log('====================================');
-    console.log(href);
-    console.log('====================================');
-    navigate(`/cakes/${href}`);
-    setHoveredItem(null);
-  };
-
-  const handleDropdownItemClick = (href) => {
-    navigate(`/cakes/${href}`);
-    setHoveredItem(null);
-  };
 
   return (
     <>
@@ -393,25 +366,21 @@ const SubNavbar = ({ vertical = false }) => {
               <div
                 key={item.label}
                 className="relative"
-                onMouseEnter={() => handleMouseEnter(item.label)}
-                onMouseLeave={handleMouseLeave}
+                onClick={() => handleMouseEnter(item.label)}
+                ref={dropdownRef}
               >
                 <li
                   ref={(el) => (itemRefs.current[item.label] = el)}
                   className="relative flex flex-col items-start group"
                 >
                   <button
-                    onClick={() => navigateTo(item.href)}
+                    // onClick={() => navigateTo(item.href)}
                     className={`text-lg md:text-xl font-medium text-black hover:text-rose-500 transition-colors px-2 ${
                       vertical ? 'py-1' : ''
                     }`}
                   >
                     {item.label}
-                    {item.badge && (
-                      <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white">
-                        {item.badge}
-                      </span>
-                    )}
+                    <span className="ml-auto text-[12px] text-gray-500">{hoveredItem ===item.label?' ▲' : ' ▼'}</span>
                   </button>
                 </li>
 
@@ -431,22 +400,16 @@ const SubNavbar = ({ vertical = false }) => {
                     <ul className="py-1">
                       {item.dropdown.map((dropdownItem, index) => (
                         <li key={index}>
-                          <button
-                            onClick={() => navigateTo(dropdownItem.href)}
+                          <Link to={`/cakes/${dropdownItem.href}`}
+                            
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
                           >
                             {dropdownItem.name}
-                          </button>
+                          </Link>
                         </li>
                       ))}
                     </ul>
                     <div className="px-4 py-2 border-t border-gray-100">
-                      <button
-                        onClick={() => navigateTo(item.href)}
-                        className="text-sm text-rose-500 hover:text-rose-600 font-medium"
-                      >
-                        View All {item.label} →
-                      </button>
                     </div>
                   </div>
                 )}

@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAllCakes } from '../services/cakeServices';
 import Loading from '../components/Loading';
-
+import { Helmet } from "react-helmet-async";
 const CommanPage = () => {
-    const {id}=useParams();
+  const { id } = useParams();
   const [filters, setFilters] = useState({
     priceRange: [0, 2000],
     rating: 0,
     dietary: [],
     flavor: []
   });
+
+  const first = id ? id.split('-')[0] : '';
+
   const [cakes, setCakes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,11 +29,11 @@ const CommanPage = () => {
       try {
         setLoading(true);
         const data = await getAllCakes();
-        const filterData = data.filter((e) => 
-          e.label?.toLowerCase().includes(id.toLowerCase()) ||
-          e.flavor?.toLowerCase().includes(id.toLowerCase()) ||
-          e.category?.toLowerCase().includes(id.toLowerCase()) ||
-          e.name?.toLowerCase().includes(id.toLowerCase())
+        const filterData = data.filter((e) =>
+          e.label?.toLowerCase().includes(first.toLowerCase()) ||
+          e.flavor?.toLowerCase().includes(first.toLowerCase()) ||
+          e.category?.toLowerCase().includes(first.toLowerCase()) ||
+          e.name?.toLowerCase().includes(first.toLowerCase())
         );
         setCakes(filterData);
         setError(null);
@@ -41,55 +44,48 @@ const CommanPage = () => {
         setLoading(false);
       }
     };
-  
+
     if (id) {
       fetchCakes();
     }
-  }, [id]); // 🔁 now it re-runs when 'id' changes
-  
+  }, [id, first]); // 🔁 now it re-runs when 'id' changes
 
-  // Filter cakes for Super Hero Cakes
-//   const getFilteredCakes = () => {
-//     let filteredCakes = cakes.filter(cake => 
-//       cake.tag?.toLowerCase().includes('Theme-Cake') ||
-//       cake.description?.toLowerCase().includes('Theme-Cake') ||
-//       cake.name?.toLowerCase().includes('Theme-Cake')
-//     );
 
-//     // Filter by price range
-//     filteredCakes = filteredCakes.filter(cake => 
-//       cake.price >= filters.priceRange[0] && cake.price <= filters.priceRange[1]
-//     );
+  const filteredCakes = cakes.filter(cake => {
+    // Price
+    if (cake.price < filters.priceRange[0] || cake.price > filters.priceRange[1]) {
+      return false;
+    }
 
-//     // Filter by rating
-//     if (filters.rating > 0) {
-//       filteredCakes = filteredCakes.filter(cake => cake.rating >= filters.rating);
-//     }
+    // Rating
+    if (filters.rating && cake.rating < filters.rating) {
+      return false;
+    }
 
-//     // Filter by dietary preferences
-//     if (filters.dietary.length > 0) {
-//       filteredCakes = filteredCakes.filter(cake => 
-//         filters.dietary.some(dietary => 
-//           cake.label?.toLowerCase().includes(dietary.toLowerCase()) ||
-//           cake.description?.toLowerCase().includes(dietary.toLowerCase())
-//         )
-//       );
-//     }
+    // Dietary
+    if (
+      filters.dietary.length > 0 &&
+      !filters.dietary.includes(cake.dietary)
+    ) {
+      return false;
+    }
 
-//     // Filter by flavor
-//     if (filters.flavor.length > 0) {
-//       filteredCakes = filteredCakes.filter(cake => 
-//         filters.flavor.some(flavor => 
-//           cake.flavor?.toLowerCase().includes(flavor.toLowerCase()) ||
-//           cake.name?.toLowerCase().includes(flavor.toLowerCase())
-//         )
-//       );
-//     }
+    // Flavor
+    if (
+      filters.flavor.length > 0 &&
+      !filters.flavor.includes(cake.flavor)
+    ) {
+      return false;
+    }
 
-//     return filteredCakes;
-//   };
+    return true;
+  });
 
-  const filteredCakes = cakes;
+
+  if (loading) {
+    return <Loading />;
+  }
+
 
   // Helper function to render star ratings
   const renderStars = (rating) => {
@@ -201,9 +197,8 @@ const CommanPage = () => {
               <button
                 key={star}
                 onClick={() => handleFilterChange('rating', star)}
-                className={`p-1 rounded ${
-                  filters.rating >= star ? 'text-yellow-400' : 'text-gray-300'
-                }`}
+                className={`p-1 rounded ${filters.rating >= star ? 'text-yellow-400' : 'text-gray-300'
+                  }`}
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -266,7 +261,7 @@ const CommanPage = () => {
   );
 
   const CakeCard = ({ cake }) => (
-    <div 
+    <div
       className="group bg-white rounded-lg shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-md hover:-translate-y-1 cursor-pointer"
       onClick={() => navigate(`/cake/${cake._id}`)}
     >
@@ -274,10 +269,10 @@ const CommanPage = () => {
         <img
           src={cake.image}
           alt={cake.name}
-            onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/images/placeholder-cake.jpg";
+          }}
           className="w-full h-full rounded-lg object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -308,7 +303,7 @@ const CommanPage = () => {
           {cake.description?.slice(0, 100)}...
         </p>
         <div className="flex gap-2">
-          <button 
+          <button
             className="hidden lg:block flex-1 bg-rose-300 hover:bg-rose-400 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors duration-300"
             onClick={(e) => {
               e.stopPropagation();
@@ -317,7 +312,7 @@ const CommanPage = () => {
           >
             Add to Cart
           </button>
-          <button 
+          <button
             className="hidden lg:block flex-1 border border-rose-300 text-rose-500 hover:bg-rose-50 px-2 py-1.5 rounded text-xs font-medium transition-colors duration-300"
             onClick={(e) => {
               e.stopPropagation();
@@ -331,17 +326,13 @@ const CommanPage = () => {
     </div>
   );
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors"
           >
             Try Again
@@ -352,58 +343,86 @@ const CommanPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-            {id} Cakes
-          </h1>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-            Make every birthday special with our delicious eggless {id} Cakes. Perfect for celebrating life's beautiful moments!
-          </p>
-        </div>
+    <>
+      <Helmet>
+        {/* SEO Title */}
+        <title>
+          {first} Cakes Online | Order {first} Cake | Eggless Cakes Noida | Same Day Delivery
+        </title>
 
-        {/* Horizontal Filters */}
-        <HorizontalFilters />
 
-        {/* Cake Grid */}
-        <div className="w-full">
-          {filteredCakes.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No Super Hero Cakes found matching your criteria.</p>
-              <button
-                onClick={() => setFilters({
-                  priceRange: [0, 2000],
-                  rating: 0,
-                  dietary: [],
-                  flavor: []
-                })}
-                className="mt-4 px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors"
-              >
-                Clear Filters
-              </button>
-            </div>
-          ) : (
-            <div className="mb-16">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                  {id} Cakes
-                </h2>
-                <p className="text-gray-600">
-                  {filteredCakes.length} {id} Cake{filteredCakes.length !== 1 ? 's' : ''} found
-                </p>
+        {/* Meta Description */}
+        <meta name="description" content={`Order ${id} online from Eggless Cakes with same-day delivery.`} />
+        {/* Canonical URL */}
+        <link rel="canonical" href={`https://www.egglesscakes.in/cakes/${id}`} />
+
+        {/* Open Graph (Social Sharing) */}
+        <meta property="og:title" content={id} />
+        <meta property="og:url" content={`https://www.egglesscakes.in/cakes/${id}`} />
+        <meta property="og:type" content="product" />
+
+        {/* Structured Data (Rich Results) */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": first,
+          })}
+        </script>
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          {/* Header */}
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+              {id} Cakes
+            </h1>
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+              Make every birthday special with our delicious eggless {id} Cakes. Perfect for celebrating life's beautiful moments!
+            </p>
+          </div>
+
+          {/* Horizontal Filters */}
+          <HorizontalFilters />
+
+          {/* Cake Grid */}
+          <div className="w-full">
+            {filteredCakes.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">No {first} Cakes found matching your criteria.</p>
+                <button
+                  onClick={() => setFilters({
+                    priceRange: [0, 2000],
+                    rating: 0,
+                    dietary: [],
+                    flavor: []
+                  })}
+                  className="mt-4 px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors"
+                >
+                  Clear Filters
+                </button>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 lg:gap-4">
-                {filteredCakes.map(cake => (
-                  <CakeCard key={cake._id} cake={cake} />
-                ))}
+            ) : (
+              <div className="mb-16">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                    {id} Cakes
+                  </h2>
+                  <p className="text-gray-600">
+                    {filteredCakes.length} {id} Cake{filteredCakes.length !== 1 ? 's' : ''} found
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 lg:gap-4">
+                  {filteredCakes.map(cake => (
+                    <CakeCard key={cake._id} cake={cake} />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
