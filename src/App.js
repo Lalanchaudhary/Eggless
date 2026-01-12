@@ -20,6 +20,7 @@ const Products = React.lazy(() => import("./components/Products"));
 const Profile = React.lazy(() => import("./pages/Profile"));
 const UserProfile = React.lazy(() => import("./pages/UserProfile"));
 const AboutUs = React.lazy(() => import("./pages/AboutUs"));
+const AllCakes = React.lazy(() => import("./pages/AllCakes"));
 const ContactUs = React.lazy(() => import("./pages/ContactUs"));
 const Checkout = React.lazy(() => import("./pages/Checkout"));
 const OrderSuccess = React.lazy(() => import("./pages/OrderSuccess"));
@@ -143,6 +144,7 @@ const App = () => {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HeroSection />} />
+            <Route path="/eggless-cakes" element={<AllCakes />} />
             <Route path="/products" element={<Products />} />
             <Route path="/delievery" element={<DeliveryBoys />} />
             <Route path="/cakes/:id" element={<CommanPage />} />
