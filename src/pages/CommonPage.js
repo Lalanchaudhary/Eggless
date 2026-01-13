@@ -13,6 +13,9 @@ const CommanPage = () => {
   });
 
   const first = id ? id.split('-')[0] : '';
+  const cakeName = id
+    ? id.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
+    : '';
 
   const [cakes, setCakes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -345,30 +348,42 @@ const CommanPage = () => {
   return (
     <>
       <Helmet>
-        {/* SEO Title */}
-        <title>
-          {first} Cakes Online | Order {first} Cake | Eggless Cakes Noida | Same Day Delivery
-        </title>
-
-
+        <title>{cakeName} | Order Eggless Cakes Online</title>
         {/* Meta Description */}
-        <meta name="description" content={`Order ${id} online from Eggless Cakes with same-day delivery.`} />
+        <meta
+          name="description"
+          content={`Order fresh eggless ${cakeName.toLowerCase()} online with same-day delivery across Noida.`}
+        />
+
         {/* Canonical URL */}
         <link rel="canonical" href={`https://www.egglesscakes.in/cakes/${id}`} />
 
         {/* Open Graph (Social Sharing) */}
-        <meta property="og:title" content={id} />
-        <meta property="og:url" content={`https://www.egglesscakes.in/cakes/${id}`} />
-        <meta property="og:type" content="product" />
+        <meta property="og:title" content={`${cakeName} | Eggless Cakes`} />
+        <meta property="og:description" content={`Buy fresh eggless ${cakeName.toLowerCase()} online.`} />
+        <meta property="og:image" content="https://www.egglesscakes.in/brand-logo.jpg" />
 
         {/* Structured Data (Rich Results) */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": first,
-          })}
-        </script>
+<script type="application/ld+json">
+{JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": cakeName,
+  "brand": {
+    "@type": "Brand",
+    "name": "Eggless Cakes"
+  },
+  "category": "Eggless Cakes",
+  "url": `https://www.egglesscakes.in/cakes/${id}`,
+  "image": "https://www.egglesscakes.in/brand-logo.jpg",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock"
+  }
+})}
+</script>
+
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
