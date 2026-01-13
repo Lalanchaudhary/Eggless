@@ -390,7 +390,7 @@ const CommanPage = () => {
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              {id} Cakes
+              {cakeName}
             </h1>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
               Make every birthday special with our delicious eggless {id} Cakes. Perfect for celebrating life's beautiful moments!
@@ -421,11 +421,8 @@ const CommanPage = () => {
               <div className="mb-16">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    {id} Cakes
+                    {cakeName} 
                   </h2>
-                  <p className="text-gray-600">
-                    {filteredCakes.length} {id} Cake{filteredCakes.length !== 1 ? 's' : ''} found
-                  </p>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 lg:gap-4">
                   {filteredCakes.map(cake => (

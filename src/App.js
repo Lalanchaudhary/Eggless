@@ -13,6 +13,7 @@ import SubNavbar from "./components/SubNavbar";
 import { AuthProvider } from './context/AdminContext';
 // Lazy imports (components/pages)
 const HeroSection = React.lazy(() => import("./components/HeroSection"));
+const Home = React.lazy(() => import("./pages/Home"));
 const CakeDetails = React.lazy(() => import("./pages/CakeDetails"));
 const Cart = React.lazy(() => import("./pages/Cart"));
 const Footer = React.lazy(() => import("./components/Footer"));
@@ -143,7 +144,7 @@ const App = () => {
         <main className="flex-grow">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<HeroSection />} />
+            <Route path="/" element={<Home />} />
             <Route path="/eggless-cakes" element={<AllCakes />} />
             <Route path="/products" element={<Products />} />
             <Route path="/delievery" element={<DeliveryBoys />} />
