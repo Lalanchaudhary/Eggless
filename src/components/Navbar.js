@@ -24,7 +24,7 @@ export function NavbarDemo() {
   const [allCakes, setAllCakes] = useState([]);
   const mobileMenuRef = useRef(null);
   const searchRef = useRef(null);
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const locationRef = useRef(null);
   const { user } = useUser();
@@ -121,7 +121,7 @@ export function NavbarDemo() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate('/all-cakes', { state: { searchQuery } });
+      navigate('/eggless-cakes', { state: { searchQuery } });
       setShowSearchResults(false);
       setSearchQuery('');
     }
@@ -140,7 +140,7 @@ export function NavbarDemo() {
 
   const handleViewAllResults = () => {
     console.log('View all results clicked for:', searchQuery);
-    navigate('/all-cakes', { state: { searchQuery } });
+    navigate('/eggless-cakes', { state: { searchQuery } });
     setShowSearchResults(false);
     setSearchQuery('');
   };
@@ -401,7 +401,7 @@ export function NavbarDemo() {
             </div>
           }
           <Navbar />
-          <VerticalSubNavbar vertical />
+          <VerticalSubNavbar vertical setIsMobileMenuOpen={setIsMobileMenuOpen} />
         </div>
       </div>
     </div>

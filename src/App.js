@@ -12,7 +12,6 @@ import { useUser } from "./context/UserContext";
 import SubNavbar from "./components/SubNavbar";
 import { AuthProvider } from './context/AdminContext';
 // Lazy imports (components/pages)
-const HeroSection = React.lazy(() => import("./components/HeroSection"));
 const Home = React.lazy(() => import("./pages/Home"));
 const CakeDetails = React.lazy(() => import("./pages/CakeDetails"));
 const Cart = React.lazy(() => import("./pages/Cart"));

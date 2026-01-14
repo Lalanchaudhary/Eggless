@@ -96,6 +96,7 @@ const SubNavbar = ({ vertical = false }) => {
   const [allCakes, setAllCakes] = useState([]);
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
+  
     useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -178,22 +179,26 @@ const SubNavbar = ({ vertical = false }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate('/all-cakes', { state: { searchQuery } });
+      navigate('/eggless-cakes', { state: { searchQuery } });
       setShowSearchResults(false);
       setSearchQuery('');
     }
   };
 
   const handleSearchResultClick = (cake) => {
+    console.log('Search result clicked:', cake);
     if (cake && cake._id) {
       navigate(`/cake/${cake._id}`);
       setShowSearchResults(false);
       setSearchQuery('');
+    } else {
+      console.error('Invalid cake data:', cake);
     }
   };
 
+
   const handleViewAllResults = () => {
-    navigate('/all-cakes', { state: { searchQuery } });
+    navigate('/eggless-cakes', { state: { searchQuery } });
     setShowSearchResults(false);
     setSearchQuery('');
   };
@@ -300,6 +305,7 @@ const SubNavbar = ({ vertical = false }) => {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
+                          
                           handleSearchResultClick(cake);
                         }}
                         className="w-full px-4 py-3 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors duration-200 flex items-center space-x-3 cursor-pointer focus:outline-none focus:bg-gray-50"

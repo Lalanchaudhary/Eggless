@@ -9,10 +9,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <img src={logo} alt="Logo"   onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }} className="h-12 md:h-16" />
+            <img src={logo} alt="Logo" onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/placeholder-cake.jpg";
+            }} className="h-12 md:h-16" />
             <p className="text-gray-600 text-sm">
               Delivering happiness through delicious eggless cakes since 2010. We specialize in custom-made cakes for all occasions.
             </p>
@@ -112,14 +112,17 @@ const Footer = () => {
               © {new Date().getFullYear()} Eggless Cakes. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <Link to="/privacy" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
+              <Link to="/privacy-policy" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
+              <Link to="/terms-and-conditions" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
                 Terms of Service
               </Link>
-              <Link to="/shipping" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
-                Shipping Policy
+              <Link to="/refund-policy" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
+                Refund Policy
+              </Link>
+              <Link to="/shipping-delivery" className="text-gray-600 hover:text-[#e098b0] text-sm transition-colors">
+                Shipping & Delivery
               </Link>
             </div>
           </div>
