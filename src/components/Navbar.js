@@ -24,7 +24,6 @@ export function NavbarDemo() {
   const [allCakes, setAllCakes] = useState([]);
   const mobileMenuRef = useRef(null);
   const searchRef = useRef(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const locationRef = useRef(null);
   const { user } = useUser();
