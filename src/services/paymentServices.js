@@ -28,9 +28,6 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear token and redirect to login if unauthorized
-      //   localStorage.removeItem('token');
-      //   window.location.href = '/login';
       console.warn('401 error: token might be invalid or expired');
     }
     return Promise.reject(error);
