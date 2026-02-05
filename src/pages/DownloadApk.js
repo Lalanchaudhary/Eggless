@@ -1,5 +1,5 @@
 import React from 'react';
-import eggless from '../assets/Egglesscake.png'
+import eggless from '../assets/Egglesscake-new.png'
 const APK_URL = 'https://apk-download-site-amcamoe5s-lalan-chaudharys-projects.vercel.app/EgglessCake.apk';
 
 const DownloadApk = () => {

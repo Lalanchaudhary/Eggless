@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../assets/Egglesscake.png';
+import logo from '../assets/Egglesscake-new.png';
 
 const Footer = () => {
   return (

@@ -3,7 +3,7 @@ import { Menu, MenuItem } from "../ui/navbar-menu";
 import { cn } from "../lib/utils";
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import logo from '../assets/Egglesscake.png'
+import logo from '../assets/Egglesscake-new.png'
 import { Link } from 'react-router-dom';
  
 import { FaMapMarkerAlt, FaPhone } from 'react-icons/fa';

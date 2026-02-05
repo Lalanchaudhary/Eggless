@@ -4,7 +4,7 @@ import {
   FiEye, 
   FiX
 } from 'react-icons/fi';
-import logo from '../../assets/Egglesscake.png'
+import logo from '../../assets/Egglesscake-new.png'
 import { Document, Page, Text, View, StyleSheet, PDFDownloadLink, Image } from '@react-pdf/renderer';
 
 const OrderDetail = ({ order, onClose, onCancel }) => {
