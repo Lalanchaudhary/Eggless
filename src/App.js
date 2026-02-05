@@ -11,6 +11,7 @@ import { reverseGeocode } from "./lib/reverseGeocode";
 import { useUser } from "./context/UserContext";
 import SubNavbar from "./components/SubNavbar";
 import { AuthProvider } from './context/AdminContext';
+import NotFound from "./pages/NotFound";
 // Lazy imports (components/pages)
 const Home = React.lazy(() => import("./pages/Home"));
 const CakeDetails = React.lazy(() => import("./pages/CakeDetails"));
@@ -155,6 +156,7 @@ const App = () => {
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/shipping-delivery" element={<ShippingDelivery />} />
+            <Route path="/notfound" element={<NotFound />} />
             <Route path="/download" element={<DownloadApk />} />
             {/* Auth Routes */}
 
@@ -317,7 +319,7 @@ const App = () => {
 
 
             {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/notfound" replace />} />
           </Routes>
         </main>
         {!isAdminRoute && <Footer />}
