@@ -103,22 +103,13 @@ const Products = () => {
     }
   };
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setIsUploading(true);
-      try {
-        const storageRef = ref(storage, `products/${file.name}`);
-        await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(storageRef);
-        setFormData(prev => ({ ...prev, image: downloadURL }));
-      } catch (error) {
-        setError('Image upload failed. Please try again.');
-      }
-      setIsUploading(false);
-    }
-  };
+  const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setImageFile(file); // store file only
+  }
+};
+
 
   const handleAddProduct = () => {
     setSelectedProduct(null);
@@ -189,20 +180,43 @@ const Products = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (selectedProduct) {
-        await adminService.updateProduct(selectedProduct._id, formData);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const data = new FormData();
+
+    // append all fields
+    Object.keys(formData).forEach(key => {
+      if (Array.isArray(formData[key])) {
+        data.append(key, JSON.stringify(formData[key]));
+      } else if (typeof formData[key] === "object") {
+        data.append(key, JSON.stringify(formData[key]));
       } else {
-        await adminService.createProduct(formData);
+        data.append(key, formData[key]);
       }
-      setDialogOpen(false);
-      await loadProducts();
-    } catch (err) {
-      setError(err.message || 'Failed to save product');
+    });
+
+    // append image ONLY if user selected new image
+    if (imageFile) {
+      data.append("image", imageFile);
     }
-  };
+
+    if (selectedProduct) {
+      await adminService.updateProduct(selectedProduct._id, data);
+    } else {
+      await adminService.createProduct(data);
+    }
+
+    setDialogOpen(false);
+    setImageFile(null);
+    await loadProducts();
+
+  } catch (err) {
+    setError(err.message || "Failed to save product");
+  }
+};
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
