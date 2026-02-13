@@ -29,9 +29,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import * as adminService from '../../services/adminService';
-
-import { storage } from '../../Firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { styled } from '@mui/material/styles';
 
 const SectionContainer = styled('div')(({ theme }) => ({
@@ -354,19 +351,29 @@ const handleSubmit = async (e) => {
       </Box>
 
       {/* Render products grouped by category */}
-      {(() => {
-        const filteredProducts = searchNumber.trim()
-          ? products.filter(product => {
-            const num = product.number?.$numberInt || product.number || '';
-            return num.toString() === searchNumber.trim();
-          })
-          : products;
-        const groupedProductsFiltered = filteredProducts.reduce((acc, product) => {
-          const label = product.label || 'Unlabeled';
-          if (!acc[label]) acc[label] = [];
-          acc[label].push(product);
-          return acc;
-        }, {});
+{(() => {
+  const filteredProducts = searchNumber.trim()
+    ? products.filter(product => {
+        const num = product.number?.$numberInt || product.number || '';
+        return num.toString() === searchNumber.trim();
+      })
+    : products;
+
+  // ⭐ SORT PRODUCTS BY NUMBER ASCENDING
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const numA = parseInt(a.number?.$numberInt || a.number || 0);
+    const numB = parseInt(b.number?.$numberInt || b.number || 0);
+    return numA - numB; // ascending
+  });
+
+  // ⭐ GROUP AFTER SORTING
+  const groupedProductsFiltered = sortedProducts.reduce((acc, product) => {
+    const label = product.label || 'Unlabeled';
+    if (!acc[label]) acc[label] = [];
+    acc[label].push(product);
+    return acc;
+  }, {});
+
         return Object.keys(groupedProductsFiltered).map((label) => (
           <Box key={label} mb={5}>
             <Typography variant="h5" sx={{ mb: 2, mt: 3 }} color="secondary">
@@ -407,7 +414,7 @@ const handleSubmit = async (e) => {
                       <TableCell>₹{product.price.toFixed(2)}</TableCell>
                       <TableCell>{product.rating}</TableCell>
                       <TableCell>{product.label}</TableCell>
-                      <TableCell>{product.number?.$numberInt || product.number || ''}</TableCell>
+                      <TableCell>{product.number}</TableCell>
                       <TableCell>
                         <IconButton
                           size="small"
