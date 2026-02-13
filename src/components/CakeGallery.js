@@ -128,11 +128,6 @@ const CakeGallery = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50 p-3 lg:p-6">
       <CakeSection
-        title="Chrismas Specail Cakes"
-        cakes={Chrismas}
-        scrollRef={trendingScrollRef}
-      />
-      <CakeSection
         title="Our Trending Cakes"
         cakes={trendingCakes}
         scrollRef={trendingScrollRef}
