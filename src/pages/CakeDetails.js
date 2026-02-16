@@ -254,79 +254,82 @@ const CakeDetails = () => {
 
   return (
     <>
-<Helmet>
-  {/* SEO Title */}
-  <title>{cakeData.name} | Eggless Cakes</title>
+      <Helmet>
+        {/* SEO Title */}
+        <title>{cakeData.name} | Eggless Cakes</title>
 
-  {/* Meta Description */}
-  <meta
-    name="description"
-    content={
-      cakeData.description
-        ? cakeData.description.slice(0, 155)
-        : `Order ${cakeData.name} online with same-day delivery.`
-    }
-  />
-
-  {/* Canonical */}
-  <link rel="canonical" href={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
-
-  {/* Open Graph */}
-  <meta property="og:title" content={cakeData.name} />
-  <meta property="og:description" content={cakeData.description} />
-  <meta property="og:image" content={cakeData.image} />
-  <meta property="og:url" content={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
-  <meta property="og:type" content="product" />
-
-  {/* ⭐ FINAL PRODUCT SCHEMA */}
-  {cakeData && (
-    <script type="application/ld+json">
-      {JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Product",
-
-        name: cakeData.name,
-        image: cakeData.image,
-        description: cakeData.description,
-        sku: cakeData._id,
-        brand: {
-          "@type": "Brand",
-          name: "Eggless Cakes"
-        },
-        category: cakeData.category,
-
-        offers: {
-          "@type": "Offer",
-          priceCurrency: "INR",
-          price: cakeData.sizes?.[0]?.price || 0,
-          availability: "https://schema.org/InStock",
-          url: `https://www.egglesscakes.in/cake/${cakeData.slug}`
-        },
-
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: cakeData.averageRating || 0,
-          reviewCount: cakeData.totalReviews || 0
-        },
-
-        review: cakeData.reviews?.slice(0, 5).map((r) => ({
-          "@type": "Review",
-          author: {
-            "@type": "Person",
-            name: r.userName
-          },
-          datePublished: r.createdAt,
-          reviewBody: r.comment,
-          reviewRating: {
-            "@type": "Rating",
-            ratingValue: r.rating,
-            bestRating: "5"
+        {/* Meta Description */}
+        <meta
+          name="description"
+          content={
+            cakeData.description
+              ? cakeData.description.slice(0, 155)
+              : `Order ${cakeData.name} online with same-day delivery.`
           }
-        }))
-      })}
-    </script>
-  )}
-</Helmet>
+        />
+
+        {/* Canonical */}
+        <link rel="canonical" href={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={cakeData.name} />
+        <meta property="og:description" content={cakeData.description} />
+        <meta property="og:image" content={cakeData.image} />
+        <meta property="og:url" content={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
+        <meta property="og:type" content="product" />
+
+        {/* ⭐ FINAL PRODUCT SCHEMA */}
+        {cakeData && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+
+              name: cakeData.name,
+              image: cakeData.image,
+              description: cakeData.description,
+              sku: cakeData._id,
+              brand: {
+                "@type": "Brand",
+                name: "Eggless Cakes"
+              },
+              category: cakeData.category,
+
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "INR",
+                price: cakeData.sizes?.[0]?.price || 0,
+                availability: "https://schema.org/InStock",
+                url: `https://www.egglesscakes.in/cake/${cakeData.slug}`
+              },
+
+              ...(cakeData.totalReviews > 0 && {
+                aggregateRating: {
+                  "@type": "AggregateRating",
+                  ratingValue: cakeData.averageRating,
+                  reviewCount: cakeData.totalReviews
+                }
+              }),
+
+
+              ...(cakeData.totalReviews > 0 && {
+                review: cakeData.reviews.slice(0, 5).map((r) => ({
+                  "@type": "Review",
+                  author: { "@type": "Person", name: r.userName },
+                  datePublished: r.createdAt,
+                  reviewBody: r.comment,
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: r.rating,
+                    bestRating: "5"
+                  }
+                }))
+              }),
+
+            })}
+          </script>
+        )}
+      </Helmet>
 
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
