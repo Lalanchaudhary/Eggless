@@ -301,6 +301,7 @@ const CakeDetails = () => {
                 price: cakeData.sizes?.[0]?.price || 0,
                 availability: "https://schema.org/InStock",
                 url: `https://www.egglesscakes.in/cake/${cakeData.slug}`,
+                priceValidUntil: "2026-12-31",
 
                 // ⭐ Shipping details
                 shippingDetails: {
