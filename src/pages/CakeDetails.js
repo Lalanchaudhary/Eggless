@@ -300,8 +300,45 @@ const CakeDetails = () => {
                 priceCurrency: "INR",
                 price: cakeData.sizes?.[0]?.price || 0,
                 availability: "https://schema.org/InStock",
-                url: `https://www.egglesscakes.in/cake/${cakeData.slug}`
+                url: `https://www.egglesscakes.in/cake/${cakeData.slug}`,
+
+                // ⭐ Shipping details
+                shippingDetails: {
+                  "@type": "OfferShippingDetails",
+                  shippingRate: {
+                    "@type": "MonetaryAmount",
+                    value: "0",
+                    currency: "INR"
+                  },
+                  shippingDestination: {
+                    "@type": "DefinedRegion",
+                    addressCountry: "IN"
+                  },
+                  deliveryTime: {
+                    "@type": "ShippingDeliveryTime",
+                    handlingTime: {
+                      "@type": "QuantitativeValue",
+                      minValue: 0,
+                      maxValue: 1,
+                      unitCode: "DAY"
+                    },
+                    transitTime: {
+                      "@type": "QuantitativeValue",
+                      minValue: 0,
+                      maxValue: 1,
+                      unitCode: "DAY"
+                    }
+                  }
+                },
+
+                // ⭐ Return policy
+                hasMerchantReturnPolicy: {
+                  "@type": "MerchantReturnPolicy",
+                  applicableCountry: "IN",
+                  returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted"
+                }
               },
+
 
               ...(cakeData.totalReviews > 0 && {
                 aggregateRating: {
