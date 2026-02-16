@@ -1,3 +1,3 @@
 module.exports = {
-  API_URL: 'http://localhost:9000'
+  API_URL: 'https://egglesscake-backend.fly.dev'
 };
