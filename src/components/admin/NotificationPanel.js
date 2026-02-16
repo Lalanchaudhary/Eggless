@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
-
+import { API_URL } from '../../config';
 const NotificationPanel = () => {
   const [notifications, setNotifications] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -8,7 +8,7 @@ const NotificationPanel = () => {
 
   useEffect(() => {
     // Initialize socket connection
-    const newSocket = io('https://egglesscake-backend.fly.dev', {
+    const newSocket = io(API_URL, {
       withCredentials: true
     });
 

@@ -1,8 +1,7 @@
 import axios from 'axios';
-// import { API_URL } from '../config';
-
+import { API_URL } from '../config';
 const api = axios.create({
-  baseURL: `https://egglesscake-backend.fly.dev/admin`,
+  baseURL: `${API_URL}/admin`,
   withCredentials: true, // Enable cookies
 });
 

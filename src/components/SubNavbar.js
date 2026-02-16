@@ -323,7 +323,7 @@ const SubNavbar = ({ vertical = false }) => {
                             {cake.name}
                           </p>
                           <p className="text-xs text-gray-500 truncate">
-                            ₹{cake.price} • {cake.flavor || cake.category}
+                            ₹{cake.sizes[0].price} • {cake.flavor || cake.category}
                           </p>
                         </div>
                       </button>

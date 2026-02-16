@@ -100,7 +100,7 @@ const CakeCard = ({ cake }) => {
 
       <div className="w-full p-3">
         <div className="flex items-center justify-between mb-1">
-          <p className="text-rose-500 font-medium text-sm">₹{cake.price}</p>
+          <p className="text-rose-500 font-medium text-sm">₹{cake.sizes[0].price}</p>
           <div className="flex items-center gap-1">
             <div className="hidden lg:flex">{renderStars(cake.rating)}</div>
             <span className="text-xs text-gray-600">({cake.reviews})</span>

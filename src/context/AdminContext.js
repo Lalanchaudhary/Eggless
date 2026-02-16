@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
-
+import { API_URL } from '../config';
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAdminLogin = async () => {
     try {
-      const res = await axios.get('https://egglesscake-backend.fly.dev/auth/verify', {
+      const res = await axios.get(`${API_URL}/auth/verify`, {
         withCredentials: true
       })
       setAdmin(res.data.admin)
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('https://egglesscake-backend.fly.dev/auth/logout', {}, {
+      await axios.post(`${API_URL}/auth/logout`, {}, {
         withCredentials: true
       })
     } catch (error) {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://egglesscake-backend.fly.dev/auth/login', credentials, {
+      const response = await axios.post(`${API_URL}/auth/login`, credentials, {
         withCredentials: true
       })
       setAdmin(response.data.admin)

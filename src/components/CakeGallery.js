@@ -29,9 +29,8 @@ const CakeGallery = () => {
     fetchCakes();
   }, []);
 
-  // Filter cakes for different sections
-  const Chrismas = cakes.filter(cake => cake.label === 'Chrismas');
-  const trendingCakes = cakes.filter(cake => cake.label === 'EGGLESS');
+
+  const trendingCakes = cakes.filter(cake => cake.label === 'Trending');
   const surpriseCakes = cakes.filter(cake => cake.tag === 'Annivarsary');
   const bestSellers = cakes.filter(cake => cake.label === 'Best Seller');
 

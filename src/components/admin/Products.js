@@ -72,11 +72,9 @@ const Products = () => {
     number: 0
   });
 
-  const [newSize, setNewSize] = useState({
-    size: '',
-    price: '',
-    serves: ''
-  });
+const [selectedSize, setSelectedSize] = useState("");
+const [sizePrice, setSizePrice] = useState("");
+
 
   const [newIngredient, setNewIngredient] = useState('');
   const [newAllergen, setNewAllergen] = useState('');
@@ -234,15 +232,32 @@ const handleSubmit = async (e) => {
     }
   };
 
-  const handleAddSize = () => {
-    if (newSize.size && newSize.price) {
-      setFormData(prev => ({
-        ...prev,
-        sizes: [...prev.sizes, { ...newSize }]
-      }));
-      setNewSize({ size: '', price: '', serves: '' });
-    }
-  };
+const handleAddCakeSize = () => {
+  if (!selectedSize || !sizePrice) return;
+
+  const serves = cakeSizes.find(s => s.size === selectedSize)?.serves;
+
+  setFormData(prev => ({
+    ...prev,
+
+    // auto set base product price from first size
+    price: prev.price || Number(sizePrice),
+
+    sizes: [
+      ...prev.sizes,
+      {
+        size: selectedSize,
+        price: Number(sizePrice),
+        serves
+      }
+    ]
+  }));
+
+  // reset fields after adding
+  setSelectedSize("");
+  setSizePrice("");
+};
+
 
   const handleRemoveSize = (index) => {
     setFormData(prev => ({
@@ -284,6 +299,14 @@ const handleSubmit = async (e) => {
       allergens: prev.allergens.filter((_, i) => i !== index)
     }));
   };
+
+  const cakeSizes = [
+  { size: "0.5Kg", serves: "4 - 5 Persons" },
+  { size: "1Kg", serves: "8 - 10 Persons" },
+  { size: "1.5Kg", serves: "12 - 14 Persons" },
+  { size: "2Kg", serves: "18 - 20 Persons" }
+];
+
 
   if (loading) {
     return (
@@ -390,7 +413,7 @@ const handleSubmit = async (e) => {
                     <TableCell>Price</TableCell>
                     <TableCell>Rating</TableCell>
                     <TableCell>Label</TableCell>
-                    <TableCell>Number</TableCell>
+                    <TableCell>Tag</TableCell>
                     <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -411,10 +434,10 @@ const handleSubmit = async (e) => {
                       <TableCell>{product.name}</TableCell>
                       <TableCell>{product.category}</TableCell>
                       <TableCell>{product.flavor}</TableCell>
-                      <TableCell>₹{product.price.toFixed(2)}</TableCell>
+                      <TableCell>₹{product.sizes[0]?.price}</TableCell>
                       <TableCell>{product.rating}</TableCell>
                       <TableCell>{product.label}</TableCell>
-                      <TableCell>{product.number}</TableCell>
+                      <TableCell>{product.tag}</TableCell>
                       <TableCell>
                         <IconButton
                           size="small"
@@ -483,28 +506,6 @@ const handleSubmit = async (e) => {
                       </MenuItem>
                     ))}
                   </TextField>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Price"
-                    name="price"
-                    type="number"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Original Price"
-                    name="original_price"
-                    type="number"
-                    value={formData.original_price}
-                    onChange={handleInputChange}
-                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -594,121 +595,91 @@ const handleSubmit = async (e) => {
               </Grid>
             </SectionContainer>
 
-            <SectionContainer>
-              <Typography variant="h6" gutterBottom>Sizes</Typography>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Size"
-                    value={newSize.size}
-                    onChange={(e) => setNewSize(prev => ({ ...prev, size: e.target.value }))}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Price"
-                    type="number"
-                    value={newSize.price}
-                    onChange={(e) => setNewSize(prev => ({ ...prev, price: e.target.value }))}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Serves"
-                    value={newSize.serves}
-                    onChange={(e) => setNewSize(prev => ({ ...prev, serves: e.target.value }))}
-                  />
-                </Grid>
-              </Grid>
-              <Button
-                variant="outlined"
-                onClick={handleAddSize}
-                sx={{ mt: 1 }}
-              >
-                Add Size
-              </Button>
-              <List>
-                {formData.sizes.map((size, index) => (
-                  <ListItem key={index}>
-                    {editingSizeIndex === index ? (
-                      <>
-                        <TextField
-                          label="Size"
-                          value={editingSize.size}
-                          onChange={e => setEditingSize(prev => ({ ...prev, size: e.target.value }))}
-                          size="small"
-                          sx={{ mr: 1, width: 80 }}
-                        />
-                        <TextField
-                          label="Price"
-                          type="number"
-                          value={editingSize.price}
-                          onChange={e => setEditingSize(prev => ({ ...prev, price: e.target.value }))}
-                          size="small"
-                          sx={{ mr: 1, width: 80 }}
-                        />
-                        <TextField
-                          label="Serves"
-                          value={editingSize.serves}
-                          onChange={e => setEditingSize(prev => ({ ...prev, serves: e.target.value }))}
-                          size="small"
-                          sx={{ mr: 1, width: 120 }}
-                        />
-                        <IconButton
-                          edge="end"
-                          aria-label="save"
-                          onClick={() => {
-                            setFormData(prev => ({
-                              ...prev,
-                              sizes: prev.sizes.map((s, i) => i === index ? { ...editingSize } : s)
-                            }));
-                            setEditingSizeIndex(null);
-                          }}
-                        >
-                          <span role="img" aria-label="save">💾</span>
-                        </IconButton>
-                        <IconButton
-                          edge="end"
-                          aria-label="cancel"
-                          onClick={() => setEditingSizeIndex(null)}
-                        >
-                          <span role="img" aria-label="cancel">❌</span>
-                        </IconButton>
-                      </>
-                    ) : (
-                      <>
-                        <ListItemText
-                          primary={`${size.size} - ₹${size.price}`}
-                          secondary={`Serves: ${size.serves}`}
-                        />
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            edge="end"
-                            aria-label="edit"
-                            onClick={() => {
-                              setEditingSizeIndex(index);
-                              setEditingSize(size);
-                            }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            onClick={() => handleRemoveSize(index)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </>
-                    )}
-                  </ListItem>
-                ))}
-              </List>
-            </SectionContainer>
+<SectionContainer>
+  <Typography variant="h6" gutterBottom>Cake Sizes</Typography>
+
+  <Grid container spacing={2} alignItems="center">
+
+    {/* SIZE DROPDOWN */}
+    <Grid item xs={12} sm={6}>
+      <TextField
+        select
+        fullWidth
+        label="Select Size"
+        value={selectedSize}
+        onChange={(e) => {
+          setSelectedSize(e.target.value);
+          setSizePrice(""); // reset price when size changes
+        }}
+      >
+        {cakeSizes.map((item) => (
+          <MenuItem key={item.size} value={item.size}>
+            {item.size} — Serves {item.serves}
+          </MenuItem>
+        ))}
+      </TextField>
+    </Grid>
+
+    {/* PRICE FIELD (SHOW ONLY AFTER SIZE SELECTED) */}
+    {selectedSize && (
+      <Grid item xs={12} sm={6}>
+        <TextField
+          fullWidth
+          label={`Price for ${selectedSize}`}
+          type="number"
+          value={sizePrice}
+          onChange={(e) => setSizePrice(e.target.value)}
+        />
+      </Grid>
+    )}
+  </Grid>
+
+  {/* ADD SIZE BUTTON */}
+  {selectedSize && sizePrice && (
+    <Button
+      variant="contained"
+      sx={{ mt: 2 }}
+      onClick={() => {
+        const serves = cakeSizes.find(s => s.size === selectedSize)?.serves;
+
+        setFormData(prev => ({
+          ...prev,
+          sizes: [
+            ...prev.sizes,
+            {
+              size: selectedSize,
+              price: sizePrice,
+              serves
+            }
+          ]
+        }));
+
+        // reset fields
+        setSelectedSize("");
+        setSizePrice("");
+      }}
+    >
+      Add Size
+    </Button>
+  )}
+
+  {/* SHOW ADDED SIZES */}
+  <List>
+    {formData.sizes.map((size, index) => (
+      <ListItem key={index}>
+        <ListItemText
+          primary={`${size.size} - ₹${size.price}`}
+          secondary={`Serves: ${size.serves}`}
+        />
+        <IconButton onClick={() => handleRemoveSize(index)}>
+          <DeleteIcon />
+        </IconButton>
+      </ListItem>
+    ))}
+  </List>
+
+</SectionContainer>
+
 
             <SectionContainer>
               <Typography variant="h6" gutterBottom>Ingredients</Typography>

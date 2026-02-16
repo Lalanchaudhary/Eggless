@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const API_URL ='https://egglesscake-backend.fly.dev';
+import { API_URL } from '../config';
+// const API_URL =process.env.REACT_APP_Rest_API
 
 // Create axios instance with default config
 const api = axios.create({
