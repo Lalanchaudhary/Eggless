@@ -345,46 +345,43 @@ const CommanPage = () => {
     );
   }
 
+
   return (
     <>
-      <Helmet>
-        <title>{cakeName} | Order Eggless Cakes Online</title>
-        {/* Meta Description */}
-        <meta
-          name="description"
-          content={`Order fresh eggless ${cakeName.toLowerCase()} online with same-day delivery across Noida.`}
-        />
+<Helmet>
+  <title>{cakeName} | Order Eggless Cakes Online</title>
 
-        {/* Canonical URL */}
-        <link rel="canonical" href={`https://www.egglesscakes.in/cakes/${id}`} />
+  <meta
+    name="description"
+    content={`Order fresh eggless ${cakeName.toLowerCase()} online with same-day delivery across Noida.`}
+  />
 
-        {/* Open Graph (Social Sharing) */}
-        <meta property="og:title" content={`${cakeName} | Eggless Cakes`} />
-        <meta property="og:description" content={`Buy fresh eggless ${cakeName.toLowerCase()} online.`} />
-        <meta property="og:image" content="https://www.egglesscakes.in/brand-logo.jpg" />
+  <link rel="canonical" href={`https://www.egglesscakes.in/cakes/${id}`} />
 
-        {/* Structured Data (Rich Results) */}
-<script type="application/ld+json">
-{JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": cakeName,
-  "brand": {
-    "@type": "Brand",
-    "name": "Eggless Cakes"
-  },
-  "category": "Eggless Cakes",
-  "url": `https://www.egglesscakes.in/cakes/${id}`,
-  "image": "https://www.egglesscakes.in/brand-logo.jpg",
-  "offers": {
-    "@type": "Offer",
-    "priceCurrency": "INR",
-    "availability": "https://schema.org/InStock"
-  }
-})}
-</script>
+  <meta property="og:title" content={`${cakeName} | Eggless Cakes`} />
+  <meta property="og:description" content={`Buy fresh eggless ${cakeName.toLowerCase()} online.`} />
+  <meta property="og:image" content="https://www.egglesscakes.in/brand-logo.jpg" />
 
-      </Helmet>
+  {/* ⭐ Correct Schema for Category Pages */}
+  {cakes && (
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: `${cakeName} Cakes`,
+        description: `Browse our delicious eggless ${cakeName.toLowerCase()} cakes.`,
+        url: `https://www.egglesscakes.in/cakes/${id}`,
+
+        itemListElement: cakes.map((cake, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: `https://www.egglesscakes.in/cake/${cake.slug}`
+        }))
+      })}
+    </script>
+  )}
+</Helmet>
+
       <div className="min-h-screen bg-gradient-to-br from-rose-50 to-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Header */}
@@ -421,7 +418,7 @@ const CommanPage = () => {
               <div className="mb-16">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    {cakeName} 
+                    {cakeName}
                   </h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 lg:gap-4">

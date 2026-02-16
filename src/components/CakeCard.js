@@ -10,11 +10,10 @@ const CakeCard = ({ cake }) => {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    console.log("Hello");
 
     if (!cake) return;
 
-    const selectedSizeData = cake.sizes?.[0]; // assuming first size as default
+    const selectedSizeData = cake.sizes?.[0];
     if (!selectedSizeData) {
       toast('Please select a size');
       return;
@@ -31,15 +30,14 @@ const CakeCard = ({ cake }) => {
     };
 
     addToCart(cartItem);
+
     const token = localStorage.getItem('token');
-    if (token) {
-      toast('Added to cart successfully!');
-    } else {
-      toast('Please login to add items to cart');
-    }
+    if (token) toast('Added to cart successfully!');
+    else toast('Please login to add items to cart');
   };
 
-  const renderStars = (rating) => {
+  // ⭐ Star rendering using new averageRating field
+  const renderStars = (rating = 0) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -90,20 +88,27 @@ const CakeCard = ({ cake }) => {
         <img
           src={cake.image}
           alt={cake.name}
-            onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/placeholder-cake.jpg";
-  }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/images/placeholder-cake.jpg";
+          }}
           className="w-full h-full rounded-lg object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>
 
       <div className="w-full p-3">
         <div className="flex items-center justify-between mb-1">
-          <p className="text-rose-500 font-medium text-sm">₹{cake.sizes[0].price}</p>
+          <p className="text-rose-500 font-medium text-sm">
+            ₹{cake.sizes?.[0]?.price || "—"}
+          </p>
+
           <div className="flex items-center gap-1">
-            <div className="hidden lg:flex">{renderStars(cake.rating)}</div>
-            <span className="text-xs text-gray-600">({cake.reviews})</span>
+            <div className="hidden lg:flex">
+              {renderStars(cake.averageRating || 0)}
+            </div>
+            <span className="text-xs text-gray-600">
+              ({cake.totalReviews || 0})
+            </span>
           </div>
         </div>
 
@@ -112,7 +117,7 @@ const CakeCard = ({ cake }) => {
         </h3>
 
         <p className="hidden lg:block text-xs text-gray-600 mb-3 line-clamp-2">
-          {cake.description.slice(0, 100)}...
+          {cake.description?.slice(0, 100)}...
         </p>
 
         <div className="flex gap-2">
@@ -122,10 +127,10 @@ const CakeCard = ({ cake }) => {
           >
             Add to Cart
           </button>
+
           <button
             className="hidden lg:block flex-1 border border-rose-300 text-rose-500 hover:bg-rose-50 px-2 py-1.5 rounded text-xs font-medium transition-colors duration-300"
             onClick={() => navigate(`/cake/${cake.slug}`)}
-
           >
             Details
           </button>

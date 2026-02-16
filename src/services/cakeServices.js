@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { API_URL } from '../config';
-// const API_URL =process.env.REACT_APP_Rest_API
 
 // Create axios instance with default config
 const api = axios.create({
@@ -105,15 +104,20 @@ export const deleteCake = async (id) => {
 };
 
 // Add review to cake
-export const addReview = async (cakeId, reviewData) => {
+export const addReview = async (cakeId, formData) => {
   try {
-    const response = await api.post(`/cake/${cakeId}/reviews`, reviewData);
+    const response = await api.post(
+      `/cake/${cakeId}/reviews`,
+      formData   // ⭐ no headers here
+    );
+
     return response.data;
   } catch (error) {
     console.error(`Error adding review to cake ${cakeId}:`, error);
     throw error;
   }
 };
+
 
 // Search cakes
 export const searchCakes = async (query) => {

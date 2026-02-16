@@ -184,39 +184,48 @@ const CakeDetails = () => {
   };
 
   // Updated review submission handler
+  const [reviewImages, setReviewImages] = useState([]);
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
+
     if (newReview.rating === 0 || !newReview.comment || !newReview.name) {
-      toast('Please fill in all fields and select a rating');
+      toast('Please fill all fields and select rating');
       return;
     }
 
     try {
       setSubmittingReview(true);
-      const reviewData = {
-        name: newReview.name,
-        rating: newReview.rating,
-        comment: newReview.comment
-      };
 
-      const updatedCake = await addReview(id, reviewData);
+      const formData = new FormData();
+      formData.append("userName", newReview.name);
+      formData.append("rating", newReview.rating);
+      formData.append("comment", newReview.comment);
+
+      // ⭐ append images ONLY if files exist
+      if (reviewImages && reviewImages.length > 0) {
+        for (let i = 0; i < reviewImages.length; i++) {
+          formData.append("images", reviewImages[i]);
+        }
+      }
+
+      const updatedCake = await addReview(id, formData);
       setCakeData(updatedCake);
 
-      // Reset form and close modal
-      setNewReview({
-        rating: 0,
-        comment: '',
-        name: ''
-      });
+      // reset form
+      setNewReview({ rating: 0, comment: '', name: '' });
+      setReviewImages([]);
       setIsReviewModalOpen(false);
+
       toast.success('Review submitted successfully!');
     } catch (error) {
-      console.error('Error submitting review:', error);
-      toast('Failed to submit review. Please try again later.');
+      console.error("Review submit error:", error.response?.data || error);
+      toast(error.response?.data?.message || 'Failed to submit review');
     } finally {
       setSubmittingReview(false);
     }
   };
+
+
 
   if (loading) {
     return <Loading />;
@@ -240,49 +249,85 @@ const CakeDetails = () => {
 
   const suggestedCakes = getSuggestedCakes();
 
+
+
+
   return (
     <>
-      <Helmet>
-        {/* SEO Title */}
-        <title>{cakeData.name} | Eggless Cakes</title>
+<Helmet>
+  {/* SEO Title */}
+  <title>{cakeData.name} | Eggless Cakes</title>
 
-        {/* Meta Description */}
-        <meta name="description" content={cakeData.description ? cakeData.description.slice(0, 155) : `Order ${cakeData.name} online from Eggless Cakes with same-day delivery.`} />
-        {/* Canonical URL */}
-        <link rel="canonical" href={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
+  {/* Meta Description */}
+  <meta
+    name="description"
+    content={
+      cakeData.description
+        ? cakeData.description.slice(0, 155)
+        : `Order ${cakeData.name} online with same-day delivery.`
+    }
+  />
 
-        {/* Open Graph (Social Sharing) */}
-        <meta property="og:title" content={cakeData.name} />
-        <meta property="og:description" content={cakeData.description} />
-        <meta property="og:image" content={cakeData.image} />
-        <meta property="og:url" content={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
-        <meta property="og:type" content="product" />
+  {/* Canonical */}
+  <link rel="canonical" href={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
 
-        {/* Structured Data (Rich Results) */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": cakeData.name,
-            "image": cakeData.image,
-            "description": cakeData.description,
-            "sku": cakeData._id,
-            "offers": {
-              "@type": "Offer",
-              "priceCurrency": "INR",
-              "price": cakeData.price || cakeData.sizes?.[0]?.price,
-              "availability": "https://schema.org/InStock"
-            },
-            "aggregateRating": cakeData.rating
-              ? {
-                "@type": "AggregateRating",
-                "ratingValue": cakeData.rating,
-                "reviewCount": cakeData.reviews
-              }
-              : undefined
-          })}
-        </script>
-      </Helmet>
+  {/* Open Graph */}
+  <meta property="og:title" content={cakeData.name} />
+  <meta property="og:description" content={cakeData.description} />
+  <meta property="og:image" content={cakeData.image} />
+  <meta property="og:url" content={`https://www.egglesscakes.in/cake/${cakeData.slug}`} />
+  <meta property="og:type" content="product" />
+
+  {/* ⭐ FINAL PRODUCT SCHEMA */}
+  {cakeData && (
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Product",
+
+        name: cakeData.name,
+        image: cakeData.image,
+        description: cakeData.description,
+        sku: cakeData._id,
+        brand: {
+          "@type": "Brand",
+          name: "Eggless Cakes"
+        },
+        category: cakeData.category,
+
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "INR",
+          price: cakeData.sizes?.[0]?.price || 0,
+          availability: "https://schema.org/InStock",
+          url: `https://www.egglesscakes.in/cake/${cakeData.slug}`
+        },
+
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: cakeData.averageRating || 0,
+          reviewCount: cakeData.totalReviews || 0
+        },
+
+        review: cakeData.reviews?.slice(0, 5).map((r) => ({
+          "@type": "Review",
+          author: {
+            "@type": "Person",
+            name: r.userName
+          },
+          datePublished: r.createdAt,
+          reviewBody: r.comment,
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: r.rating,
+            bestRating: "5"
+          }
+        }))
+      })}
+    </script>
+  )}
+</Helmet>
+
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button */}
@@ -350,21 +395,25 @@ const CakeDetails = () => {
                   <div className="flex items-center gap-4 mb-3">
                     <div className="flex items-center">
                       <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <svg
-                            key={i}
-                            className={`w-5 h-5 ${i < Math.floor(parseFloat(cakeData.rating)) ? 'text-yellow-400' : 'text-gray-300'
-                              }`}
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
+                        {[...Array(5)].map((_, i) => {
+                          const rating = cakeData?.averageRating || 0;
+                          return (
+                            <svg
+                              key={i}
+                              className={`w-5 h-5 ${i < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'}`}
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          );
+                        })}
+
                       </div>
                       <span className="ml-2 text-sm text-gray-600">
-                        {cakeData.rating} ({cakeData.reviews} reviews)
+                        {(cakeData.averageRating || 0).toFixed(1)} ({cakeData.totalReviews || 0} reviews)
                       </span>
+
                     </div>
                   </div>
 
@@ -480,28 +529,44 @@ const CakeDetails = () => {
                   </div>
 
                   {/* Existing Reviews - Show if available */}
-                  {cakeData.reviewsList && Array.isArray(cakeData.reviewsList) && cakeData.reviewsList.length > 0 ? (
+                  {cakeData.reviews && cakeData.reviews.length > 0 ? (
                     <div className="space-y-4">
-                      {cakeData.reviewsList.map((review) => (
-                        <div key={review.id} className="bg-gray-50 p-4 rounded-lg">
+                      {cakeData.reviews.map((review, index) => (
+                        <div key={index} className="bg-gray-50 p-4 rounded-lg">
+
                           <div className="flex items-center justify-between mb-2">
-                            <div className="font-medium">{review.name}</div>
-                            <div className="text-sm text-gray-500">{new Date(review.date).toLocaleDateString("en-IN")}</div>
+                            <div className="font-medium">{review.userName}</div>
+                            <div className="text-sm text-gray-500">
+                              {new Date(review.createdAt).toLocaleDateString("en-IN")}
+                            </div>
                           </div>
+
+                          {/* ⭐ stars */}
                           <div className="flex items-center mb-2">
                             {[...Array(5)].map((_, i) => (
-                              <svg
-                                key={i}
-                                className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'
-                                  }`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
+                              <svg key={i}
+                                className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                               </svg>
                             ))}
                           </div>
-                          <p className="text-gray-600">{review.comment}</p>
+
+                          <p className="text-gray-600 mb-3">{review.comment}</p>
+
+                          {/* ⭐ Review Images */}
+                          {review.images?.length > 0 && (
+                            <div className="flex gap-2 flex-wrap">
+                              {review.images.map((img, i) => (
+                                <img
+                                  key={i}
+                                  src={img}
+                                  className="w-20 h-20 object-cover rounded-md"
+                                />
+                              ))}
+                            </div>
+                          )}
+
                         </div>
                       ))}
                     </div>
@@ -510,6 +575,7 @@ const CakeDetails = () => {
                       <p>No reviews yet. Be the first to review this cake!</p>
                     </div>
                   )}
+
                 </div>
               </div>
             </div>
@@ -646,6 +712,32 @@ const CakeDetails = () => {
                       required
                     />
                   </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Upload Photos (optional)
+                    </label>
+
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => setReviewImages([...e.target.files])}
+                    />
+
+                    {/* preview */}
+                    {reviewImages.length > 0 && (
+                      <div className="flex gap-2 mt-2">
+                        {Array.from(reviewImages).map((file, i) => (
+                          <img
+                            key={i}
+                            src={URL.createObjectURL(file)}
+                            className="w-16 h-16 object-cover rounded"
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
 
                   <div className="flex justify-end gap-3">
                     <button
