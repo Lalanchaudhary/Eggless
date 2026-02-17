@@ -677,7 +677,7 @@ const CakeDetails = () => {
                     <div className="p-4">
                       <h3 className="font-semibold text-lg text-gray-900 mb-1 line-clamp-1">{cake.name}</h3>
                       <p className="text-gray-600 text-sm mb-2 line-clamp-2">{cake.description}</p>
-                      <p className="text-rose-500 font-semibold">₹{cake.price}</p>
+                      <p className="text-rose-500 font-semibold">₹{cake.sizes[0].price}</p>
                     </div>
                   </div>
                 ))}
