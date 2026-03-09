@@ -3,7 +3,13 @@ import cake from '../assets/cake.jpg'
 import CakeGallery from '../components/CakeGallery';
 import Carousel from "../components/Carousel";
 import { useNavigate } from "react-router-dom";
-
+import chocolate from '../assets/flavor/choco_truffle.png'
+import redvelvet from '../assets/flavor/redvelvet.png'
+import blackforest from '../assets/flavor/black_forest.png'
+import whiteforest from '../assets/flavor/white_forest.png'
+import butterscotch from '../assets/flavor/butterscotch.png'
+import fruit from '../assets/flavor/fruitcake.png'
+import choco_vanilla from '../assets/flavor/choco_vanila.png'
 const Home = () => {
     const navigate = useNavigate();
 
@@ -76,99 +82,126 @@ const Home = () => {
             <section className="bg-gradient-to-br from-rose-50 to-white py-16">
                 <div className="max-w-7xl mx-auto px-4">
                     <h2 className="text-3xl font-bold text-gray-900 mb-3">
-                        Popular Cake Categories
+                        Popular Cake Flavors
                     </h2>
                     <p className="text-gray-600 mb-10">
-                        Discover our most loved eggless cake collections
+                        Discover our most loved flavors cake collections
                     </p>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                    <div className="flex gap-6 overflow-x-auto pb-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
 
                         {/* Chocolate Cakes */}
                         <a
                             href="/cakes/chocolate-cakes"
-                            className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
                         >
-                            <div className="h-44 overflow-hidden">
                                 <img
-                                    src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c"
+                                    src={chocolate}
                                     alt="Chocolate Cakes"
-                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
                                 />
-                            </div>
+
                             <div className="p-4 text-center">
                                 <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
                                     Chocolate Cakes
                                 </h3>
-                                <p className="text-sm text-gray-500 mt-1">
-                                    Rich & indulgent treats
-                                </p>
+                                
                             </div>
                         </a>
 
                         {/* Red Velvet Cakes */}
                         <a
                             href="/cakes/red-velvet-cakes"
-                            className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
                         >
-                            <div className="h-44 overflow-hidden">
                                 <img
-                                    src="https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7"
+                                    src={redvelvet}
                                     alt="Red Velvet Cakes"
-                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
                                 />
-                            </div>
                             <div className="p-4 text-center">
                                 <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
                                     Red Velvet Cakes
                                 </h3>
-                                <p className="text-sm text-gray-500 mt-1">
-                                    Smooth & creamy delight
-                                </p>
                             </div>
                         </a>
 
                         {/* Black Forest Cakes */}
                         <a
                             href="/cakes/black-forest-cakes"
-                            className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
                         >
-                            <div className="h-44 overflow-hidden">
                                 <img
-                                    src="https://images.unsplash.com/photo-1604413191066-4dd20bedf486"
+                                    src={blackforest}
                                     alt="Black Forest Cakes"
-                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
                                 />
-                            </div>
                             <div className="p-4 text-center">
                                 <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
                                     Black Forest Cakes
                                 </h3>
-                                <p className="text-sm text-gray-500 mt-1">
-                                    Timeless classic
-                                </p>
                             </div>
                         </a>
 
                         {/* Butterscotch Cakes */}
                         <a
                             href="/cakes/butterscotch-flavor-cakes"
-                            className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
                         >
-                            <div className="h-44 overflow-hidden">
                                 <img
-                                    src="https://images.unsplash.com/photo-1622621746668-59fb299bc4d7"
+                                    src={butterscotch}
                                     alt="Butterscotch Cakes"
-                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
                                 />
-                            </div>
                             <div className="p-4 text-center">
                                 <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
                                     Butterscotch Cakes
                                 </h3>
-                                <p className="text-sm text-gray-500 mt-1">
-                                    Crunchy & caramel sweet
-                                </p>
+                            </div>
+                        </a>
+                        <a
+                            href="/cakes/white-forest-cakes"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
+                        >
+                                <img
+                                    src={whiteforest}
+                                    alt="White Forest Cakes"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
+                                />
+                            <div className="p-4 text-center">
+                                <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
+                                    White Forest Cakes
+                                </h3>
+                            </div>
+                        </a>
+                        <a
+                            href="/cakes/choco-vanilla-cakes"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
+                        >
+                                <img
+                                    src={choco_vanilla}
+                                    alt="Choco Vanilla Cakes"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
+                                />
+                            <div className="p-4 text-center">
+                                <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
+                                    Choco Vanilla Cakes
+                                </h3>
+                            </div>
+                        </a>
+                        <a
+                            href="/cakes/fruit-cakes"
+                            className="group min-w-[230px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition snap-start"
+                        >
+                                <img
+                                    src={fruit}
+                                    alt="Fruit Cakes"
+                                    className="w-full h-34 object-cover group-hover:scale-105 transition duration-300"
+                                />
+                            <div className="p-4 text-center">
+                                <h3 className="text-lg font-semibold text-gray-800 group-hover:text-rose-500">
+                                    Fruit Cakes
+                                </h3>
                             </div>
                         </a>
 
