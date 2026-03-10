@@ -74,9 +74,11 @@ const CakeDetails = () => {
 
         const cake = await getCakeBySlug(id);
         setCakeData(cake);
-        if (cake.flavors && cake.flavors.length > 0) {
-          setSelectedFlavor(cake.flavors[0]);
-        }
+        const initialFlavor =
+          typeof cake.flavor === 'string' && cake.flavor.trim() && cake.flavor.trim().toLowerCase() !== 'unknown'
+            ? cake.flavor.trim()
+            : Cakeflavors[0];
+        setSelectedFlavor(initialFlavor);
 
         setError(null);
       } catch (err) {
@@ -247,6 +249,10 @@ const CakeDetails = () => {
     );
   }
 
+  const cakeFlavor = typeof cakeData.flavor === 'string' ? cakeData.flavor.trim() : '';
+  const shouldShowFlavorChoices = !cakeFlavor || cakeFlavor.toLowerCase() === 'unknown';
+  const availableFlavors = shouldShowFlavorChoices ? Cakeflavors : [cakeFlavor];
+
   const suggestedCakes = getSuggestedCakes();
 
 
@@ -411,17 +417,18 @@ const CakeDetails = () => {
               <div className="space-y-6">
                 <div>
                   <div className='flex justify-between'>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-3xl max-w-[390px] font-bold text-gray-900 mb-2">
                       {cakeData.name}
                     </h1>
-                    {Cakeflavors && Cakeflavors.length > 0 && (
-                      <div className="mb-4">
+                    {availableFlavors.length > 0 && (
+                      <div className="mb-4 w-[100px]">
                         <select
                           value={selectedFlavor}
                           onChange={(e) => setSelectedFlavor(e.target.value)}
-                          className="w-full text-[#000] border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                          disabled={!shouldShowFlavorChoices}
+                          className="w-[120px] text-[#000] border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-rose-300"
                         >
-                          {Cakeflavors.map((flavor, index) => (
+                          {availableFlavors.map((flavor, index) => (
                             <option key={index} value={flavor}>
                               {flavor}
                             </option>
